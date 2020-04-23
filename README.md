@@ -5,3 +5,7 @@
 ## Whats new
 * Added gameover message
 * Added scoring system
+
+## Gameplay
+
+![](bluesky.gif)

@@ -21,7 +21,7 @@ class Text(pygame.sprite.Sprite):
     def __init__(self, text, size, color):
         pygame.sprite.Sprite.__init__(self)
         self.color = color
-        self.font = pygame.font.Font('font/ARCADECLASSIC.ttf', size)
+        self.font = pygame.font.Font('font/ARCADE.ttf', size)
         self.surf = self.font.render(text, 1, self.color)
         self.rect = self.surf.get_rect(center=(SCREEN_WIDTH/2, SCREEN_HEIGHT/2))
     
@@ -32,13 +32,12 @@ class Text(pygame.sprite.Sprite):
 # Define a ScoreBoard class, a subclass of Text to display the score in screen
 class ScoreBoard(Text):
     def __init__(self):
-        self.gap = ' ' * 3
         self.max_length = 5
-        Text.__init__(self, text="TIME 0{}SCORE 0".format(self.gap), size=20, color=(255,255,255))
-        self.rect = self.surf.get_rect(topright=(SCREEN_WIDTH-self.surf.get_width() + 30, 2))
+        Text.__init__(self, text="TIME 0 SCORE 0", size=28, color=(255,255,255))
+        self.rect = self.surf.get_rect(topright=(SCREEN_WIDTH - 5 - self.surf.get_width() / 2, 2))
     
     def update(self, second, score):
-        self.surf = self.font.render("TIME {}{}SCORE {}".format(str(second).zfill(self.max_length), self.gap, str(score).zfill(self.max_length)), 1, self.color)
+        self.surf = self.font.render("TIME {} SCORE {}".format(str(second).zfill(self.max_length), str(score).zfill(self.max_length)), 1, self.color)
 
 
 # Define a Cloud class object by extending pygame.sprite.Sprite
@@ -50,7 +49,7 @@ class Cloud(pygame.sprite.Sprite):
         self.rect = self.surf.get_rect(
             center=(
                 random.randint(SCREEN_WIDTH + 20, SCREEN_WIDTH + 100),
-                random.randint(0, SCREEN_HEIGHT)
+                random.randint(0, SCREEN_HEIGHT) 
             )
         )
 
@@ -66,7 +65,7 @@ class Jet(pygame.sprite.Sprite):
         super(Jet, self).__init__()
         self.surf = pygame.image.load('image/jet.png').convert()
         self.surf.set_colorkey((255, 255, 255), RLEACCEL)
-        self.rect = self.surf.get_rect()
+        self.rect = self.surf.get_rect(center = (25, SCREEN_HEIGHT/2))
 
     # Move the sprite based on user keypresses
     def update(self, pressed_keys):
@@ -224,7 +223,7 @@ while running:
         move_down_sound.stop()
         collision_sound.play()
 
-        message = Text("GAME OVER", 45, (255, 0, 0))
+        message = Text("GAME OVER", 60, (255, 0, 0))
         screen.blit(message.surf, message.rect)
         running = False
         exit_delay = True

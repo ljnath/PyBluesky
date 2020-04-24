@@ -2,9 +2,6 @@
 import pygame
 import random
 import time
-
-# Import pygame.locals for easier access to key coordinates
-# Updated to conform to flake8 and black standards
 from pygame.locals import (
     RLEACCEL,
     K_UP,
@@ -14,235 +11,180 @@ from pygame.locals import (
     K_ESCAPE,
     KEYDOWN,
     QUIT,
-)
+)                               # loading constants from pygame.locals
+
+__version__ = 0.2               # setting game version
+__name__ = 'Bluesky'            # setting game name    
+
 
 # Define a Text class for creating surface with custome text, size and color
 class Text(pygame.sprite.Sprite):
     def __init__(self, text, size, color):
-        pygame.sprite.Sprite.__init__(self)
-        self.color = color
-        self.font = pygame.font.Font('font/ARCADE.ttf', size)
-        self.surf = self.font.render(text, 1, self.color)
-        self.rect = self.surf.get_rect(center=(SCREEN_WIDTH/2, SCREEN_HEIGHT/2))
+        pygame.sprite.Sprite.__init__(self)                                     # initializing parent class
+        self.color = color                                                      # storing argument color in class variable
+        self.font = pygame.font.Font('font/ARCADE.ttf', size)                   # loading font and creating class variable font with given size
+        self.surf = self.font.render(text, 1, self.color)                       # creating surface by rendering the text
+        self.rect = self.surf.get_rect(center=(SCREEN_WIDTH/2, SCREEN_HEIGHT/2))# creating rectangle from the surface
     
     def render(self, text):
-        self.surf = self.font.render(text, 2, self.color)
+        self.surf = self.font.render(text, 2, self.color)                       # dynamically updating the surface with updated text
 
 
-# Define a ScoreBoard class, a subclass of Text to display the score in screen
+# Define a ScoreBoard class object by Text class
 class ScoreBoard(Text):
     def __init__(self):
-        self.max_length = 5
-        Text.__init__(self, text="TIME 0 SCORE 0", size=28, color=(255,255,255))
-        self.rect = self.surf.get_rect(topright=(SCREEN_WIDTH - 5 - self.surf.get_width() / 2, 2))
+        Text.__init__(self, text="TIME 0 SCORE 0", size=28, color=(255,255,255))                # initializing parent class with defautl text and color
+        self.rect = self.surf.get_rect(topright=(SCREEN_WIDTH-5-self.surf.get_width() / 2, 2))  # creating rectangle from text surface
     
-    def update(self, second, score):
-        self.surf = self.font.render("TIME {} SCORE {}".format(str(second).zfill(self.max_length), str(score).zfill(self.max_length)), 1, self.color)
+    def update(self, playtime, score):
+        length = 5                                                                              # setting max length of score
+        self.surf = self.font.render("TIME {} SCORE {}".format(str(playtime).zfill(length), str(score).zfill(length)), 1, self.color)   # updating scoreboard score and time
 
 
 # Define a Cloud class object by extending pygame.sprite.Sprite
 class Cloud(pygame.sprite.Sprite):
     def __init__(self):
-        super(Cloud, self).__init__()
-        self.surf = pygame.image.load('image/cloud.png').convert()
-        self.surf.set_colorkey((0, 0, 0), RLEACCEL)
-        self.rect = self.surf.get_rect(
-            center=(
-                random.randint(SCREEN_WIDTH + 20, SCREEN_WIDTH + 100),
-                random.randint(0, SCREEN_HEIGHT) 
-            )
-        )
+        super(Cloud, self).__init__()                                               # initilizing parent class pygame.sprite.Sprite
+        random_cloud = random.choice(('cloud1.png', 'cloud2.png', 'cloud3.png'))    # getting a random cloud image
+        self.surf = pygame.image.load('image/{}'.format(random_cloud)).convert()    # loading cloud image
+        self.surf.set_colorkey((255, 255, 255), RLEACCEL)                           # setting the white color as the transperant area; RLEACCEL is used for better performance on non accelerated displays
+        x_pos = random.randint(SCREEN_WIDTH + 20, SCREEN_WIDTH + 100)               # generating random x position for the cloud
+        y_pos = random.randint(0, SCREEN_HEIGHT)                                    # generating random y position for the cloud
+        self.rect = self.surf.get_rect(center=(x_pos, y_pos))                       # create rectange from the cloud screen
 
     def update(self):
-        self.rect.move_ip(-5, 0)
-        if self.rect.right < 0:
+        self.rect.move_ip(-5, 0)                                        # move the cloud towards left at constant speed
+        if self.rect.right < 0:                                         # if the cloud has completly moved from the screen, the cloud is killed
             self.kill()
 
 
-# Define a Jet class object by extending pygame.sprite.Sprite
-class Jet(pygame.sprite.Sprite):
-    def __init__(self):
-        super(Jet, self).__init__()
-        self.surf = pygame.image.load('image/jet.png').convert()
-        self.surf.set_colorkey((255, 255, 255), RLEACCEL)
-        self.rect = self.surf.get_rect(center = (25, SCREEN_HEIGHT/2))
-
-    # Move the sprite based on user keypresses
-    def update(self, pressed_keys):
-        if pressed_keys[K_UP]:
-            self.rect.move_ip(0, -5)
-            move_up_sound.play()
-        if pressed_keys[K_DOWN]:
-            self.rect.move_ip(0, 5)
-            move_down_sound.play()
-        if pressed_keys[K_LEFT]:
-            self.rect.move_ip(-5, 0)
-        if pressed_keys[K_RIGHT]:
-            self.rect.move_ip(5, 0)
-
-        # Keep player on the screen
-        if self.rect.left < 0:
-            self.rect.left = 0
-        if self.rect.right > SCREEN_WIDTH:
-            self.rect.right = SCREEN_WIDTH
-        if self.rect.top <= 0:
-            self.rect.top = 0
-        if self.rect.bottom >= SCREEN_HEIGHT:
-            self.rect.bottom = SCREEN_HEIGHT
-
-
-# Define a Missile class object by extending pygame.sprite.Sprite
+# Missile class which holds missile attributes and behaviour
 class Missile(pygame.sprite.Sprite):
     def __init__(self):
-        super(Missile, self).__init__()
-        self.surf = pygame.image.load('image/missile.png').convert()
-        self.surf.set_colorkey((255, 255, 255), RLEACCEL)
-        self.rect = self.surf.get_rect(
-            center=(
-                random.randint(SCREEN_WIDTH + 20, SCREEN_WIDTH + 100),
-                random.randint(0, SCREEN_HEIGHT)
-            )
-        )
-        self.speed = random.randint(5, 20)
+        super(Missile, self).__init__()                                 # initilizing parent class pygame.sprite.Sprite
+        self.surf = pygame.image.load('image/missile.png').convert()    # loading missile image from file
+        self.surf.set_colorkey((255, 255, 255), RLEACCEL)               # setting the white color as the transperant area; RLEACCEL is used for better performance on non accelerated displays
+        self.speed = random.randint(5, 20)                              # generating random speed for the missle
+        x_pos = random.randint(SCREEN_WIDTH + 20, SCREEN_WIDTH + 100)   # generating random x position for the missile
+        y_pos = random.randint(0, SCREEN_HEIGHT)                        # generating random y position for the missile
+        self.rect = self.surf.get_rect(center=(x_pos, y_pos))           # create rectange from the missile screen
 
     def update(self):
-        self.rect.move_ip(-self.speed, 0)
-        if self.rect.right < 0:
+        self.rect.move_ip(-self.speed, 0)                               # move the missle towards left at the predefine speed
+        if self.rect.right < 0:                                         # if the missile has completly moved from the screen, the missile is killed
             self.kill()
 
 
-# Setup for sounds. Defaults are good.
-pygame.mixer.init()
+# Jet class which holds jet attributes and behaviour
+class Jet(pygame.sprite.Sprite):
+    def __init__(self):
+        super(Jet, self).__init__()                                 # initilizing parent class pygame.sprite.Sprite
+        self.surf = pygame.image.load('image/jet.png').convert()    # loading jet image from file;  image source https://www.flaticon.com/authors/iconixar
+        self.surf.set_colorkey((255, 255, 255), RLEACCEL)           # setting the white color as the transperant area; RLEACCEL is used for better performance on non accelerated displays
+        self.rect = self.surf.get_rect(center=(25,SCREEN_HEIGHT/2)) # getting rectangle from jet screen; setting the jet position as the middle of the scrren on the left
 
-# Initialize pygame
-pygame.init()
+    def update(self, pressed_keys):
+        if pressed_keys[K_UP]:                                      # if the UP key is pressed
+            self.rect.move_ip(0, -5)                                # moving the jet on negtaive y-axis
+            move_up_sound.play()                                    # playing the move_up sound
+        if pressed_keys[K_DOWN]:                                    # if the DOWN key is pressed
+            self.rect.move_ip(0, 5)                                 # moving the jet on positive y-axis
+            move_down_sound.play()                                  # playing the move_down souund
+        if pressed_keys[K_LEFT]:                                    # if the LEFT key is presssed
+            self.rect.move_ip(-5, 0)                                # moving the jet on negative x-axis
+        if pressed_keys[K_RIGHT]:                                   # if the RIGHT key is pressed
+            self.rect.move_ip(5, 0)                                 # moving the jet on positive x-axis
 
-# Setup the clock for a decent framerate
-clock = pygame.time.Clock()
+        if self.rect.left < 0: self.rect.left = 0                               # if the jet has moved left and have crossed the screen; the left position is set to 0 as it is the boundary
+        if self.rect.right > SCREEN_WIDTH: self.rect.right = SCREEN_WIDTH       # if the jet has moved right and have crossed the screen; the right position is set to screen width as it is the boundary
+        if self.rect.top <= 0: self.rect.top = 0                                # if the jet has moved top and have crossed the screen; the top position is set to 0 as it is the boundary
+        if self.rect.bottom >= SCREEN_HEIGHT: self.rect.bottom = SCREEN_HEIGHT  # if the jet has moved bottom and have crossed the screen; the bottom position is set to screen width as it is the boundary
 
 
-# Define constants for the screen width and height
-SCREEN_WIDTH = 800
-SCREEN_HEIGHT = 600
+pygame.mixer.init()                                     # initializing same audio mixer with default settings
+pygame.init()                                           # initializing pygame
 
-# Create the screen object
-# The size is determined by the constant SCREEN_WIDTH and SCREEN_HEIGHT
-screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
-pygame.display.set_caption('Bluesky v0.1')
+running = True                                          # game running variable
+clock = pygame.time.Clock()                             # setting up game clock to maintain constant fps
+SCREEN_WIDTH = 800                                      # setting width of game screen
+SCREEN_HEIGHT = 600                                     # setting height of game screen
 
-# Create a custom event for adding a new enemy
-ADD_MISSILE = pygame.USEREVENT + 1
-pygame.time.set_timer(ADD_MISSILE, 500)
+screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))     # creating game screen with custom width and height
+pygame.display.set_caption('{} v{}'.format(__name__, __version__))  # setting name of game window
 
-ADD_CLOUD = pygame.USEREVENT + 2
-pygame.time.set_timer(ADD_CLOUD, 1000)
+ADD_MISSILE = pygame.USEREVENT + 1                      # creating custom event to automatically add missiles in the screen
+pygame.time.set_timer(ADD_MISSILE, 500)                 # setting event to auto-trigger every 500ms; 2 missiles will be created every second
 
-# UPDATE_SCORE = pygame.USEREVENT + 3
-# pygame.time.set_timer(UPDATE_SCORE, 3000)
+ADD_CLOUD = pygame.USEREVENT + 2                        # creating custom event to automatically add cloud in the screen
+pygame.time.set_timer(ADD_CLOUD, 1000)                  # setting event to auto-trigger every 1s; 1 cloud will be created every second
 
-# Variable to keep the main loop running
-running = True
+pygame.mixer.music.load("audio/Apoxode_-_Electric_1.mp3")# setting main game background music; Sound source: http://ccmixter.org/files/Apoxode/59262 | License: https://creativecommons.org/licenses/by/3.0/
+pygame.mixer.music.play(loops=-1)                        # lopping the main game music
+
+move_up_sound = pygame.mixer.Sound("audio/Rising_putter.ogg")       # creating move_up sound for jet movement; Sound sources: Jon Fincher
+move_down_sound = pygame.mixer.Sound("audio/Falling_putter.ogg")    # creating move_down sound for jet movement; Sound sources: Jon Fincher
+collision_sound = pygame.mixer.Sound("audio/collision.ogg")         # creating collision sound for jet collision
+
+move_up_sound.set_volume(0.5)                           # setting half volume of move_up sound
+move_down_sound.set_volume(0.5)                         # setting half volume of move_down sound
+collision_sound.set_volume(2)                           # setting double volume of collision sound
+
+jet = Jet()                                             # creating the jet for the game
+scoreBoard = ScoreBoard()                               # creating the scoreboard for the game
+all_sprites = pygame.sprite.Group()                     # creating group of sprites to hold all the srites in the game
+all_sprites.add(jet)                                    # adding the jet to all_sprites
+all_sprites.add(scoreBoard)                             # adding the scoreboard to all_sprites
+
+clouds = pygame.sprite.Group()                          # creating cloud group for storing all the clouds in the game
+missiles = pygame.sprite.Group()                        # creating missile group for storing all teh missiles in the game
+score = 0                                               # default score
+playtime = 0                                            # default game score
+
 exit_delay = False
 
-jet = Jet()
-scoreBoard = ScoreBoard()
-
-# Create groups to hold enemy sprites and all sprites
-# - missiles is used for collision detection and position updates
-# - all_sprites is used for rendering
-clouds = pygame.sprite.Group()
-missiles = pygame.sprite.Group()
-all_sprites = pygame.sprite.Group()
-all_sprites.add(jet)
-all_sprites.add(scoreBoard)
-
-# Load and play our background music
-# Sound source: http://ccmixter.org/files/Apoxode/59262
-# License: https://creativecommons.org/licenses/by/3.0/
-pygame.mixer.music.load("audio/Apoxode_-_Electric_1.mp3")
-pygame.mixer.music.play(loops=-1)
-
-# Load all sound files
-# Sound sources: Jon Fincher
-move_up_sound = pygame.mixer.Sound("audio/Rising_putter.ogg")
-move_down_sound = pygame.mixer.Sound("audio/Falling_putter.ogg")
-collision_sound = pygame.mixer.Sound("audio/Collision.ogg")
-
-# Set the base volume for all sounds
-move_up_sound.set_volume(0.5)
-move_down_sound.set_volume(0.5)
-collision_sound.set_volume(0.5)
-
-score = 0
-playtime = 0
-
-# Main loop
+# Main game loop
 while running:
-    # Look at every event in the queue
-    for event in pygame.event.get():
-        # Did the user hit a key?
-        if event.type == KEYDOWN:
-            # Was it the Escape key? If so, stop the loop.
-            if event.key == K_ESCAPE:
-                running = False
-
-        # Did the user click the window close button? If so, stop the loop.
-        elif event.type == QUIT:
+    for event in pygame.event.get():                                                # Look at every event in the queue
+        if event.type == KEYDOWN and event.key == K_ESCAPE or event.type == QUIT:   # stopping game when ESC key is pressed or when the game window is closed
             running = False
-
-        # Add a new missile?
-        elif event.type == ADD_MISSILE:
-            # Create the new missile and add it to sprite groups
-            new_missile = Missile()
-            missiles.add(new_missile)
-            all_sprites.add(new_missile)
-
-        # Add a new cloud?
+        elif event.type == ADD_MISSILE:                 # is event to add missile is triggered
+            new_missile = Missile()                     # create a new missile
+            missiles.add(new_missile)                   # adding the missile to missle group
+            all_sprites.add(new_missile)                # adding the missile to all_sprites group as well
         elif event.type == ADD_CLOUD:
-            # Create the new enemy and add it to sprite groups
-            new_cloud = Cloud()
-            clouds.add(new_cloud)
-            all_sprites.add(new_cloud)
+            new_cloud = Cloud()                         # is event to add cloud is triggered
+            clouds.add(new_cloud)                       # create a new cloud
+            all_sprites.add(new_cloud)                  # adding the cloud to all_sprites group
+            playtime += 1                               # increasing playtime by 1s as this event is triggered every second; just reusing existing event instead of recreating a new event
+            score += 10                                 # increasing score by 10 as this event is triggered every second
 
-            # increasing playtime by 1s as this event is triggered every second
-            playtime += 1
-            # increasing score by 10 as this event is triggered every second
-            score += 10
+    
+    screen.fill((135, 206, 250))                        # Filling screen with sky blue color
+    [screen.blit(sprite.surf, sprite.rect) for sprite in all_sprites]       # drawing all sprites in the screen
 
-    # Fill the screen with white
-    screen.fill((135, 206, 250))
+    if pygame.sprite.spritecollideany(jet, missiles):   # Check if any missiles have collided with the player; if so
+        jet.kill()                                      # killing the jet
+        move_up_sound.stop()                            # stopping any move_up sound
+        move_down_sound.stop()                          # stopping any move_down sound
+        collision_sound.play()                          # playing collision sound
 
-    for entity in all_sprites:
-        screen.blit(entity.surf, entity.rect)
-
-    # Check if any missiles have collided with the player
-    if pygame.sprite.spritecollideany(jet, missiles):
-        # If so, then remove the player and stop the loop
-        jet.kill()
-        move_up_sound.stop()
-        move_down_sound.stop()
-        collision_sound.play()
-
-        message = Text("GAME OVER", 60, (255, 0, 0))
-        screen.blit(message.surf, message.rect)
-        running = False
+        message = Text("GAME OVER", 60, (255, 0, 0))    # creating game over message
+        screen.blit(message.surf, message.rect)         # adding message
+        running = False                                 # stopping game
         exit_delay = True
 
-    pygame.display.flip()
+    pygame.display.flip()                               # updating display to the screen
+    clock.tick(30)                                      # ticking game clock at 30 to maintain 30fps
 
-    # Ensure program maintains a rate of 30 frames per second
-    clock.tick(30)
+    pressed_keys = pygame.key.get_pressed()             # getting all the pressed keys
+    jet.update(pressed_keys)                            # calling update() to act according to pressed keys
 
-    # Get the set of keys pressed and check for user input
-    pressed_keys = pygame.key.get_pressed()
-    jet.update(pressed_keys)
-
-    missiles.update()
-    clouds.update()
-    scoreBoard.update(playtime, score)
+    missiles.update()                                   # update the position of the missiles
+    clouds.update()                                     # update the postition of the clouds
+    scoreBoard.update(playtime, score)                  # update the game score board
 
     if exit_delay:
-        time.sleep( 3)
+        time.sleep(2)
 
-pygame.mixer.music.stop()
-pygame.mixer.quit()
+pygame.mixer.music.stop()                               # stopping game music
+pygame.mixer.quit()                                     # stopping game sound mixer

@@ -10,6 +10,7 @@ Date : April 2020<br>
 Email : ljnath@ljnath.com<br>
 Website : https://www.ljnath.com
 
+## Change Log
 ### [0.3] - 2020-04-25
 - added replay mechanism
 
@@ -28,4 +29,4 @@ Website : https://www.ljnath.com
 
 ## Demo
 
-![](bluesky.gif)m
+![](bluesky.gif)

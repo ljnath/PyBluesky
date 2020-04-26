@@ -2,7 +2,7 @@
 # PyGame-bluesky
 ### Version : 0.5
 
-A simple python game based to save your jet from missiles baed on pygame framework.</br>
+A simple python game based to protect your jet from missiles based on pygame framework </br>
 Based on https://realpython.com/blog/python/pygame-a-primer
 
 Author : Lakhya Jyoti Nath (ljnath)<br>

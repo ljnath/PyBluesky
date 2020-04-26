@@ -1,6 +1,6 @@
 
 # PyGame-bluesky
-### Version : 0.5
+### Version : 0.6
 
 A simple python game based to protect your jet from missiles based on pygame framework </br>
 Based on https://realpython.com/blog/python/pygame-a-primer
@@ -11,6 +11,10 @@ Email : ljnath@ljnath.com<br>
 Website : https://www.ljnath.com
 
 ## Change Log
+### [0.6] - 2020-04-26
+- refactored game code into modules based on sprite
+- introduced game environment to maintain and share game environment data across different various modules
+
 ### [0.5] - 2020-04-26
 - added support for continous jet movement towards cursor; even on fixed mouse position
 
@@ -35,4 +39,4 @@ Website : https://www.ljnath.com
 
 ## Demo
 
-![](bluesky.gif)
+![](gameplay.gif)

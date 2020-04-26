@@ -11,6 +11,13 @@ Email : ljnath@ljnath.com<br>
 Website : https://www.ljnath.com
 
 ## Change Log
+### [0.7] - 2020-04-26
+- added game title in the menu
+- added support for level up in the game, missile count will increase every level
+- added sound for level up
+- removed redundant condition check in jet sprite
+- renamed GameInputText to GameMenuText
+
 ### [0.6] - 2020-04-26
 - refactored game code into modules based on sprite
 - introduced game environment to maintain and share game environment data across different various modules

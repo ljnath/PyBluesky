@@ -74,7 +74,8 @@ class Constants():
             'music' : 'audio/Apoxode_-_Electric_1.mp3',   # sound source: http://ccmixter.org/files/Apoxode/59262 ; License: https://creativecommons.org/licenses/by/3.0/
             'move_up' : 'audio/Rising_putter.ogg',        # sound sources: Jon Fincher
             'move_down' : 'audio/Falling_putter.ogg',     # sound sources: Jon Fincher
-            'collision' : 'audio/collision.ogg'
+            'collision' : 'audio/collision.ogg',
+            'levelup' : 'audio/levelup.ogg'
         }
 
 
@@ -86,6 +87,7 @@ class Variables():
         self.__moveup_sound = Sound(constants.game_sound.get('move_up'))
         self.__movedown_sound = Sound(constants.game_sound.get('move_down'))
         self.__collision_sound = Sound(constants.game_sound.get('collision'))
+        self.__levelup_sound = Sound(constants.game_sound.get('levelup'))
         self.__game_input = InputMode.KEYBOARD
         self.__all_sprites = Group()
 
@@ -100,6 +102,10 @@ class Variables():
     @property
     def collision_sound(self):
         return self.__collision_sound
+
+    @property
+    def levelup_sound(self):
+        return self.__levelup_sound
 
     @property
     def game_input(self):

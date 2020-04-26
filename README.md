@@ -1,6 +1,6 @@
 
 # PyGame-bluesky
-### Version : 0.6
+### Version : 0.7
 
 A simple python game based to protect your jet from missiles based on pygame framework </br>
 Based on https://realpython.com/blog/python/pygame-a-primer

@@ -19,7 +19,7 @@ from pygame.locals import (
     QUIT,
 )                               # loading constants from pygame.locals
 
-__version__ = 0.4               # setting game version
+__version__ = 0.5               # setting game version
 __name__ = 'Bluesky'            # setting game name    
 
 # enum defining the available input mode
@@ -247,22 +247,23 @@ move_up_sound.set_volume(0.5)                                       # setting ha
 move_down_sound.set_volume(0.5)                                     # setting half volume of move_down sound
 collision_sound.set_volume(2)                                       # setting double volume of collision sound
 
-gameover = False
-game_started = False
-input_mode = InputMode.KEYBOARD
+mouse_position = (SCREEN_WIDTH, SCREEN_HEIGHT/2)                    # default mouse position, let the jet move forward on a straight line
+gameover = False                                                    # no gameover by default
+game_started = False                                                # game is not started by default
+input_mode = InputMode.KEYBOARD                                     # default input mode is set to keyboard
 score = 0                                                           # default score
 playtime = 0                                                        # default game score
 screen_color = GAMEOVER_SCREEN                                      # to store the current scrreen color; updating in case of gameover
 
-replaySprite = ReplaySprite()
-gameInput = GameInput()
+replaySprite = ReplaySprite()                                       # creating replay text sprite
+gameInput = GameInput()                                             # creating gameinput sprite
 jet = Jet()                                                         # creating the jet for the game
 scoreBoard = ScoreBoard()                                           # creating the scoreboard for the game
 
 clouds = pygame.sprite.Group()                                      # creating cloud group for storing all the clouds in the game
 missiles = pygame.sprite.Group()                                    # creating missile group for storing all teh missiles in the game
 all_sprites = pygame.sprite.Group()                                 # creating group of sprites to hold all the srites in the game
-all_sprites.add(gameInput)
+all_sprites.add(gameInput)                                          # adding gameinput to all_sprites group to be drawn on the screen
 
 def show_gameover():
     global screen_color, gameover                                   # updating global variable
@@ -272,13 +273,14 @@ def show_gameover():
     all_sprites.add(gameover_txt)                                   # adding gameover text sprite to all_sprites for repetated rendereing incase of gameover
     all_sprites.add(replaySprite)                                   # adding replay text sprite to all_sprites for repetated rendereing incase of gameover
 
+
 # Main game loop
 while running:
     for event in pygame.event.get():                                                        # Look at every event in the queue
         if event.type == KEYDOWN and event.key == K_ESCAPE or event.type == QUIT:           # stopping game when ESC key is pressed or when the game window is closed
             running = False
         elif input_mode == input_mode.MOUSE and event.type == MOUSEMOTION and not gameover: # moving jet based on mouse movement
-            jet.move(pygame.mouse.get_pos())
+            mouse_position = pygame.mouse.get_pos()                                         # saving the mouse co-ordinate for smooth movement later
         elif not game_started and event.type == KEYDOWN and event.key == K_RETURN:
             input_mode = gameInput.userChoice                                               # getting the user input choice on RETURN press
             pygame.mouse.set_visible(True if input_mode == InputMode.MOUSE else False)      # displaying mouse cursor based on user input mode
@@ -323,7 +325,7 @@ while running:
         show_gameover()                                                     # show gameover infomation as game as ended
         
     pygame.display.flip()                                                   # updating display to the screen
-    gameclock.tick(FPS)                                                          # ticking game clock at 30 to maintain 30fps
+    gameclock.tick(FPS)                                                     # ticking game clock at 30 to maintain 30fps
 
     pressed_keys = pygame.key.get_pressed()                                 # getting all the pressed keys
     if game_started and not gameover and input_mode == InputMode.KEYBOARD:
@@ -332,6 +334,9 @@ while running:
         replaySprite.update(pressed_keys)                                   # allowing user to select replay game choice during gameover mode
     elif not game_started:
         gameInput.update(pressed_keys)
+    
+    if game_started and not gameover and input_mode == InputMode.MOUSE:     # performing the jet movement here for smooth movement till mouse cursor
+        jet.move(mouse_position)
 
     missiles.update()                                                       # update the position of the missiles
     clouds.update()                                                         # update the postition of the clouds

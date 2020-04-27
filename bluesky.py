@@ -11,13 +11,7 @@ from game.sprites.text.replay import ReplayText
 from game.sprites.text.gamemenu import GameMenuText
 
 __name__ = 'Bluesky'            # setting game name    
-__version__ = 0.7               # setting game version
-
-def show_gameover(game_env, replaytext_sprite):
-    gameover_txt = Text(game_env, "GAME OVER", 60, x_pos=game_env.constants.screen_width/2 - 10 ,y_pos = game_env.constants.screen_height/2-25)        # creating game over message sprite
-    game_env.variables.all_sprites.add(gameover_txt)                # adding gameover text sprite to all_sprites for repetated rendereing incase of gameover
-    game_env.variables.all_sprites.add(replaytext_sprite)           # adding replay text sprite to all_sprites for repetated rendereing incase of gameover
-
+__version__ = 0.8               # setting game version
 
 def play_bluesky():
     pygame.mixer.init()                                                 # initializing same audio mixer with default settings
@@ -26,6 +20,8 @@ def play_bluesky():
 
     game_env.variables.moveup_sound.set_volume(0.5)
     game_env.variables.movedown_sound.set_volume(0.5)
+    game_env.variables.collision_sound.set_volume(1.5)
+    game_env.variables.levelup_sound.set_volume(1.5)
 
     pygame.mixer.music.load(game_env.constants.game_sound.get('music'))     # setting main game background music
     pygame.mixer.music.play(loops=-1)                                       # lopping the main game music
@@ -52,10 +48,13 @@ def play_bluesky():
     screen_color = game_env.constants.background_default if game_started else game_env.constants.background_special
 
     gamemenu_sprite = GameMenuText(game_env)                                            # creating GameMenuText sprite
-    game_env.variables.all_sprites.add(gamemenu_sprite)                                 # adding GameMenuText to all_sprites group to be drawn on the screen
+    gametitle_sprite = Text(game_env, "{} {}".format(__name__, __version__), 100, x_pos=game_env.constants.screen_width/2 , y_pos=100)                                      # creating gametitle_sprite text sprite with game name
+    gameauthor_sprite = Text(game_env, "Written by: Lakhya Jyoti Nath (ljnath)", 24, x_pos=game_env.constants.screen_width/2 , y_pos= game_env.constants.screen_height-25)  # creating game author
+    gameover_sprite = Text(game_env, "GAME OVER", 60, x_pos=game_env.constants.screen_width/2 - 10 ,y_pos = game_env.constants.screen_height/2-25)                          # creating game over message sprite
 
-    gametitle_sprite = Text(game_env, "{} {}".format(__name__, __version__), 100, x_pos=game_env.constants.screen_width/2 , y_pos=100)      # creating gametitle_sprite text sprite with game name
+    game_env.variables.all_sprites.add(gamemenu_sprite)                                 # adding GameMenuText to all_sprites group to be drawn on the screen
     game_env.variables.all_sprites.add(gametitle_sprite)                                # adding gametitle_sprite text sprite to all_sprites for repetated rendereing
+    game_env.variables.all_sprites.add(gameauthor_sprite)                              # adding gameauthor_sprite text sprite to all_sprites for repetated rendereing
 
     clouds = pygame.sprite.Group()                                                      # creating cloud group for storing all the clouds in the game
     missiles = pygame.sprite.Group()                                                    # creating missile group for storing all teh missiles in the game
@@ -75,6 +74,7 @@ def play_bluesky():
                 pygame.mouse.set_visible(True if game_env.variables.game_input == InputMode.MOUSE else False)                   # displaying mouse cursor based on user input mode
                 screen_color = game_env.constants.background_default                                                            # restoring screen colot
                 game_started = True                                                                                             # starting game               
+                gameauthor_sprite.kill()
                 gametitle_sprite.kill()
                 gamemenu_sprite.kill()                                                                                          # killing the GameMenuText sprite
                 game_env.variables.all_sprites.add(jet)                                                                         # adding the jet to all_sprites
@@ -119,7 +119,8 @@ def play_bluesky():
             game_env.variables.moveup_sound.stop()
             game_env.variables.movedown_sound.stop()
             game_env.variables.collision_sound.play()
-            show_gameover(game_env, replaytext_sprite)                                              # showing gameover sprite
+            game_env.variables.all_sprites.add(gameover_sprite)                                     # adding gameover text sprite to all_sprites for repetated rendereing incase of gameover
+            game_env.variables.all_sprites.add(replaytext_sprite)                                   # adding replay text sprite to all_sprites for repetated rendereing incase of gameover
             gameover = True                                                                         # setting gameover to true to prevent new missiles from spawning
 
         pygame.display.flip()                                                                       # updating display to the screen
@@ -132,6 +133,7 @@ def play_bluesky():
             replaytext_sprite.update(pressed_keys)                                                  # allowing user to select game replay option during gameover mode
         elif not game_started:
             gamemenu_sprite.update(pressed_keys)                                                    # allowing user to select game input type when the game is not started
+            gameauthor_sprite.moveOnXaxis(2)                                                        # moving the game author sprite across the X axis
         elif game_started and not gameover and game_env.variables.game_input == InputMode.MOUSE:    # performing the jet movement here for smooth movement till mouse cursor
             jet.auto_move(mouse_pos)
 

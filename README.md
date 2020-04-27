@@ -1,6 +1,6 @@
 
 # PyGame-bluesky
-### Version : 0.7
+### Version : 0.8
 
 A simple python game protect your jet from missiles attack based on pygame framework </br>
 Based on https://realpython.com/blog/python/pygame-a-primer
@@ -11,6 +11,10 @@ Email : ljnath@ljnath.com<br>
 Website : https://www.ljnath.com
 
 ## Change Log
+### [0.8] - 2020-04-27
+- added methods to continously move text on either X or Y axis
+- added author sprite in the game menu
+
 ### [0.7] - 2020-04-26
 - added game title in the menu
 - added support for level up in the game, missile count will increase every level

@@ -14,8 +14,8 @@ class Text(pygame.sprite.Sprite):
         if not y_pos:
             y_pos = game_env.constants.screen_height / 2                                    # deafult position is set to center of screen
         self.rect = self.surf.get_rect(center=(x_pos, y_pos))                               # creating rectangle from the surface
-        self.__forward_move = True
-        self.__forward_up = True
+        self.__move_forward = True
+        self.__move_up = True
 
     
     def render(self, text):
@@ -24,17 +24,17 @@ class Text(pygame.sprite.Sprite):
     def moveOnXaxis(self, speed):
         """ Method to move the text across the X axis
         """
-        if not self.__forward_move and self.rect.x <= 0:
-            self.__forward_move = True
-        elif self.__forward_move and self.rect.x + self.rect.width >= self.__game_env.constants.screen_width:
-            self.__forward_move = False
-        self.rect.x += speed if self.__forward_move else (speed*-1)
+        if not self.__move_forward and self.rect.x <= 0:                                    # detecting if the sprite should move forward or backward 
+            self.__move_forward = True
+        elif self.__move_forward and self.rect.x + self.rect.width >= self.__game_env.constants.screen_width:
+            self.__move_forward = False
+        self.rect.x += speed if self.__move_forward else (speed*-1)
     
     def moveOnYaxis(self, speed):
         """ Method to move the text across the Y axis
         """
-        if not self.__forward_up and self.rect.y <= 0:
-            self.__forward_up = True
-        elif self.__forward_up and self.rect.y + self.rect.height >= self.__game_env.constants.screen_height:
-            self.__forward_up = False
-        self.rect.y += speed if self.__forward_up else (speed*-1)
+        if not self.__move_up and self.rect.y <= 0:                                         # detecting if the sprite should move up or down
+            self.__move_up = True
+        elif self.__move_up and self.rect.y + self.rect.height >= self.__game_env.constants.screen_height:
+            self.__move_up = False
+        self.rect.y += speed if self.__move_up else (speed*-1)

@@ -2,7 +2,9 @@ import pygame
 import math
 
 class Bullet(pygame.sprite.Sprite):
-    def __init__(self, game_env, src_x, src_y):
+    """ Bullet sprite for create and moving bullet
+    """
+    def __init__(self, game_env, src_x, src_y):                                     # bullet constructur takes the position where it should be created
         super(Bullet, self).__init__()
         self.__game_env = game_env
         self.__x = src_x

@@ -45,9 +45,9 @@ class Jet(pygame.sprite.Sprite):
         self.rect.y += self.__speed * math.sin(angle)                           # moving the y-coordinate of jet towards the mouse cursor
 
     def shoot(self):
-        bullet = Bullet(self.__game_env, self.rect.x, self.rect.y)
-        self.__game_env.variables.bullets.add(bullet)
-        self.__game_env.variables.all_sprites.add(bullet)
-        self.__game_env.variables.shoot_sound.play()
+        bullet = Bullet(self.__game_env, self.rect.x, self.rect.y)              # create a bullet where the jet is located
+        self.__game_env.variables.bullets.add(bullet)                           # add the bullet to bullet group
+        self.__game_env.variables.all_sprites.add(bullet)                       # add the bullet tp all_sprites
+        self.__game_env.variables.shoot_sound.play()                            # play shooting sound
 
 

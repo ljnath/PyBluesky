@@ -133,7 +133,7 @@ def play_bluesky():
         
         collision = pygame.sprite.groupcollide(missiles, game_env.variables.bullets, True, True)    # checking for collision between bullets and missiles, killing each one of them on collision
         if len(collision) > 0:
-            game_env.variables.hit_sound.play()
+            game_env.variables.hit_sound.play()                                                     # play missile destroyed sound
             game_score += len(collision) * 10                                                       # 1 missle destroyed = 10 pts.
 
 

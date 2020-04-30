@@ -11,8 +11,10 @@ from pygame.locals import (
     K_RIGHT,
     K_ESCAPE,
     K_RETURN,
+    K_SPACE,
     KEYDOWN,
     MOUSEMOTION,
+    MOUSEBUTTONDOWN,
     FULLSCREEN,
     QUIT,
 )
@@ -88,3 +90,11 @@ class GameEnvironment():
     @property
     def MOUSEMOTION(self):
         return MOUSEMOTION
+
+    @property
+    def K_SPACE(self):
+        return K_SPACE
+
+    @property
+    def MOUSEBUTTONDOWN(self):
+        return MOUSEBUTTONDOWN

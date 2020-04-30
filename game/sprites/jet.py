@@ -1,5 +1,7 @@
 import pygame
 import math
+from .bullet import Bullet
+
 # Jet class which holds jet attributes and behaviour
 class Jet(pygame.sprite.Sprite):
     """ Jet sprite class for creating and updating the jet in the game screen
@@ -30,7 +32,7 @@ class Jet(pygame.sprite.Sprite):
             self.rect.right = self.__game_env.constants.screen_width            # if the jet has moved right and have crossed the screen; the right position is set to screen width as it is the boundary
         if self.rect.bottom > self.__game_env.constants.screen_width:
             self.rect.bottom = self.__game_env.constants.screen_width           # if the jet has moved bottom and have crossed the screen; the bottom position is set to screen width as it is the boundary
-    
+
     def auto_move(self, position):
         dx = position[0] - self.rect.x                                          # calculating x-coordinate difference of mouse and current jet position
         dy = position[1] - self.rect.y                                          # caluclating y-coordinate difference of mouse and current jet position
@@ -41,4 +43,11 @@ class Jet(pygame.sprite.Sprite):
             self.__game_env.variables.movedown_sound.play()                     # playing the move_up sound
         self.rect.x += self.__speed * math.cos(angle)                           # moving the x-coordinate of jet towards the mouse cursor
         self.rect.y += self.__speed * math.sin(angle)                           # moving the y-coordinate of jet towards the mouse cursor
+
+    def shoot(self):
+        bullet = Bullet(self.__game_env, self.rect.x, self.rect.y)
+        self.__game_env.variables.bullets.add(bullet)
+        self.__game_env.variables.all_sprites.add(bullet)
+        self.__game_env.variables.shoot_sound.play()
+
 

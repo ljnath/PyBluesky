@@ -49,6 +49,10 @@ class Constants():
         return 'image/jet.png'              # jet image path
 
     @property
+    def bullet_image(self):
+        return 'image/bullet.png'           # bullet image path
+
+    @property
     def cloud_per_sec(self):
         return 1                            # number of cloud to be spawned per second
 
@@ -75,7 +79,9 @@ class Constants():
             'move_up' : 'audio/Rising_putter.ogg',        # sound sources: Jon Fincher
             'move_down' : 'audio/Falling_putter.ogg',     # sound sources: Jon Fincher
             'collision' : 'audio/collision.ogg',
-            'levelup' : 'audio/levelup.ogg'
+            'levelup' : 'audio/levelup.ogg',
+            'shoot' : 'audio/shoot.ogg',
+            'hit' : 'audio/hit.ogg'
         }
 
 
@@ -88,8 +94,11 @@ class Variables():
         self.__movedown_sound = Sound(constants.game_sound.get('move_down'))
         self.__collision_sound = Sound(constants.game_sound.get('collision'))
         self.__levelup_sound = Sound(constants.game_sound.get('levelup'))
+        self.__shoot_sound = Sound(constants.game_sound.get('shoot'))
+        self.__hit_sound = Sound(constants.game_sound.get('hit'))
         self.__game_input = InputMode.KEYBOARD
         self.__all_sprites = Group()
+        self.__bullets = Group()
 
     @property
     def moveup_sound(self):
@@ -108,6 +117,14 @@ class Variables():
         return self.__levelup_sound
 
     @property
+    def shoot_sound(self):
+        return self.__shoot_sound
+
+    @property
+    def hit_sound(self):
+        return self.__hit_sound
+
+    @property
     def game_input(self):
         return self.__game_input
 
@@ -122,3 +139,11 @@ class Variables():
     @all_sprites.setter
     def all_sprites(self, value):
         self.__all_sprites = value
+
+    @property
+    def bullets(self):
+        return self.__bullets
+
+    @bullets.setter
+    def bullets(self, value):
+        self.__bullets = value

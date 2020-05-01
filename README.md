@@ -1,6 +1,6 @@
 
 # PyGame-bluesky
-### Version : 0.9
+### Version : 0.12
 
 A simple python game protect your jet from missiles attack based on pygame framework </br>
 Based on https://realpython.com/blog/python/pygame-a-primer
@@ -11,6 +11,12 @@ Email : ljnath@ljnath.com<br>
 Website : https://www.ljnath.com
 
 ## Change Log
+### [0.12] - 2020-05-02
+- updated sprite for bullet, jet
+- added support for flashing powerup star, flash rate is configurable in the class
+- added music which powerup is activated
+- added sprite for deactivated missiles to distinguishing between activated ones
+
 ### [0.11] - 2020-05-01
 - added powerup star which will mark all active missiles as bad
 - added suport for collision detection between the jet and its bullet

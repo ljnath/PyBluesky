@@ -43,20 +43,24 @@ class Constants():
         return ('image/cloud1.png', 'image/cloud2.png', 'image/cloud3.png') # all game cloud designs
 
     @property
-    def missile_image(self):
-        return 'image/missile.png'          # missle image path
+    def missile_activated_image(self):
+        return 'image/missile_activated.png'    # missle image path
+
+    @property
+    def missile_deactivated_image(self):
+        return 'image/missile_deactivated.png'  # missle image path
 
     @property
     def jet_image(self):
-        return 'image/jet.png'              # jet image path
+        return 'image/jet.png'                  # jet image path
 
     @property
     def powerup_image(self):
-        return 'image/powerup.png'              # jet image path
+        return 'image/star.png'                 # jet image path
 
     @property
     def bullet_image(self):
-        return 'image/bullet.png'           # bullet image path
+        return 'image/bullet.png'               # bullet image path
 
     @property
     def cloud_per_sec(self):
@@ -91,7 +95,8 @@ class Constants():
             'collision' : 'audio/collision.ogg',
             'levelup' : 'audio/levelup.ogg',
             'shoot' : 'audio/shoot.ogg',
-            'hit' : 'audio/hit.ogg'
+            'hit' : 'audio/hit.ogg',
+            'powerup' : 'audio/powerup.ogg'
         }
 
 
@@ -106,6 +111,7 @@ class Variables():
         self.__levelup_sound = Sound(self.__constants.game_sound.get('levelup'))
         self.__shoot_sound = Sound(self.__constants.game_sound.get('shoot'))
         self.__hit_sound = Sound(self.__constants.game_sound.get('hit'))
+        self.__powerup_sound = Sound(self.__constants.game_sound.get('powerup'))
         self.__game_input = InputMode.KEYBOARD
         self.__all_sprites = Group()
         self.__bullets = Group()
@@ -135,6 +141,10 @@ class Variables():
     @property
     def hit_sound(self):
         return self.__hit_sound
+
+    @property
+    def powerup_sound(self):
+        return self.__powerup_sound
 
     @property
     def game_input(self):

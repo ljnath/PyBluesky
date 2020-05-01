@@ -13,7 +13,7 @@ from game.sprites.text.replay import ReplayText
 from game.sprites.text.gamemenu import GameMenuText
 
 __name__ = 'Bluesky'            # setting game name    
-version = '0.11'               # setting game version
+version = '0.12'               # setting game version
 
 def play_bluesky():
     pygame.mixer.init()                                                 # initializing same audio mixer with default settings
@@ -25,12 +25,14 @@ def play_bluesky():
     game_env.variables.collision_sound.set_volume(1.5)
     game_env.variables.levelup_sound.set_volume(1.5)
     game_env.variables.shoot_sound.set_volume(1.5)
-    game_env.variables.hit_sound.set_volume(2)
+    game_env.variables.hit_sound.set_volume(3)
+    game_env.variables.powerup_sound.set_volume(10)
 
     pygame.mixer.music.load(game_env.constants.game_sound.get('music'))     # setting main game background music
     pygame.mixer.music.play(loops=-1)                                       # lopping the main game music
+    pygame.mixer.music.set_volume(0.5)
 
-    # screen = pygame.display.set_mode((800,600))     # creating game screen with custom width and height
+    screen = pygame.display.set_mode((800,600))     # creating game screen with custom width and height
     
     screen = pygame.display.set_mode((game_env.constants.screen_width, game_env.constants.screen_height), game_env.FULLSCREEN)     # creating game screen with custom width and height
     pygame.display.set_caption('{} ver. {}'.format(__name__, version))              # setting name of game window
@@ -64,7 +66,7 @@ def play_bluesky():
     gametitle_sprite = Text(game_env, "{} {}".format(__name__, version), 100, x_pos=game_env.constants.screen_width/2 , y_pos=100)                                      # creating gametitle_sprite text sprite with game name
     gameauthor_sprite = Text(game_env, "Written by: Lakhya Jyoti Nath (ljnath)", 24, x_pos=game_env.constants.screen_width/2 , y_pos= game_env.constants.screen_height-15)  # creating game author
     gamehelp_sprite = Text(game_env, "(Instructions: Move -> mouse/arrow keys, Shoot -> spacebar/mouseclick)", 22, x_pos=game_env.constants.screen_width/2 , y_pos= 140)  # creating game help
-    game_env.variables.noammo_sprite = Text(game_env, "NO AMMO !", 22)                 # creating noammo-sprite 
+    game_env.variables.noammo_sprite = Text(game_env, "NO AMMO !", 24)                 # creating noammo-sprite 
 
     welcome_screen_sprites.add(gamemenu_sprite)                                                         # adding GameMenuText to welcome_screen_sprites group
     welcome_screen_sprites.add(gametitle_sprite)                                
@@ -88,7 +90,7 @@ def play_bluesky():
                     mouse_pos = pygame.mouse.get_pos()                                                                              # saving the mouse co-ordinate for smooth movement later
                 elif (game_env.variables.game_input ==  InputMode.KEYBOARD and event.type == game_env.KEYDOWN and event.key == game_env.K_SPACE) or (game_env.variables.game_input ==  InputMode.MOUSE and event.type==game_env.MOUSEBUTTONDOWN):
                     jet.shoot()
-                if event.type == ADD_MISSILE:   # is event to add missile is triggered; missles are not added during gameover
+                if event.type == ADD_MISSILE:                                       # is event to add missile is triggered; missles are not added during gameover
                     new_missile = Missile(game_env)                                 # create a new missile
                     missiles.add(new_missile)                                       # adding the missile to missle group
                     game_env.variables.all_sprites.add(new_missile)                 # adding the missile to all_sprites group as well
@@ -110,8 +112,7 @@ def play_bluesky():
                     clouds.empty()                                              # empting the cloud group
                     missiles.empty()                                            # empting the missle group
                     screen_color = game_env.constants.background_default        # restoring  screen color
-                    game_score, game_playtime = 0, 0                            # reseting game score and playtime
-                    game_level = 1                                              # resetting game level
+                    game_score, game_playtime, game_level = 0, 0, 1             # reseting game score, playtime and game_level
                     star_shown = False
                     pygame.time.set_timer(ADD_MISSILE, int(1000/game_env.constants.missile_per_sec))
                 else:
@@ -122,7 +123,7 @@ def play_bluesky():
                 game_env.variables.all_sprites.add(new_cloud)                   # adding the cloud to all_sprites group
                 if not gameover and game_started:
                     game_playtime += 1                                          # increasing playtime by 1s as this event is triggered every second; just reusing existing event instead of recreating a new event
-                    if not star_shown and random.randint(0,30)%3 == 0:
+                    if not star_shown and random.randint(0,30) % 3 == 0:        # probabity of getting a star is 30%
                         star = Star(game_env)
                         stars.add(star)
                         game_env.variables.all_sprites.add(star)
@@ -139,6 +140,7 @@ def play_bluesky():
         screen.fill(screen_color)                                                                   # Filling screen with sky blue color
         [screen.blit(sprite.surf, sprite.rect) for sprite in game_env.variables.all_sprites]        # drawing all sprites in the screen
 
+        # missile hit
         if pygame.sprite.spritecollideany(jet, missiles):                                           # Check if any missiles have collided with the player; if so
             jet.kill()                                                                              # killing the jet
             game_env.variables.moveup_sound.stop()
@@ -149,14 +151,17 @@ def play_bluesky():
             game_env.variables.all_sprites.remove(game_env.variables.noammo_sprite)
             gameover = True                                                                         # setting gameover to true to prevent new missiles from spawning
         
+        # missile hit
         collision = pygame.sprite.groupcollide(missiles, game_env.variables.bullets, True, True)    # checking for collision between bullets and missiles, killing each one of them on collision
         if len(collision) > 0:
             game_env.variables.hit_sound.play()                                                     # play missile destroyed sound
             game_score += len(collision) * 10                                                       # 1 missle destroyed = 10 pts.
 
+        # powerup hit
         if pygame.sprite.spritecollideany(jet, stars):                                              # collition between jet and star (powerup)
+            game_env.variables.powerup_sound.play()
             [game_env.variables.all_sprites.remove(s) for s in stars.sprites()]                     # removing the star from all_sprites to hide from screen
-            game_score += 100                                                                       # increasing game score by 100
+            game_score += 100 * game_level                                                                      # increasing game score by 100
             stars.empty()                                                                           # removing star from stars group
             for missile in missiles.sprites():                                                      
                 missile.deactivate()                                                                # making missile as deactivated
@@ -173,7 +178,7 @@ def play_bluesky():
             replaytext_sprite.update(pressed_keys)                                                  # allowing user to select game replay option during gameover mode
         elif not game_started:
             gamemenu_sprite.update(pressed_keys)                                                    # allowing user to select game input type when the game is not started
-            gameauthor_sprite.moveOnXaxis(2)                                                        # moving the game author sprite across the X axis
+            gameauthor_sprite.moveOnXaxis(2)                                                        # moving the game author sprite across the X axis   
         elif game_started and not gameover and game_env.variables.game_input == InputMode.MOUSE:    # performing the jet movement here for smooth movement till mouse cursor
             jet.auto_move(mouse_pos)
 

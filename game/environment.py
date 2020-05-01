@@ -32,8 +32,8 @@ class GameEnvironment():
         return (x_pos, y_pos)
 
     def get_random_point_on_top(self):
-        x_pos = random.randint(0, self.__constants.screen_width)     # generating random x position
-        y_pos = random.randint(10, 20)                                           # generating random y position
+        x_pos = random.randint(0, self.__constants.screen_width)                    # generating random x position
+        y_pos = random.randint(10, 20)                                              # generating random y position
         return (x_pos, y_pos * -1)
         
     @property

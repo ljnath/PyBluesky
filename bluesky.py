@@ -11,7 +11,7 @@ from game.sprites.text.replay import ReplayText
 from game.sprites.text.gamemenu import GameMenuText
 
 __name__ = 'Bluesky'            # setting game name    
-__version__ = 0.9               # setting game version
+version = '0.10'               # setting game version
 
 def play_bluesky():
     pygame.mixer.init()                                                 # initializing same audio mixer with default settings
@@ -28,8 +28,8 @@ def play_bluesky():
     pygame.mixer.music.load(game_env.constants.game_sound.get('music'))     # setting main game background music
     pygame.mixer.music.play(loops=-1)                                       # lopping the main game music
 
-    screen = pygame.display.set_mode((game_env.constants.screen_width, game_env.constants.screen_height))     # creating game screen with custom width and height
-    pygame.display.set_caption('{} ver. {}'.format(__name__, __version__))              # setting name of game window
+    screen = pygame.display.set_mode((game_env.constants.screen_width, game_env.constants.screen_height), game_env.FULLSCREEN)     # creating game screen with custom width and height
+    pygame.display.set_caption('{} ver. {}'.format(__name__, version))              # setting name of game window
     pygame.mouse.set_visible(False)                                                     # hiding the mouse pointer from the game screen
 
     gameclock = pygame.time.Clock()                                                     # setting up game clock to maintain constant fps
@@ -54,9 +54,10 @@ def play_bluesky():
     welcome_screen_sprites = pygame.sprite.Group()
 
     gamemenu_sprite = GameMenuText(game_env)                                            # creating GameMenuText sprite
-    gametitle_sprite = Text(game_env, "{} {}".format(__name__, __version__), 100, x_pos=game_env.constants.screen_width/2 , y_pos=100)                                      # creating gametitle_sprite text sprite with game name
+    gametitle_sprite = Text(game_env, "{} {}".format(__name__, version), 100, x_pos=game_env.constants.screen_width/2 , y_pos=100)                                      # creating gametitle_sprite text sprite with game name
     gameauthor_sprite = Text(game_env, "Written by: Lakhya Jyoti Nath (ljnath)", 24, x_pos=game_env.constants.screen_width/2 , y_pos= game_env.constants.screen_height-15)  # creating game author
     gamehelp_sprite = Text(game_env, "(Instructions: Move -> mouse/arrow keys, Shoot -> spacebar/mouseclick)", 22, x_pos=game_env.constants.screen_width/2 , y_pos= 140)  # creating game help
+    game_env.variables.noammo_sprite = Text(game_env, "NO AMMO !", 22)                 # creating noammo-sprite 
 
     welcome_screen_sprites.add(gamemenu_sprite)                                                         # adding GameMenuText to welcome_screen_sprites group
     welcome_screen_sprites.add(gametitle_sprite)                                
@@ -95,6 +96,7 @@ def play_bluesky():
                 if replaytext_sprite.replay_choice:
                     gameover = False                                            # setting gameover variable to false as user as opted to replay
                     jet = Jet(game_env)                                         # re-creating the jet
+                    game_env.variables.ammo = 100
                     game_env.variables.all_sprites = pygame.sprite.Group()      # re-creating group of sprites 
                     game_env.variables.all_sprites.add(jet)                     # adding the jet to all_sprites
                     game_env.variables.all_sprites.add(scoretext_sprite)        # adding the scoreboard to all_sprites
@@ -113,11 +115,12 @@ def play_bluesky():
                 if not gameover and game_started:
                     game_playtime += 1                                          # increasing playtime by 1s as this event is triggered every second; just reusing existing event instead of recreating a new event
 
-                    if game_playtime % 10 == 0:                                 # changing game level very 10s
+                    if game_playtime % 20 == 0:                                 # changing game level very 20s
                         game_env.variables.levelup_sound.play()                 # playing level up sound
                         game_level += 1                                         # increasing the game level
                         pygame.time.set_timer(ADD_MISSILE, int(1000/(game_env.constants.missile_per_sec + game_level))) # updating timer of ADD_MISSLE for more missiles to be added
-            
+                        game_env.variables.ammo += 50                                                                   # adding 50 ammo on each level up
+                        game_env.variables.all_sprites.remove(game_env.variables.noammo_sprite)                         # removing no ammo sprite when ammo is refilled
 
         screen.fill(screen_color)                                                                   # Filling screen with sky blue color
         [screen.blit(sprite.surf, sprite.rect) for sprite in game_env.variables.all_sprites]        # drawing all sprites in the screen
@@ -129,13 +132,13 @@ def play_bluesky():
             game_env.variables.collision_sound.play()
             game_env.variables.all_sprites.add(gameover_sprite)                                     # adding gameover text sprite to all_sprites for repetated rendereing incase of gameover
             game_env.variables.all_sprites.add(replaytext_sprite)                                   # adding replay text sprite to all_sprites for repetated rendereing incase of gameover
+            game_env.variables.all_sprites.remove(game_env.variables.noammo_sprite)
             gameover = True                                                                         # setting gameover to true to prevent new missiles from spawning
         
         collision = pygame.sprite.groupcollide(missiles, game_env.variables.bullets, True, True)    # checking for collision between bullets and missiles, killing each one of them on collision
         if len(collision) > 0:
             game_env.variables.hit_sound.play()                                                     # play missile destroyed sound
             game_score += len(collision) * 10                                                       # 1 missle destroyed = 10 pts.
-
 
         pygame.display.flip()                                                                       # updating display to the screen
         gameclock.tick(game_env.constants.fps)                                                      # ticking game clock at 30 to maintain 30fps

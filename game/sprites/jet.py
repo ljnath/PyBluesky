@@ -27,11 +27,11 @@ class Jet(pygame.sprite.Sprite):
             self.rect.move_ip(self.__speed, 0)                                  # moving the jet on positive x-axis
 
         if self.rect.left < 0: self.rect.left = 0                               # if the jet has moved left and have crossed the screen; the left position is set to 0 as it is the boundary
-        if self.rect.top < 0: self.rect.top = 0                                # if the jet has moved top and have crossed the screen; the top position is set to 0 as it is the boundary
+        if self.rect.top < 0: self.rect.top = 0                                 # if the jet has moved top and have crossed the screen; the top position is set to 0 as it is the boundary
         if self.rect.right > self.__game_env.constants.screen_width:
             self.rect.right = self.__game_env.constants.screen_width            # if the jet has moved right and have crossed the screen; the right position is set to screen width as it is the boundary
-        if self.rect.bottom > self.__game_env.constants.screen_width:
-            self.rect.bottom = self.__game_env.constants.screen_width           # if the jet has moved bottom and have crossed the screen; the bottom position is set to screen width as it is the boundary
+        if self.rect.bottom > self.__game_env.constants.screen_height:
+            self.rect.bottom = self.__game_env.constants.screen_height          # if the jet has moved bottom and have crossed the screen; the bottom position is set to screen width as it is the boundary
 
     def auto_move(self, position):
         dx = position[0] - self.rect.x                                          # calculating x-coordinate difference of mouse and current jet position
@@ -45,9 +45,12 @@ class Jet(pygame.sprite.Sprite):
         self.rect.y += self.__speed * math.sin(angle)                           # moving the y-coordinate of jet towards the mouse cursor
 
     def shoot(self):
-        bullet = Bullet(self.__game_env, self.rect.x+self.rect.width, self.rect.y+22)              # create a bullet where the jet is located
-        self.__game_env.variables.bullets.add(bullet)                           # add the bullet to bullet group
-        self.__game_env.variables.all_sprites.add(bullet)                       # add the bullet tp all_sprites
-        self.__game_env.variables.shoot_sound.play()                            # play shooting sound
-
+        if self.__game_env.variables.ammo > 0:
+            bullet = Bullet(self.__game_env, self.rect.x+self.rect.width, self.rect.y+22)           # create a bullet where the jet is located
+            self.__game_env.variables.bullets.add(bullet)                                           # add the bullet to bullet group
+            self.__game_env.variables.all_sprites.add(bullet)                                       # add the bullet tp all_sprites
+            self.__game_env.variables.shoot_sound.play()                                            # play shooting sound
+            self.__game_env.variables.ammo -= 1
+        else:
+            self.__game_env.variables.all_sprites.add(self.__game_env.variables.noammo_sprite)      # show noammo sprite
 

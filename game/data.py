@@ -1,6 +1,7 @@
 from enum import Enum
 from pygame.mixer import Sound
 from pygame.sprite import Group
+from pygame import display
 
 class InputMode(Enum):
     """ InputMode enumerator which holds the supported input modes for the game
@@ -10,19 +11,18 @@ class InputMode(Enum):
 
 
 class Constants():
-    """ Class which holds all the game constants
+    """ Class which holds all the game self.__
     """
     def __init__(self):
-        """ default constructor"""
-        pass
+        self.__display_info = display.Info()                        # get current display information
 
     @property
     def screen_width(self):
-        return 800                          # game resolution is 800x600
+        return self.__display_info.current_w                        # game resolution is same as monitor resolution
 
     @property
     def screen_height(self):
-        return 600                          # game resolution is 800x600
+        return self.__display_info.current_h                        # game resolution is same as monitor resolution
     
     @property
     def text_default_color(sef):
@@ -73,6 +73,10 @@ class Constants():
         return 30                           # game should run at 30 pfs
 
     @property
+    def max_ammo(self):
+        return 999
+
+    @property
     def game_sound(self):
         return {
             'music' : 'audio/Apoxode_-_Electric_1.mp3',   # sound source: http://ccmixter.org/files/Apoxode/59262 ; License: https://creativecommons.org/licenses/by/3.0/
@@ -89,16 +93,18 @@ class Variables():
     """ Class which holds all the game variables
     """
     def __init__(self):
-        constants= Constants()
-        self.__moveup_sound = Sound(constants.game_sound.get('move_up'))
-        self.__movedown_sound = Sound(constants.game_sound.get('move_down'))
-        self.__collision_sound = Sound(constants.game_sound.get('collision'))
-        self.__levelup_sound = Sound(constants.game_sound.get('levelup'))
-        self.__shoot_sound = Sound(constants.game_sound.get('shoot'))
-        self.__hit_sound = Sound(constants.game_sound.get('hit'))
+        self.__constants= Constants()
+        self.__moveup_sound = Sound(self.__constants.game_sound.get('move_up'))
+        self.__movedown_sound = Sound(self.__constants.game_sound.get('move_down'))
+        self.__collision_sound = Sound(self.__constants.game_sound.get('collision'))
+        self.__levelup_sound = Sound(self.__constants.game_sound.get('levelup'))
+        self.__shoot_sound = Sound(self.__constants.game_sound.get('shoot'))
+        self.__hit_sound = Sound(self.__constants.game_sound.get('hit'))
         self.__game_input = InputMode.KEYBOARD
         self.__all_sprites = Group()
         self.__bullets = Group()
+        self.__ammo = 100
+        self.__noammo_sprite = None
 
     @property
     def moveup_sound(self):
@@ -147,3 +153,19 @@ class Variables():
     @bullets.setter
     def bullets(self, value):
         self.__bullets = value
+
+    @property
+    def ammo(self):
+       return self.__ammo
+    
+    @ammo.setter
+    def ammo(self, value):
+        self.__ammo = value if value <= self.__constants.max_ammo else self.__constants.max_ammo
+
+    @property
+    def noammo_sprite(self):
+       return self.__noammo_sprite
+    
+    @noammo_sprite.setter
+    def noammo_sprite(self, value):
+        self.__noammo_sprite = value

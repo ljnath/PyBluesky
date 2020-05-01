@@ -11,6 +11,13 @@ Email : ljnath@ljnath.com<br>
 Website : https://www.ljnath.com
 
 ## Change Log
+### [0.10] - 2020-05-01
+- added ammo limit, game starts with 100 ammo and 50 is added pn every level up (max ammo can be 999)
+- added support for game to run in full screen by default
+- added support to dynamically set game resolution as the monitor resolution
+- channged score sprite color to dark grey
+- change levelup time from 10s to 20s
+
 ### [0.9] - 2020-05-01
 - added shoot functionality for the jet by clicking mouse of pressing spacebar
 - updated score calculation, now destroying 1 missile gives 10 pts

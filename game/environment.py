@@ -26,10 +26,15 @@ class GameEnvironment():
         self.__constants = Constants()
         self.__variables = Variables()
 
-    def get_random_point(self):
+    def get_random_point_on_right(self):
         x_pos = random.randint(self.__constants.screen_width + 20, self.__constants.screen_width + 100)     # generating random x position
         y_pos = random.randint(0, self.__constants.screen_height)                                           # generating random y position
         return (x_pos, y_pos)
+
+    def get_random_point_on_top(self):
+        x_pos = random.randint(0, self.__constants.screen_width)     # generating random x position
+        y_pos = random.randint(10, 20)                                           # generating random y position
+        return (x_pos, y_pos * -1)
         
     @property
     def constants(self):

@@ -1,17 +1,19 @@
 # Import the pygame module
 import pygame
+import random
 from game.data import InputMode
 from game.environment import GameEnvironment
 from game.sprites.jet import Jet
 from game.sprites.missile import Missile
 from game.sprites.cloud import Cloud
+from game.sprites.star import Star
 from game.sprites.text import Text
 from game.sprites.text.score import ScoreText
 from game.sprites.text.replay import ReplayText
 from game.sprites.text.gamemenu import GameMenuText
 
 __name__ = 'Bluesky'            # setting game name    
-version = '0.10'               # setting game version
+version = '0.11'               # setting game version
 
 def play_bluesky():
     pygame.mixer.init()                                                 # initializing same audio mixer with default settings
@@ -28,6 +30,8 @@ def play_bluesky():
     pygame.mixer.music.load(game_env.constants.game_sound.get('music'))     # setting main game background music
     pygame.mixer.music.play(loops=-1)                                       # lopping the main game music
 
+    # screen = pygame.display.set_mode((800,600))     # creating game screen with custom width and height
+    
     screen = pygame.display.set_mode((game_env.constants.screen_width, game_env.constants.screen_height), game_env.FULLSCREEN)     # creating game screen with custom width and height
     pygame.display.set_caption('{} ver. {}'.format(__name__, version))              # setting name of game window
     pygame.mouse.set_visible(False)                                                     # hiding the mouse pointer from the game screen
@@ -46,11 +50,14 @@ def play_bluesky():
     game_level = 1                                                                      # game level is set to 1
     game_score = 0                                                                      # default game score
     game_playtime = 0                                                                   # default game playtime
+    star_shown = False
     mouse_pos = (game_env.constants.screen_width, game_env.constants.screen_height/2)   # default mouse position, let the jet move forward on a straight line
     screen_color = game_env.constants.background_default if game_started else game_env.constants.background_special
 
+    stars = pygame.sprite.GroupSingle()                                                 # group of stars with max 1 sprite
     clouds = pygame.sprite.Group()                                                      # creating cloud group for storing all the clouds in the game
     missiles = pygame.sprite.Group()                                                    # creating missile group for storing all teh missiles in the game
+    deactivated_missile = pygame.sprite.Group()                                                # creating missile group for storing all teh missiles in the game
     welcome_screen_sprites = pygame.sprite.Group()
 
     gamemenu_sprite = GameMenuText(game_env)                                            # creating GameMenuText sprite
@@ -105,6 +112,7 @@ def play_bluesky():
                     screen_color = game_env.constants.background_default        # restoring  screen color
                     game_score, game_playtime = 0, 0                            # reseting game score and playtime
                     game_level = 1                                              # resetting game level
+                    star_shown = False
                     pygame.time.set_timer(ADD_MISSILE, int(1000/game_env.constants.missile_per_sec))
                 else:
                     running = False                                             # stopping game as user as opted not to replay
@@ -114,13 +122,19 @@ def play_bluesky():
                 game_env.variables.all_sprites.add(new_cloud)                   # adding the cloud to all_sprites group
                 if not gameover and game_started:
                     game_playtime += 1                                          # increasing playtime by 1s as this event is triggered every second; just reusing existing event instead of recreating a new event
-
+                    if not star_shown and random.randint(0,30)%3 == 0:
+                        star = Star(game_env)
+                        stars.add(star)
+                        game_env.variables.all_sprites.add(star)
+                        star_shown = True
                     if game_playtime % 20 == 0:                                 # changing game level very 20s
+                        star_shown = False
                         game_env.variables.levelup_sound.play()                 # playing level up sound
                         game_level += 1                                         # increasing the game level
                         pygame.time.set_timer(ADD_MISSILE, int(1000/(game_env.constants.missile_per_sec + game_level))) # updating timer of ADD_MISSLE for more missiles to be added
                         game_env.variables.ammo += 50                                                                   # adding 50 ammo on each level up
                         game_env.variables.all_sprites.remove(game_env.variables.noammo_sprite)                         # removing no ammo sprite when ammo is refilled
+                        
 
         screen.fill(screen_color)                                                                   # Filling screen with sky blue color
         [screen.blit(sprite.surf, sprite.rect) for sprite in game_env.variables.all_sprites]        # drawing all sprites in the screen
@@ -140,6 +154,15 @@ def play_bluesky():
             game_env.variables.hit_sound.play()                                                     # play missile destroyed sound
             game_score += len(collision) * 10                                                       # 1 missle destroyed = 10 pts.
 
+        if pygame.sprite.spritecollideany(jet, stars):                                              # collition between jet and star (powerup)
+            [game_env.variables.all_sprites.remove(s) for s in stars.sprites()]                     # removing the star from all_sprites to hide from screen
+            game_score += 100                                                                       # increasing game score by 100
+            stars.empty()                                                                           # removing star from stars group
+            for missile in missiles.sprites():                                                      
+                missile.deactivate()                                                                # making missile as deactivated
+                deactivated_missile.add(missile)                                                    # adding missile to deactivated_missile group
+                missiles.remove(missile)                                                            # remove missiles from missles group to avoid collision with jet 
+            
         pygame.display.flip()                                                                       # updating display to the screen
         gameclock.tick(game_env.constants.fps)                                                      # ticking game clock at 30 to maintain 30fps
 
@@ -156,7 +179,9 @@ def play_bluesky():
 
         game_env.variables.bullets.update()
         missiles.update()                                                       # update the position of the missiles
+        deactivated_missile.update()
         clouds.update()                                                         # update the postition of the clouds
+        stars.update()
         scoretext_sprite.update(game_level, game_playtime, game_score)          # update the game score
 
     pygame.mixer.music.stop()                                                   # stopping game music

@@ -11,6 +11,11 @@ Email : ljnath@ljnath.com<br>
 Website : https://www.ljnath.com
 
 ## Change Log
+### [0.11] - 2020-05-01
+- added powerup star which will mark all active missiles as bad
+- added suport for collision detection between the jet and its bullet
+- consuming powerup will increase game score by 100
+
 ### [0.10] - 2020-05-01
 - added ammo limit, game starts with 100 ammo and 50 is added pn every level up (max ammo can be 999)
 - added support for game to run in full screen by default

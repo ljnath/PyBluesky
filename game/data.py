@@ -18,10 +18,12 @@ class Constants():
 
     @property
     def screen_width(self):
+        # return 800
         return self.__display_info.current_w                        # game resolution is same as monitor resolution
 
     @property
     def screen_height(self):
+        # return 600
         return self.__display_info.current_h                        # game resolution is same as monitor resolution
     
     @property
@@ -47,6 +49,10 @@ class Constants():
     @property
     def jet_image(self):
         return 'image/jet.png'              # jet image path
+
+    @property
+    def powerup_image(self):
+        return 'image/powerup.png'              # jet image path
 
     @property
     def bullet_image(self):

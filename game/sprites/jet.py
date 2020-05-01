@@ -8,7 +8,7 @@ class Jet(pygame.sprite.Sprite):
     """
     def __init__(self, game_env):
         super(Jet, self).__init__()                                 # initilizing parent class pygame.sprite.Sprite
-        self.__speed = 5                                            # setting jet speed as 5
+        self.__speed = 8                                            # setting jet speed as 5
         self.__game_env = game_env
         self.surf = pygame.image.load(game_env.constants.jet_image).convert()    # loading jet image from file;  image source https://www.flaticon.com/authors/iconixar
         self.surf.set_colorkey((255, 255, 255), self.__game_env.RLEACCEL)           # setting the white color as the transperant area; RLEACCEL is used for better performance on non accelerated displays
@@ -46,7 +46,7 @@ class Jet(pygame.sprite.Sprite):
 
     def shoot(self):
         if self.__game_env.variables.ammo > 0:
-            bullet = Bullet(self.__game_env, self.rect.x+self.rect.width, self.rect.y+22)           # create a bullet where the jet is located
+            bullet = Bullet(self.__game_env, self.rect.x+self.rect.width+10, self.rect.y+22)           # create a bullet where the jet is located
             self.__game_env.variables.bullets.add(bullet)                                           # add the bullet to bullet group
             self.__game_env.variables.all_sprites.add(bullet)                                       # add the bullet tp all_sprites
             self.__game_env.variables.shoot_sound.play()                                            # play shooting sound

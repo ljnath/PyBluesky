@@ -21,7 +21,7 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 
-pybluesky - A simple python game protect your jet from missiles attack based on pygame framework
+PyBluesky - A simple python game to navigate your jet and fight though a massive missiles attack based on pygame framework
 
 Version: 1.0.0
 Author: Lakhya Jyoti Nath (ljnath)

@@ -34,9 +34,7 @@ import cx_Freeze
 
 executables = [
     cx_Freeze.Executable(
-        "pybluesky.py",
-        shortcutName="Play PyBluesky",
-        shortcutDir="DesktopFolder",
+        "pybluesky.py"
         )
     ]
 
@@ -67,7 +65,7 @@ base = "Win32GUI"
 cx_Freeze.setup(
     name = "PyBluesky",
     version = '1.0.0',
-    description = 'A simple python game protect your jet from missiles attack based on pygame framework',
+    description = 'A simple python game to navigate your jet and fight though a massive missiles attack based on pygame framework',
     executables = executables,
     options={
         "bdist_msi": bdist_msi_options,
@@ -77,8 +75,7 @@ cx_Freeze.setup(
                 'audio/',
                 'font/',
                 'image/',
-                'icon/',
-                'pybluesky.ico'
+                'icon/'
             ]
         }
     }

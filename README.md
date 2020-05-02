@@ -2,7 +2,7 @@
 # PyBluesky
 ### Version : 1.0.0
 
-A simple python game protect your jet from missiles attack based on pygame framework </br>
+A simple python game to navigate your jet and fight though a massive missiles attack based on pygame framework</br>
 Based on https://realpython.com/blog/python/pygame-a-primer
 
 Author : Lakhya Jyoti Nath (ljnath)<br>
@@ -15,7 +15,6 @@ Website : https://www.ljnath.com
 - renamed game to PyBluesky
 - added background vegetation support
 - added packaging support
-
 
 ### [0.12] - 2020-05-02
 - updated sprite for bullet, jet

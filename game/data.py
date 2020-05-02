@@ -14,17 +14,18 @@ class Constants():
     """ Class which holds all the game self.__
     """
     def __init__(self):
+        pass
         self.__display_info = display.Info()                        # get current display information
 
     @property
     def screen_width(self):
-        # return 800
         return self.__display_info.current_w                        # game resolution is same as monitor resolution
+        return 1024
 
     @property
     def screen_height(self):
-        # return 600
         return self.__display_info.current_h                        # game resolution is same as monitor resolution
+        return 768
     
     @property
     def text_default_color(sef):
@@ -35,12 +36,20 @@ class Constants():
         return (0,0,255)                    # selection color is blue
 
     @property
+    def game_icon(self):
+        return 'icon/pybluesky.ico'                  # jet image path
+
+    @property
     def game_font(self):
         return 'font/ARCADE.ttf'            # game font file path
 
     @property
     def clouds(self):
         return ('image/cloud1.png', 'image/cloud2.png', 'image/cloud3.png') # all game cloud designs
+
+    @property
+    def vegetation(self):
+        return ('image/vegetation_plain.png', 'image/vegetation_tree.png')
 
     @property
     def missile_activated_image(self):
@@ -72,7 +81,7 @@ class Constants():
 
     @property
     def background_default(self):
-        return (135, 206, 250)              # skyblue color
+        return (208, 244, 247)              # skyblue color
 
     @property
     def background_special(self):
@@ -117,6 +126,7 @@ class Variables():
         self.__bullets = Group()
         self.__ammo = 100
         self.__noammo_sprite = None
+        self.__game_level = 1
 
     @property
     def moveup_sound(self):
@@ -185,3 +195,11 @@ class Variables():
     @noammo_sprite.setter
     def noammo_sprite(self, value):
         self.__noammo_sprite = value
+
+    @property
+    def game_level(self):
+        return self.__game_level
+
+    @game_level.setter
+    def game_level(self, value):
+        self.__game_level = value

@@ -9,10 +9,8 @@ class Text(pygame.sprite.Sprite):
         self.color = game_env.constants.text_default_color if color is None else color      # storing argument color in class variable
         self.font = pygame.font.Font(game_env.constants.game_font, size)                    # loading font and creating class variable font with given size
         self.surf = self.font.render(text, 1, self.color)                                   # creating surface by rendering the text
-        if not x_pos:
-            x_pos = game_env.constants.screen_width / 2                                     # deafult position is set to center of screen
-        if not y_pos:
-            y_pos = game_env.constants.screen_height / 2                                    # deafult position is set to center of screen
+        x_pos = game_env.constants.screen_width / 2 if x_pos is None else x_pos             # default position is set to center of screen
+        y_pos = game_env.constants.screen_height / 2 if y_pos is None else y_pos             # default position is set to center of screen
         self.rect = self.surf.get_rect(center=(x_pos, y_pos))                               # creating rectangle from the surface
         self.__move_forward = True
         self.__move_up = True

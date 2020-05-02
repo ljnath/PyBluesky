@@ -9,5 +9,5 @@ class ScoreText(Text):
         self.__game_env = game_env
         self.rect = self.surf.get_rect(topright=(self.__game_env.constants.screen_width-self.surf.get_width()/2 + 30, 2))       # creating rectangle from text surface
     
-    def update(self, level, playtime, score):
-        self.surf = self.font.render("LEVEL {} TIME {} AMMO {} SCORE {}".format(str(level).zfill(2), str(playtime).zfill(5), str(self.__game_env.variables.ammo).zfill(3),str(score).zfill(8)), 1, self.color)   # updating scoreboard score and time
+    def update(self, playtime, score):
+        self.surf = self.font.render("LEVEL {} TIME {} AMMO {} SCORE {}".format(str(self.__game_env.variables.game_level).zfill(2), str(playtime).zfill(5), str(self.__game_env.variables.ammo).zfill(3),str(score).zfill(8)), 1, self.color)   # updating scoreboard score and time

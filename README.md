@@ -1,6 +1,6 @@
 
-# PyGame-bluesky
-### Version : 0.12
+# PyBluesky
+### Version : 1.0.0
 
 A simple python game protect your jet from missiles attack based on pygame framework </br>
 Based on https://realpython.com/blog/python/pygame-a-primer
@@ -11,6 +11,12 @@ Email : ljnath@ljnath.com<br>
 Website : https://www.ljnath.com
 
 ## Change Log
+### [1.0.0] - 2020-05-02
+- renamed game to PyBluesky
+- added background vegetation support
+- added packaging support
+
+
 ### [0.12] - 2020-05-02
 - updated sprite for bullet, jet
 - added support for flashing powerup star, flash rate is configurable in the class

@@ -1,6 +1,6 @@
 from game.data import Constants, Variables
 import random
-
+from pygame import image
  # importing here to avoid reimporting in all the sub modules
 from pygame.locals import (
     SRCALPHA,
@@ -27,15 +27,23 @@ class GameEnvironment():
         self.__variables = Variables()
 
     def get_random_point_on_right(self):
-        x_pos = random.randint(self.__constants.screen_width + 20, self.__constants.screen_width + 100)     # generating random x position
-        y_pos = random.randint(0, self.__constants.screen_height)                                           # generating random y position
-        return (x_pos, y_pos)
+        pos_x = random.randint(self.__constants.screen_width + 20, self.__constants.screen_width + 100)     # generating random x position
+        pos_y = random.randint(0, self.__constants.screen_height)                                           # generating random y position
+        return (pos_x, pos_y)
 
     def get_random_point_on_top(self):
-        x_pos = random.randint(0, self.__constants.screen_width)                    # generating random x position
-        y_pos = random.randint(10, 20)                                              # generating random y position
-        return (x_pos, y_pos * -1)
+        pos_x = random.randint(0, self.__constants.screen_width)                    # generating random x position
+        pos_y = random.randint(10, 20)                                              # generating random y position
+        return (pos_x, pos_y * -1)
         
+    def get_image_size(self, image_file):
+        image_surf = image.load(image_file)
+        return (image_surf.get_width(), image_surf.get_height())
+
+    @property
+    def vegetation_size(self):
+        return self.get_image_size(self.__constants.vegetation[0])
+            
     @property
     def constants(self):
         return self.__constants

@@ -100,6 +100,7 @@ celerybeat-schedule
 # Environments
 .env
 .venv
+.venv_x86
 env/
 venv/
 ENV/

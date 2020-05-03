@@ -4,12 +4,15 @@
 
 A simple python game to navigate your jet and fight though a massive missiles attack based on pygame framework</br>
 Based on https://realpython.com/blog/python/pygame-a-primer
-Download the game binary from https://sourceforge.net/projects/ljnath/
 
 Author : Lakhya Jyoti Nath (ljnath)<br>
 Date : April 2020<br>
 Email : ljnath@ljnath.com<br>
 Website : https://www.ljnath.com
+
+
+[![Download PyBluesky](https://sourceforge.net/sflogo.php?type=13&group_id=3215162)](https://sourceforge.net/p/ljnath/)  
+[![Download PyBluesky](https://img.shields.io/sourceforge/dt/ljnath.svg)](https://sourceforge.net/projects/ljnath/files/latest/download)
 
 ## Change Log
 ### [1.0.2] - 2020-05-04

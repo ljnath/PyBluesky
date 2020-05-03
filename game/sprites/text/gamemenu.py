@@ -8,10 +8,10 @@ class GameMenuText(Text):
         It creates the game input menu sprite
     """
     def __init__(self, game_env): 
-        Text.__init__(self, game_env, size=42)                                                                          # initilizing parent class with default text color as red
+        Text.__init__(self, game_env, size=36)                                                                          # initilizing parent class with default text color as red
         self.__game_env = game_env
         self.__jet = Jet(game_env)                                                                                      # creating a of jet 
-        self.__prefix_surf = self.font.render('Select game input', 1, self.color)                                       # creating surface with the prefix text
+        self.__prefix_surf = self.font.render("What's your input {}?".format(self.__game_env.dynamic.player_name), 1, self.color)                                       # creating surface with the prefix text
         self.__mouse = self.font.render(' Mouse',1, self.color)                                                         # creating surface with mouse text
         self.__keybrd = self.font.render(' Keyboard', 1, self.color)                                                    # creating surface with mouse text
 
@@ -24,10 +24,10 @@ class GameMenuText(Text):
         self.__mouse_selected = Surface((self.__jet.surf.get_width() + mouse_surf.get_width(), mouse_surf.get_height()), game_env.SRCALPHA)       # creating surface for jet and highlighted mouse text
         self.__mouse_selected.blit(self.__jet.surf, (0,0))                                                              # drawing the jet
         self.__mouse_selected.blit(mouse_surf, (self.__jet.surf.get_width(), 0))                                        # drawing the highligted mouse text after the jet image 
-
+        self.__left_padding = self.__prefix_surf.get_width()/2 - self.__keybrd_selected.get_width() / 2
         self.__highlightKeyboard()                                                                                      # calling method to highlight keyboard (the default choice)
         
-    def __recreateSurf(self):
+    def __recreate_surface(self):
         self.surf = Surface((self.__prefix_surf.get_width(), self.__prefix_surf.get_height() * 3), self.__game_env.SRCALPHA)                # creating default surface of combinted expected length
         self.surf.blit(self.__prefix_surf, (0,0))                                                                                           # drawing the prefix text
 
@@ -41,11 +41,11 @@ class GameMenuText(Text):
         self.rect = self.surf.get_rect(center=(self.__game_env.static.screen_width/2, self.__game_env.static.screen_height/2 + 50))        # creating default rect and setting its position center
 
     def __highlightKeyboard(self):
-        self.__recreateSurf()                                                                                           # recreating the surface, as we will re-draw
-        self.surf.blit(self.__keybrd_selected, (0,self.__prefix_surf.get_height()))                                     # drawing the jet+keyboard text
-        self.surf.blit(self.__mouse, (self.__jet.surf.get_width(), self.__prefix_surf.get_height() * 2))                # drawing the mouse text
+        self.__recreate_surface()                                                                                           # recreating the surface, as we will re-draw
+        self.surf.blit(self.__keybrd_selected, (self.__left_padding ,self.__prefix_surf.get_height()))                                     # drawing the jet+keyboard text
+        self.surf.blit(self.__mouse, (self.__left_padding  + self.__jet.surf.get_width(), self.__prefix_surf.get_height() * 2))                # drawing the mouse text
 
     def __highlightMouse(self):
-        self.__recreateSurf()                                                                                           # recreating the surface, as we will re-draw
-        self.surf.blit(self.__keybrd, (self.__jet.surf.get_width(), self.__prefix_surf.get_height()))                   # drawing keyboard text
-        self.surf.blit(self.__mouse_selected, (0, self.__prefix_surf.get_height()*2))                                   # drawing jet+mouse text
+        self.__recreate_surface()                                                                                           # recreating the surface, as we will re-draw
+        self.surf.blit(self.__keybrd, (self.__left_padding  + self.__jet.surf.get_width(), self.__prefix_surf.get_height()))                   # drawing keyboard text
+        self.surf.blit(self.__mouse_selected, (self.__left_padding , self.__prefix_surf.get_height()*2))                                   # drawing jet+mouse text

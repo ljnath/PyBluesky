@@ -1,8 +1,9 @@
 
 from game.data.static import StaticData
-from game.data.enums import InputMode, TitleScreen
+from game.data.enums import InputMode, Screen
 from pygame.mixer import Sound
 from pygame.sprite import Group
+import os
 
 class DynamicData():
     """ Class which holds all the game variables
@@ -21,11 +22,19 @@ class DynamicData():
         self.__noammo_sprite = None
         self.__game_level = 1
         self.__update_available = False
-        self.__active_screen = TitleScreen.GAMEMENU
         self.__game_score = 0
         self.__game_playtime = 0
         self.__replay = True
+        self.__player_name = ''
+
+        # loading the player name from file, name can be max 20 character long
+        if os.path.exists(self.__static.player_file):
+            with open(self.__static.player_file) as file_reader:
+                name = file_reader.read().strip()[:self.__static.name_length]
+                self.__player_name = '' if not name else name
         
+        self.__active_screen = Screen.NAMEINPUT if not self.__player_name else Screen.GAMEMENU
+
     @property
     def collision_sound(self):
         return self.__collision_sound
@@ -133,3 +142,14 @@ class DynamicData():
     @replay.setter
     def replay(self, value):
         self.__replay = value
+
+    @property
+    def player_name(self):
+        return self.__player_name
+
+    @player_name.setter
+    def player_name(self, value):
+        self.__player_name = value
+        # saving the player name to file for future reference
+        with open(self.__static.player_file, 'w') as file_writter:
+            file_writter.write(self.__player_name)

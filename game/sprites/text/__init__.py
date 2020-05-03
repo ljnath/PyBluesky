@@ -15,7 +15,6 @@ class Text(Sprite):
         self.rect = self.surf.get_rect(center=(pos_x, pos_y))                               # creating rectangle from the surface
         self.__move_forward = True
         self.__move_up = True
-
     
     def render(self, text):
         self.surf = self.font.render(text, 2, self.color)                                   # dynamically updating the surface with updated text

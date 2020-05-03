@@ -21,9 +21,9 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 
-cx freeze detup file for building the game
+cx freeze setup file for building the game
 
-Version: 1.0.1
+Version: 1.0.2
 Author: Lakhya Jyoti Nath (ljnath)
 Email:  ljnath@ljnath.com
 Website: https://www.ljnath.com
@@ -41,19 +41,15 @@ shortcut_metadata = [
      None,                              # Arguments
      None,                              # Description
      None,                              # Hotkey
-     "TARGETDIR/pybluesky.exe",        # Icon
+     "",                                # Icon
      None,                              # IconIndex
      False,                             # ShowCmd
      'TARGETDIR'                        # WkDir
      )
     ]
 
-bdist_msi_options = {
-    'data': {
-        "Shortcut": shortcut_metadata
-    }
-}
 
+bdist_msi_options= {}
 executables =None
 if sys.platform == "win32":
     executables = [Executable(
@@ -62,12 +58,18 @@ if sys.platform == "win32":
         base = "Win32GUI",
         targetName = "pybluesky.exe",
         icon = 'icon/pybluesky.ico'
-    )]   
+    )]
+
+    bdist_msi_options = {
+        'data': {
+            "Shortcut": shortcut_metadata  
+        }
+    }
 
 
 setup(
     name = "PyBluesky",
-    version = '1.0.1',
+    version = '1.0.2',
     description = 'A simple python game to navigate your jet and fight though a massive missiles attack based on pygame framework',
     executables = executables,
     options={

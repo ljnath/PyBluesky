@@ -8,7 +8,7 @@ class Jet(pygame.sprite.Sprite):
     """
     def __init__(self, game_env):
         super(Jet, self).__init__()                                 # initilizing parent class pygame.sprite.Sprite
-        self.__speed = 8                                            # setting jet speed as 5
+        self.__speed = 7                                            # setting jet speed as 5
         self.__game_env = game_env
         self.surf = pygame.image.load(game_env.static.jet_image).convert()                   # loading jet image from file;  image source https://www.flaticon.com/authors/iconixar
         self.surf.set_colorkey((255, 255, 255), self.__game_env.RLEACCEL)                       # setting the white color as the transperant area; RLEACCEL is used for better performance on non accelerated displays

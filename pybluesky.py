@@ -23,7 +23,7 @@ SOFTWARE.
 
 PyBluesky - A simple python game to navigate your jet and fight though a massive missiles attack based on pygame framework
 
-Version: 1.0.1
+Version: 1.0.2
 Author: Lakhya Jyoti Nath (ljnath)
 Email:  ljnath@ljnath.com
 Website: https://www.ljnath.com
@@ -44,9 +44,10 @@ from game.sprites.text.replay import ReplayText
 from game.sprites.text.gamemenu import GameMenuText
 from game.sprites.text.help import HelpText
 from game.sprites.text.leaderboard import LeaderBoardText
+from game.sprites.text.input.name import NameInputText
 from game.handlers.network import NetworkHandler
 from game.handlers.leaderboard import LeaderBoardHandler
-from game.data.enums import InputMode, TitleScreen
+from game.data.enums import InputMode, Screen
 from threading import Thread
 
 def load_leaders():
@@ -60,9 +61,9 @@ def check_update(game_env):
     check_update_thread.join()
     load_leaders()
 
-def submit_score(game_env):
+def submit_result(game_env):
     if game_env.dynamic.game_score > 0:
-        network_thread = Thread(target=NetworkHandler().submit_score, args=([game_env.dynamic.game_score]))
+        network_thread = Thread(target=NetworkHandler().submit_result, args=([game_env]))
         network_thread.start()
         network_thread.join()
     load_leaders()
@@ -88,7 +89,7 @@ def play():
     pygame.mixer.music.play(loops=-1)                                                                       # lopping the main game music
     pygame.mixer.music.set_volume(.3)
 
-    screen = pygame.display.set_mode((game_env.static.screen_width, game_env.static.screen_height))         # creating game screen with custom width and height
+    # screen = pygame.display.set_mode((game_env.static.screen_width, game_env.static.screen_height))         # creating game screen with custom width and height
     screen = pygame.display.set_mode((game_env.static.screen_width, game_env.static.screen_height), game_env.FULLSCREEN)     # creating game screen with custom width and height
     pygame.display.set_caption('{} ver. {}'.format(game_env.static.name, game_env.static.version))          # setting name of game window
     pygame.display.set_icon(pygame.image.load(game_env.static.game_icon))                                   # updating game icon to the jet image
@@ -118,17 +119,20 @@ def play():
     deactivated_missile = pygame.sprite.Group()                                         # creating missile group for storing all teh missiles in the game
     title_sprites = pygame.sprite.Group()
 
-    active_sprite = GameMenuText(game_env)                                              # creating GameMenuText sprite
-    hint_sprite = Text(game_env, "Press M->Game menu, H->HELP, L->LeaderBoard, ESC->Quit", 22, pos_x=game_env.static.screen_width/2 , pos_y= 145)  # creating game help
-    title_banner_sprite = Text(game_env, "{} {}".format(game_env.static.name, game_env.static.version), 100, pos_x=game_env.static.screen_width/2 , pos_y=100)                                      # creating title_banner_sprite text sprite with game name
-    title_author_sprite = Text(game_env, "Written by: Lakhya Jyoti Nath (www.ljnath.com)", 24, pos_x=game_env.static.screen_width/2 , pos_y= game_env.static.screen_height-15)  # creating game author
-    
-    title_sprites.add(active_sprite)                                                                                # adding GameMenuText to title_sprites group
-    title_sprites.add(title_banner_sprite)                                
-    title_sprites.add(title_author_sprite)
-    [game_env.dynamic.all_sprites.add(sprite) for sprite in title_sprites]                                          # adding all title_sprites sprite to all_sprites
-    game_env.dynamic.all_sprites.add(hint_sprite)
+    general_hint_text = "Press M->Game menu, H->Help, L->LeaderBoard, ESC->Quit"
+    active_sprite = NameInputText(game_env)
+    hint_sprite = Text(game_env, "Enter your name and press [ENTER] Press [ESC] to quit", 22, pos_x=game_env.static.screen_width/2 , pos_y= 145)  # creating game help
+    title_banner_sprite = Text(game_env, "{} {}".format(game_env.static.name, game_env.static.version), 100, pos_x=game_env.static.screen_width/2 , pos_y=100)                  # creating title_banner_sprite text sprite with game name
+    title_author_sprite = Text(game_env, "Written by: Lakhya Jyoti Nath (www.ljnath.com)", 26, pos_x=game_env.static.screen_width/2 , pos_y= game_env.static.screen_height-20)  # creating game author
 
+    if game_env.dynamic.player_name:
+        hint_sprite = Text(game_env, general_hint_text, 22, pos_x=game_env.static.screen_width/2 , pos_y= 145)  # creating game help
+        active_sprite = GameMenuText(game_env)
+
+    game_env.dynamic.all_sprites.add(hint_sprite)
+    [title_sprites.add(sprite) for sprite in (active_sprite, title_banner_sprite, title_author_sprite)]             # adding all the necessary sprites to title_sprites
+    [game_env.dynamic.all_sprites.add(sprite) for sprite in title_sprites]                                          # adding all title_sprites sprite to all_sprites
+        
     jet = Jet(game_env)                                                                                             # creating jet sprite
     scoretext_sprite = ScoreText(game_env)                                                                          # creating scoreboard sprite
     game_env.dynamic.noammo_sprite = Text(game_env, "NO AMMO !", 24)                                                # creating noammo-sprite 
@@ -150,45 +154,51 @@ def play():
                     missiles.add(new_missile)                                                                       # adding the missile to missle group
                     game_env.dynamic.all_sprites.add(new_missile)                                                   # adding the missile to all_sprites group as well
             elif event.type == game_env.KEYDOWN:                                                                    # handling all the VALID key press, action varies based on current active screen
-                if event.key == game_env.K_h and game_env.dynamic.active_screen != TitleScreen.HELP:                # displyaing the help menu
+                if not game_started and game_env.dynamic.active_screen == Screen.NAMEINPUT:
+                    active_sprite.render(event.unicode)
+                    if game_env.dynamic.player_name:                                                                # if user has entered the name, then gamemenu is shown
+                        [game_env.dynamic.all_sprites.remove(sprite) for sprite in (active_sprite, hint_sprite)]
+                        active_sprite = GameMenuText(game_env)
+                        hint_sprite = Text(game_env, general_hint_text, 22, pos_x=game_env.static.screen_width/2 , pos_y= 145)
+                        [game_env.dynamic.all_sprites.add(sprite) for sprite in (active_sprite, hint_sprite)]
+                        game_env.dynamic.active_screen = Screen.GAMEMENU
+                        
+                elif event.key == game_env.K_h and game_env.dynamic.active_screen != Screen.HELP:                   # displyaing the help menu
                     game_env.dynamic.all_sprites.remove(active_sprite)
                     active_sprite = HelpText(game_env)
                     game_env.dynamic.all_sprites.add(active_sprite)
-                    game_env.dynamic.active_screen = TitleScreen.HELP
-                elif event.key == game_env.K_l and game_env.dynamic.active_screen != TitleScreen.LEADERBOARD:       # displyaing the leaderboard
+                    game_env.dynamic.active_screen = Screen.HELP
+                elif event.key == game_env.K_l and game_env.dynamic.active_screen != Screen.LEADERBOARD:            # displyaing the leaderboard
                     game_env.dynamic.all_sprites.remove(active_sprite)
                     active_sprite = LeaderBoardText(game_env)
                     game_env.dynamic.all_sprites.add(active_sprite)
-                    game_env.dynamic.active_screen = TitleScreen.LEADERBOARD
+                    game_env.dynamic.active_screen = Screen.LEADERBOARD
                 elif event.key == game_env.K_m:
                     game_env.dynamic.all_sprites.remove(active_sprite)
-                    if not gameover and game_env.dynamic.active_screen != TitleScreen.GAMEMENU:                     # displyaing the game menu
+                    if not gameover and game_env.dynamic.active_screen != Screen.GAMEMENU:                     # displyaing the game menu
                         active_sprite = GameMenuText(game_env)
-                        game_env.dynamic.active_screen = TitleScreen.GAMEMENU
-                    elif gameover and game_env.dynamic.active_screen != TitleScreen.REPLAYMENU:                     # displaying the replay menu
+                        game_env.dynamic.active_screen = Screen.GAMEMENU
+                    elif gameover and game_env.dynamic.active_screen != Screen.REPLAYMENU:                     # displaying the replay menu
                         active_sprite = ReplayText(game_env)
-                        game_env.dynamic.active_screen = TitleScreen.REPLAYMENU
+                        game_env.dynamic.active_screen = Screen.REPLAYMENU
                     game_env.dynamic.all_sprites.add(active_sprite)
                 elif event.key == game_env.K_RETURN:                                                                # handling all [ENTER] key press activity
-                    if game_env.dynamic.active_screen == TitleScreen.GAMEMENU:                                      # selecting input mode in gamemenu screen
+                    if game_env.dynamic.active_screen == Screen.GAMEMENU:                                      # selecting input mode in gamemenu screen
                         pygame.mouse.set_visible(True if game_env.dynamic.game_input == InputMode.MOUSE else False) # displaying mouse cursor based on user input mode
                         screen_color = game_env.static.background_default                                           # restoring screen colot
                         [sprite.kill() for sprite in title_sprites]                                                 # kill all the title_sprites sprite sprite
-                        game_env.dynamic.all_sprites.remove(active_sprite)
-                        game_env.dynamic.all_sprites.remove(hint_sprite)
-                        game_env.dynamic.all_sprites.add(jet)                                                       # adding the jet to all_sprites
-                        game_env.dynamic.all_sprites.add(scoretext_sprite)                                          # adding the scoreboard to all_sprites
+                        [game_env.dynamic.all_sprites.remove(sprite) for sprite in (active_sprite, hint_sprite)]
+                        [game_env.dynamic.all_sprites.add(sprite) for sprite in (jet, scoretext_sprite)]            # adding the jet and scoreboard to all_sprites
                         [backgrounds.add(sprite) for sprite in vegetations.sprites()]
                         game_started = True                                                                         # starting game 
-                    elif game_env.dynamic.active_screen == TitleScreen.REPLAYMENU:                                  # selecting reply option in replaymenu screen
+                    elif game_env.dynamic.active_screen == Screen.REPLAYMENU:                                       # selecting reply option in replaymenu screen
                         if game_env.dynamic.replay:
                             gameover = False                                                                        # setting gameover variable to false as user as opted to replay
                             jet = Jet(game_env)                                                                     # re-creating the jet
                             game_env.dynamic.ammo = 100
                             missiles.empty()                                                                        # empting the missle group                    
                             game_env.dynamic.all_sprites = pygame.sprite.Group()                                    # re-creating group of sprites 
-                            game_env.dynamic.all_sprites.add(scoretext_sprite)                                      # adding the scoreboard to all_sprites
-                            game_env.dynamic.all_sprites.add(jet)                                                   # adding the jet to all_sprites
+                            [game_env.dynamic.all_sprites.add(sprite) for sprite in (jet, scoretext_sprite)]        # adding the jet and scoreboard to all_sprites
                             screen_color = game_env.static.background_default                                       # restoring  screen color
                             game_env.dynamic.game_playtime, game_env.dynamic.game_score, game_env.dynamic.game_level = 0, 0, 1 # resetting game data 
                             star_shown = False
@@ -219,7 +229,7 @@ def play():
                         star_shown = False
                         game_env.dynamic.levelup_sound.play()                                       # playing level up sound
                         game_env.dynamic.game_level += 1                                            # increasing the game level
-                        pygame.time.set_timer(ADD_MISSILE, int(1000/(game_env.static.missile_per_sec + game_env.dynamic.game_level))) # updating timer of ADD_MISSLE for more missiles to be added
+                        pygame.time.set_timer(ADD_MISSILE, int(1000/(game_env.static.missile_per_sec + int(game_env.dynamic.game_level/2)))) # updating timer of ADD_MISSLE for more missiles to be added
                         game_env.dynamic.ammo += 50                                                 # adding 50 ammo on each level up
                         game_env.dynamic.all_sprites.remove(game_env.dynamic.noammo_sprite)         # removing no ammo sprite when ammo is refilled
                         
@@ -228,18 +238,18 @@ def play():
         [screen.blit(sprite.surf, sprite.rect) for sprite in backgrounds]                           # drawing all backgrounds sprites
         [screen.blit(sprite.surf, sprite.rect) for sprite in game_env.dynamic.all_sprites]          # drawing all sprites in the screen
 
+        
 
         # missile hit
         if pygame.sprite.spritecollideany(jet, missiles) and not gameover:                          # Check if any missiles have collided with the player; if so
             active_sprite = ReplayText(game_env)
-            game_env.dynamic.active_screen = TitleScreen.REPLAYMENU
+            game_env.dynamic.active_screen = Screen.REPLAYMENU
             jet.kill()                                                                              # killing the jet
             game_env.dynamic.collision_sound.play()
-            game_env.dynamic.all_sprites.add(active_sprite)                                         # adding gameover text sprite to all_sprites for repetated rendereing incase of gameover
-            game_env.dynamic.all_sprites.add(hint_sprite)                                           # adding gameover text sprite to all_sprites for repetated rendereing incase of gameover
+            [game_env.dynamic.all_sprites.add(sprite) for sprite in (active_sprite, hint_sprite)]   # adding the gameover and the hint sprite
             game_env.dynamic.all_sprites.remove(game_env.dynamic.noammo_sprite)
             gameover = True                                                                         # setting gameover to true to prevent new missiles from spawning
-            submit_score(game_env)
+            submit_result(game_env)
         
         # missile hit
         collision = pygame.sprite.groupcollide(missiles, game_env.dynamic.bullets, True, True)      # checking for collision between bullets and missiles, killing each one of them on collision

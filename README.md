@@ -1,6 +1,6 @@
 
 # PyBluesky
-### Version : 1.0.1
+### Version : 1.0.2
 
 A simple python game to navigate your jet and fight though a massive missiles attack based on pygame framework</br>
 Based on https://realpython.com/blog/python/pygame-a-primer
@@ -11,7 +11,25 @@ Email : ljnath@ljnath.com<br>
 Website : https://www.ljnath.com
 
 ## Change Log
-### [1.0.1] - 2020-05-02
+### [1.0.2] - 2020-05-04
+- added support for player name, games prompts to enter the name for the 1st time and saving to file
+- added support for automatically loading exitsing player name from file
+- added support for player name to be used for submitting game result
+- added special hint in the input name menu
+- added support to save game level data along with game score
+- added support to boost enemy missle speed by 5% after each 10th level
+- changed starting missile count from 4 to 2 
+- changed missile increase factor per level  to half
+- changed input mode selection message in gamemenu sprite
+- changed jet speed from 8 to 7
+- changes TitleScreen enum to Screen as it has all type of screen information
+- changed bullet speed from 5 to 7, to avoid jet hitting its own bullet
+- fixed leaderboard rendereing issue related to alignment
+- fixed help message
+- replace duplicate codes with list comprehension
+- removed capturing of system username
+
+### [1.0.1] - 2020-05-03
 - added leaderboard functionality (requires internet)
 - added game help menu
 - added support to toggle between menu in game start and gameover screen

@@ -12,7 +12,7 @@ class StaticData():
 
     @property
     def version(self):
-        return '1.0.1'
+        return '1.0.2'
 
     @property
     def screen_width(self):
@@ -74,7 +74,7 @@ class StaticData():
 
     @property
     def missile_per_sec(self):
-        return 4                            # number of missiles to be spawned per seconds
+        return 2                            # number of missiles to be spawned per seconds
 
     @property
     def background_default(self):
@@ -92,6 +92,14 @@ class StaticData():
     def max_ammo(self):
         return 999
 
+    @property
+    def player_file(self):
+        return 'player.dat'
+
+    @property
+    def name_length(self):
+        return 12
+        
     @property
     def game_sound(self):
         return {

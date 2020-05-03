@@ -7,11 +7,12 @@ class InputMode(Enum):
     KEYBOARD = 1,
     MOUSE = 2
 
-class TitleScreen(Enum):
+class Screen(Enum):
     """ TitleScreen enumerator which holds the available title screens
     """
     GAMEMENU = 0,
     HELP = 1,
     LEADERBOARD = 2
     REPLAYMENU = 3
+    NAMEINPUT = 4
     

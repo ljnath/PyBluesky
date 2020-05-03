@@ -1,6 +1,5 @@
 import http.client
 import mimetypes
-from getpass import getuser
 from datetime import datetime
 from json import loads, dumps
 
@@ -46,21 +45,21 @@ class NetworkHandler():
             return leaders
         
     @staticmethod
-    def submit_score(score):
-        current_user = getuser()
+    def submit_result(game_env):
         try:
             payload = {
                 'apiKey' : API_KEY,
-                'name' : current_user,
-                'score' : int(score)
+                'name' : game_env.dynamic.player_name,
+                'score' : game_env.dynamic.game_score,
+                'level' : game_env.dynamic.game_level
             }
             conn = http.client.HTTPSConnection("www.ljnath.com")
             conn.request("PUT", "/api/pybluesky", dumps(payload), headers={ 'Content-Type': 'application/json' })
             response = conn.getresponse()
             if response.code != 201:
                 raise Exception()
-            NetworkHandler.log('Successfully sumbitted score {} for user {}'.format(score, current_user))
+            NetworkHandler.log('Successfully sumbitted score {} for player {}'.format(game_env.dynamic.game_score, game_env.dynamic.player_name))
         except:
-            NetworkHandler.log('Failed to sumbitted score {} for user {}'.format(score, current_user))
+            NetworkHandler.log('Failed to sumbitted score {} for player {}'.format(game_env.dynamic.game_score, game_env.dynamic.player_name))
 
     

@@ -4,6 +4,7 @@
 
 A simple python game to navigate your jet and fight though a massive missiles attack based on pygame framework</br>
 Based on https://realpython.com/blog/python/pygame-a-primer
+Download the game binary from https://sourceforge.net/projects/ljnath/
 
 Author : Lakhya Jyoti Nath (ljnath)<br>
 Date : April 2020<br>
@@ -24,6 +25,7 @@ Website : https://www.ljnath.com
 - changed jet speed from 8 to 7
 - changes TitleScreen enum to Screen as it has all type of screen information
 - changed bullet speed from 5 to 7, to avoid jet hitting its own bullet
+- changed game icon, shortcut icon
 - fixed leaderboard rendereing issue related to alignment
 - fixed help message
 - replace duplicate codes with list comprehension

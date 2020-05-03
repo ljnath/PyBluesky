@@ -32,13 +32,6 @@ Website: https://www.ljnath.com
 from cx_Freeze import setup, Executable
 import sys
 
-# executables = [
-#     cx_Freeze.Executable(
-#         "pybluesky.py",
-#         "game/data/enums.py"
-#         )
-    # ]
-
 shortcut_metadata = [
     ("DesktopShortcut",                 # Shortcut
      "DesktopFolder",                   # Directory_
@@ -48,7 +41,7 @@ shortcut_metadata = [
      None,                              # Arguments
      None,                              # Description
      None,                              # Hotkey
-     "[TARGETDIR]icon/pybluesky.ico",    # Icon
+     "TARGETDIR/pybluesky.exe",        # Icon
      None,                              # IconIndex
      False,                             # ShowCmd
      'TARGETDIR'                        # WkDir

@@ -48,12 +48,11 @@ from game.handlers.network import NetworkHandler
 from game.handlers.leaderboard import LeaderBoardHandler
 from game.data.enums import InputMode, TitleScreen
 from threading import Thread
-from multiprocessing import Process
 
 def load_leaders():
-    leader_process = Process(target=LeaderBoardHandler().update, args=([]))
-    leader_process.start()
-    leader_process.join()
+    leader_thread = Thread(target=LeaderBoardHandler().update, args=([]))
+    leader_thread.start()
+    leader_thread.join()
 
 def check_update(game_env):
     check_update_thread = Thread(target=NetworkHandler().check_game_update, args=([game_env]))
@@ -63,9 +62,9 @@ def check_update(game_env):
 
 def submit_score(game_env):
     if game_env.dynamic.game_score > 0:
-        network_process = Process(target=NetworkHandler().submit_score, args=([game_env.dynamic.game_score]))
-        network_process.start()
-        network_process.join()
+        network_thread = Thread(target=NetworkHandler().submit_score, args=([game_env.dynamic.game_score]))
+        network_thread.start()
+        network_thread.join()
     load_leaders()
 
 def create_vegetation(game_env, vegetations):
@@ -186,7 +185,6 @@ def play():
                             gameover = False                                                                        # setting gameover variable to false as user as opted to replay
                             jet = Jet(game_env)                                                                     # re-creating the jet
                             game_env.dynamic.ammo = 100
-                            clouds.empty()                                                                          # empting the cloud group
                             missiles.empty()                                                                        # empting the missle group                    
                             game_env.dynamic.all_sprites = pygame.sprite.Group()                                    # re-creating group of sprites 
                             game_env.dynamic.all_sprites.add(scoretext_sprite)                                      # adding the scoreboard to all_sprites

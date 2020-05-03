@@ -1,6 +1,6 @@
 
 # PyBluesky
-### Version : 1.0.0
+### Version : 1.0.1
 
 A simple python game to navigate your jet and fight though a massive missiles attack based on pygame framework</br>
 Based on https://realpython.com/blog/python/pygame-a-primer
@@ -11,6 +11,17 @@ Email : ljnath@ljnath.com<br>
 Website : https://www.ljnath.com
 
 ## Change Log
+### [1.0.1] - 2020-05-02
+- added leaderboard functionality (requires internet)
+- added game help menu
+- added support to toggle between menu in game start and gameover screen
+- added support to upload game score and current system user to remote api
+- added support to check for game update at startup
+- added support for clouds to notify user about new game update
+- added support for dynamic menu spries creation instead for pre-created sprites
+- changed main game music
+- removed game sound for jet move up and move down (no more licenses)
+
 ### [1.0.0] - 2020-05-02
 - renamed game to PyBluesky
 - added background vegetation support

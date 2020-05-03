@@ -23,20 +23,21 @@ SOFTWARE.
 
 cx freeze detup file for building the game
 
-Version: 1.0.0
+Version: 1.0.1
 Author: Lakhya Jyoti Nath (ljnath)
 Email:  ljnath@ljnath.com
 Website: https://www.ljnath.com
 """
 
-import cx_Freeze
+from cx_Freeze import setup, Executable
+import sys
 
-
-executables = [
-    cx_Freeze.Executable(
-        "pybluesky.py"
-        )
-    ]
+# executables = [
+#     cx_Freeze.Executable(
+#         "pybluesky.py",
+#         "game/data/enums.py"
+#         )
+    # ]
 
 shortcut_metadata = [
     ("DesktopShortcut",                 # Shortcut
@@ -60,22 +61,37 @@ bdist_msi_options = {
     }
 }
 
-base = "Win32GUI"
+executables =None
+if sys.platform == "win32":
+    executables = [Executable(
+        script="pybluesky.py",
+        initScript = None,
+        base = "Win32GUI",
+        targetName = "pybluesky.exe",
+        icon = 'icon/pybluesky.ico'
+    )]   
 
-cx_Freeze.setup(
+
+setup(
     name = "PyBluesky",
-    version = '1.0.0',
+    version = '1.0.1',
     description = 'A simple python game to navigate your jet and fight though a massive missiles attack based on pygame framework',
     executables = executables,
     options={
         "bdist_msi": bdist_msi_options,
         "build_exe": {
             "packages":["pygame"],
+            "includes":[
+                'math',
+                'random'
+            ],
             "include_files": [
                 'audio/',
                 'font/',
                 'image/',
-                'icon/'
+                'icon/',
+                'LICENSE',
+                'README.md'
             ]
         }
     }

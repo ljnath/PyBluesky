@@ -1,4 +1,5 @@
-from game.data import Constants, Variables
+from game.data.static import StaticData
+from game.data.dynamic import DynamicData
 import random
 from pygame import image
  # importing here to avoid reimporting in all the sub modules
@@ -17,23 +18,27 @@ from pygame.locals import (
     MOUSEBUTTONDOWN,
     FULLSCREEN,
     QUIT,
+    K_m,
+    K_l,
+    K_h
+
 )
 
 class GameEnvironment():
     """ Game environment which holds the game contants, variables as well as pygame constants
     """
     def __init__(self):
-        self.__constants = Constants()
-        self.__variables = Variables()
+        self.__static_data = StaticData()
+        self.__dynamic_data = DynamicData()
 
     def get_random_point_on_right(self):
-        pos_x = random.randint(self.__constants.screen_width + 20, self.__constants.screen_width + 100)     # generating random x position
-        pos_y = random.randint(0, self.__constants.screen_height)                                           # generating random y position
+        pos_x = random.randint(self.__static_data.screen_width + 20, self.__static_data.screen_width + 100)     # generating random x position
+        pos_y = random.randint(0, self.__static_data.screen_height)                                             # generating random y position
         return (pos_x, pos_y)
 
     def get_random_point_on_top(self):
-        pos_x = random.randint(0, self.__constants.screen_width)                    # generating random x position
-        pos_y = random.randint(10, 20)                                              # generating random y position
+        pos_x = random.randint(0, self.__static_data.screen_width)                      # generating random x position
+        pos_y = random.randint(10, 20)                                                  # generating random y position
         return (pos_x, pos_y * -1)
         
     def get_image_size(self, image_file):
@@ -42,15 +47,15 @@ class GameEnvironment():
 
     @property
     def vegetation_size(self):
-        return self.get_image_size(self.__constants.vegetation[0])
+        return self.get_image_size(self.__static_data.vegetation[0])
             
     @property
-    def constants(self):
-        return self.__constants
+    def static(self):
+        return self.__static_data
     
     @property
-    def variables(self):
-        return self.__variables
+    def dynamic(self):
+        return self.__dynamic_data
 
     @property
     def RLEACCEL(self):
@@ -111,3 +116,15 @@ class GameEnvironment():
     @property
     def MOUSEBUTTONDOWN(self):
         return MOUSEBUTTONDOWN
+    
+    @property
+    def K_h(self):
+        return K_h
+
+    @property
+    def K_m(self):
+        return K_m
+
+    @property
+    def K_l(self):
+        return K_l

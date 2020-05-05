@@ -50,20 +50,22 @@ from game.handlers.leaderboard import LeaderBoardHandler
 from game.data.enums import InputMode, Screen
 from threading import Thread
 
+API_KEY = ''
+
 def load_leaders():
-    leader_thread = Thread(target=LeaderBoardHandler().update, args=([]))
+    leader_thread = Thread(target=LeaderBoardHandler().update, args=([API_KEY]))
     leader_thread.start()
     leader_thread.join()
 
 def check_update(game_env):
-    check_update_thread = Thread(target=NetworkHandler().check_game_update, args=([game_env]))
+    check_update_thread = Thread(target=NetworkHandler().check_game_update, args=([API_KEY, game_env]))
     check_update_thread.start()
     check_update_thread.join()
     load_leaders()
 
 def submit_result(game_env):
     if game_env.dynamic.game_score > 0:
-        network_thread = Thread(target=NetworkHandler().submit_result, args=([game_env]))
+        network_thread = Thread(target=NetworkHandler().submit_result, args=([API_KEY, game_env]))
         network_thread.start()
         network_thread.join()
     load_leaders()
@@ -121,7 +123,7 @@ def play():
 
     general_hint_text = "Press M->Game menu, H->Help, L->LeaderBoard, ESC->Quit"
     active_sprite = NameInputText(game_env)
-    hint_sprite = Text(game_env, "Enter your name and press [ENTER] Press [ESC] to quit", 22, pos_x=game_env.static.screen_width/2 , pos_y= 145)  # creating game help
+    hint_sprite = Text(game_env, "Enter your name and press [ENTER] or press [ESC] to quit", 22, pos_x=game_env.static.screen_width/2 , pos_y= 145)  # creating game help
     title_banner_sprite = Text(game_env, "{} {}".format(game_env.static.name, game_env.static.version), 100, pos_x=game_env.static.screen_width/2 , pos_y=100)                  # creating title_banner_sprite text sprite with game name
     title_author_sprite = Text(game_env, "Written by: Lakhya Jyoti Nath (www.ljnath.com)", 26, pos_x=game_env.static.screen_width/2 , pos_y= game_env.static.screen_height-20)  # creating game author
 

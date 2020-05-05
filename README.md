@@ -1,6 +1,6 @@
 
 # PyBluesky
-### Version : 1.0.2
+### Version : 1.0.3
 
 A simple python game to navigate your jet and fight though a massive missiles attack based on pygame framework</br>
 Based on https://realpython.com/blog/python/pygame-a-primer
@@ -16,6 +16,13 @@ Website : https://www.ljnath.com
 
 
 ## Change Log
+
+### [1.0.3] - (Under Development)
+- changed API key handling from network handler to main game file
+- changes game asset names to lowercase for UNIX comaptibity and changed name to be more meaningful
+- changes game asset path name for UNIX comaptibity
+- fixed hint text in player name input screen
+- removed unused game assets
 
 ### [1.0.2] - 2020-05-04
 - added support for player name, games prompts to enter the name for the 1st time and saving to file

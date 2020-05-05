@@ -14,14 +14,8 @@ Website : https://www.ljnath.com
 [![Download PyBluesky](https://sourceforge.net/sflogo.php?type=13&group_id=3215162)](https://sourceforge.net/p/ljnath/)  
 [![Download PyBluesky](https://img.shields.io/sourceforge/dt/ljnath.svg)](https://sourceforge.net/projects/ljnath/files/latest/download)
 
-## Change Log
 
-### [1.0.3] - 2020-05-05 (in development)
-- changed API key handling from network handler to main game file
-- changes game asset names to lowercase for UNIX comaptibity and changed name to be more meaningful
-- changes game asset path name for UNIX comaptibity
-- fixed hint text in player name input screen
-- removed unused game assets
+## Change Log
 
 ### [1.0.2] - 2020-05-04
 - added support for player name, games prompts to enter the name for the 1st time and saving to file

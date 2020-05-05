@@ -38,7 +38,7 @@ class StaticData():
 
     @property
     def game_font(self):
-        return 'font/ARCADE.ttf'            # game font file path
+        return 'font/arcade.ttf'            # game font file path
 
     @property
     def clouds(self):
@@ -103,11 +103,11 @@ class StaticData():
     @property
     def game_sound(self):
         return {
-            'music' : 'audio/DarkDnB_5.ogg',
+            'music' : 'audio/music.ogg',
             'collision' : 'audio/collision.ogg',
             'levelup' : 'audio/levelup.ogg',
             'shoot' : 'audio/shoot.ogg',
-            'hit' : 'audio/hit.ogg',
+            'hit' : 'audio/missile_hit.ogg',
             'powerup' : 'audio/powerup.ogg'
         }
 

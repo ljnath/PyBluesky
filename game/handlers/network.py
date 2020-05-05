@@ -3,6 +3,8 @@ import mimetypes
 from datetime import datetime
 from json import loads, dumps
 
+API_HOST = 'www.ljnath.com'
+
 class NetworkHandler():
     def __init__(self):
         pass
@@ -15,7 +17,7 @@ class NetworkHandler():
     @staticmethod
     def check_game_update(api_key, game_env):
         try:
-            conn = http.client.HTTPSConnection("www.ljnath.com")
+            conn = http.client.HTTPSConnection(API_HOST)
             conn.request("GET", "/api/pybluesky?action=getUpdate&apiKey={}".format(api_key), headers={ 'Content-Type': 'application/json' })
             response = conn.getresponse()
             if response.code != 200:
@@ -31,7 +33,7 @@ class NetworkHandler():
     def get_leaders(api_key):
         leaders = {}
         try:
-            conn = http.client.HTTPSConnection("www.ljnath.com")
+            conn = http.client.HTTPSConnection(API_HOST)
             conn.request("GET", "/api/pybluesky?action=getTopScores&apiKey={}".format(api_key), headers={ 'Content-Type': 'application/json' })
             response = conn.getresponse()
             if response.code != 200:
@@ -51,7 +53,7 @@ class NetworkHandler():
                 'score' : game_env.dynamic.game_score,
                 'level' : game_env.dynamic.game_level
             }
-            conn = http.client.HTTPSConnection("www.ljnath.com")
+            conn = http.client.HTTPSConnection(API_HOST)
             conn.request("PUT", "/api/pybluesky", dumps(payload), headers={ 'Content-Type': 'application/json' })
             response = conn.getresponse()
             if response.code != 201:

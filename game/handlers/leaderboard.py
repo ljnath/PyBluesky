@@ -27,5 +27,5 @@ class LeaderBoardHandler():
         except Exception:
             print('Failed to dump leaders to file')
     
-    def update(self):
-        self.dump(NetworkHandler().get_leaders())
+    def update(self, api_key):
+        self.dump(NetworkHandler().get_leaders(api_key))

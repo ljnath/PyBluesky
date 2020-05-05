@@ -235,12 +235,9 @@ def play():
                         game_env.dynamic.ammo += 50                                                 # adding 50 ammo on each level up
                         game_env.dynamic.all_sprites.remove(game_env.dynamic.noammo_sprite)         # removing no ammo sprite when ammo is refilled
                         
-
         screen.fill(screen_color)                                                                   # Filling screen with sky blue color
         [screen.blit(sprite.surf, sprite.rect) for sprite in backgrounds]                           # drawing all backgrounds sprites
         [screen.blit(sprite.surf, sprite.rect) for sprite in game_env.dynamic.all_sprites]          # drawing all sprites in the screen
-
-        
 
         # missile hit
         if pygame.sprite.spritecollideany(jet, missiles) and not gameover:                          # Check if any missiles have collided with the player; if so

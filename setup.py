@@ -45,8 +45,7 @@ shortcut_metadata = [
      None,                              # IconIndex
      False,                             # ShowCmd
      'TARGETDIR'                        # WkDir
-     )
-    ]
+    )]
 
 
 bdist_msi_options= {}
@@ -65,6 +64,10 @@ if sys.platform == "win32":
             "Shortcut": shortcut_metadata  
         }
     }
+else:
+    executables = [Executable(
+        script="pybluesky.py"
+    )]
 
 
 setup(

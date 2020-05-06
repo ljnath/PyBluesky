@@ -19,7 +19,7 @@ class LeaderBoardText(Text):
         all_surfaces.append(seperator)
         try:
             if len(leaders) == 0:
-                all_surfaces.append(self.font.render('No Records, make sure you have working internet connectivity', 1, self.color))
+                all_surfaces.append(self.font.render('No records, make sure you have working internet connectivity', 1, self.color))
 
             for index, score in enumerate(leaders['scores']):
                 all_surfaces.append(self.font.render('{}- {}- {}- {}'.format(str(index+1).ljust(5), score['name'][:name_length].ljust(name_length), str(score['score']).ljust(10), str(score['level']).ljust(5)), 1, self.color))

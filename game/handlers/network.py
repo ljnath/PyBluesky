@@ -3,7 +3,8 @@ import mimetypes
 from datetime import datetime
 from json import loads, dumps
 
-API_HOST = 'www.ljnath.com'
+API_HOST = 'app.ljnath.com'
+API_ENDPOINT = '/pybluesky/'
 
 class NetworkHandler():
     def __init__(self):
@@ -18,7 +19,7 @@ class NetworkHandler():
     def check_game_update(api_key, game_env):
         try:
             conn = http.client.HTTPSConnection(API_HOST)
-            conn.request("GET", "/api/pybluesky?action=getUpdate&apiKey={}".format(api_key), headers={ 'Content-Type': 'application/json' })
+            conn.request("GET", "{}?action=getUpdate&apiKey={}".format(API_ENDPOINT, api_key), headers={ 'Content-Type': 'application/json' })
             response = conn.getresponse()
             if response.code != 200:
                 raise Exception()
@@ -34,12 +35,13 @@ class NetworkHandler():
         leaders = {}
         try:
             conn = http.client.HTTPSConnection(API_HOST)
-            conn.request("GET", "/api/pybluesky?action=getTopScores&apiKey={}".format(api_key), headers={ 'Content-Type': 'application/json' })
+            conn.request("GET", "{}?action=getTopScores&apiKey={}".format(API_ENDPOINT, api_key), headers={ 'Content-Type': 'application/json' })
             response = conn.getresponse()
             if response.code != 200:
                 raise Exception()
             leaders = loads(response.read().decode('utf-8'))
-        except:
+        except Exception as e:
+            print(e)
             NetworkHandler.log('Failed to get game leaders')
         finally:
             return leaders
@@ -54,7 +56,7 @@ class NetworkHandler():
                 'level' : game_env.dynamic.game_level
             }
             conn = http.client.HTTPSConnection(API_HOST)
-            conn.request("PUT", "/api/pybluesky", dumps(payload), headers={ 'Content-Type': 'application/json' })
+            conn.request("PUT", API_ENDPOINT, dumps(payload), headers={ 'Content-Type': 'application/json' })
             response = conn.getresponse()
             if response.code != 201:
                 raise Exception()

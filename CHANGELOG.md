@@ -1,10 +1,17 @@
 # Changelog
 
 ## [1.0.3] - Unreleased
-- changed API key handling from network handler to main game file
+- added support for new api
+- added support to add 10 pts on each level up
+- added support to calulate player accuracy
+- added common logging for both network-handler and leaderboard-handler
+- increased hall-of-fame scores to 15
+- changed log file name to game.log
+- changed API key handling from network-handler to main game file
 - changes game asset names to lowercase for UNIX comaptibity and changed name to be more meaningful
 - changes game asset path name for UNIX comaptibity
 - fixed hint text in player name input screen
+- fixed invalid player name input via file
 - removed unused game assets
 
 ## [1.0.2] - 2020-05-04

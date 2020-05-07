@@ -4,6 +4,7 @@ from game.data.enums import InputMode, Screen
 from pygame.mixer import Sound
 from pygame.sprite import Group
 import os
+import re
 
 class DynamicData():
     """ Class which holds all the game variables
@@ -18,22 +19,26 @@ class DynamicData():
         self.__game_input = InputMode.KEYBOARD
         self.__all_sprites = Group()
         self.__bullets = Group()
-        self.__ammo = 100
         self.__noammo_sprite = None
-        self.__game_level = 1
         self.__update_available = False
-        self.__game_score = 0
-        self.__game_playtime = 0
         self.__replay = True
         self.__player_name = ''
-
         # loading the player name from file, name can be max 20 character long
         if os.path.exists(self.__static.player_file):
             with open(self.__static.player_file) as file_reader:
                 name = file_reader.read().strip()[:self.__static.name_length]
-                self.__player_name = '' if not name else name
+                self.__player_name = name if name and re.match(r'[a-zA-Z0-9@. ]',name) else ''
         
         self.__active_screen = Screen.NAMEINPUT if not self.__player_name else Screen.GAMEMENU
+        self.load_defaults()
+
+    def load_defaults(self):
+        self.__ammo = 100
+        self.__game_level = 1
+        self.__game_score = 0
+        self.__game_playtime = 0
+        self.__bullet_fired = 0
+        self.__missles_destroyed = 0
 
     @property
     def collision_sound(self):
@@ -153,3 +158,23 @@ class DynamicData():
         # saving the player name to file for future reference
         with open(self.__static.player_file, 'w') as file_writter:
             file_writter.write(self.__player_name)
+
+    @property
+    def bullets_fired(self):
+        return self.__bullet_fired
+
+    @bullets_fired.setter
+    def bullets_fired(self, value):
+        self.__bullet_fired = value
+
+    @property
+    def missiles_destroyed(self):
+        return self.__missles_destroyed
+
+    @missiles_destroyed.setter
+    def missiles_destroyed(self, value):
+        self.__missles_destroyed = value
+
+    @property
+    def accuracy(self):
+        return round(self.missiles_destroyed / self.bullets_fired *100, 3)

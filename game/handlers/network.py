@@ -1,19 +1,20 @@
 import http.client
 import mimetypes
+import platform
 from datetime import datetime
 from json import loads, dumps
+from game.handlers import Handlers
 
 API_HOST = 'app.ljnath.com'
 API_ENDPOINT = '/pybluesky/'
 
-class NetworkHandler():
+class NetworkHandler(Handlers):
     def __init__(self):
-        pass
+        Handlers().__init__()
 
     @staticmethod
     def log(message):
-        with open('network.log', 'a+') as file_handler:
-            file_handler.write('\n[{:%Y-%m-%d %H:%M:%S.%f}] : {}'.format(datetime.now(), message))
+        Handlers().log(message)
 
     @staticmethod
     def check_game_update(api_key, game_env):
@@ -53,7 +54,9 @@ class NetworkHandler():
                 'apiKey' : api_key,
                 'name' : game_env.dynamic.player_name,
                 'score' : game_env.dynamic.game_score,
-                'level' : game_env.dynamic.game_level
+                'level' : game_env.dynamic.game_level,
+                'accuracy' : game_env.dynamic.accuracy,
+                'platform' : '{} {}'.format(platform.system(), platform.release())
             }
             conn = http.client.HTTPSConnection(API_HOST)
             conn.request("PUT", API_ENDPOINT, dumps(payload), headers={ 'Content-Type': 'application/json' })

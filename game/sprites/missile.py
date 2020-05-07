@@ -15,7 +15,6 @@ class Missile(pygame.sprite.Sprite):
         self.rect = self.surf.get_rect(center=(pos_x, pos_y))                                                           # create rectange from the missile screen
         self.__activated = True                                                                                         # bad missiles will drop down
         self.__speed = random.randint(5, 20)                                                                            # generating random speed for the missle
-        olf = self.__speed
         boost_factor = self.__game_env.dynamic.game_level // 10                                                         # increasing missile speed by 5% every 10th level
         self.__speed += int(self.__speed * (boost_factor * 5) / 100)
 

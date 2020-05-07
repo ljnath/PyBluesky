@@ -45,6 +45,9 @@ class GameEnvironment():
         image_surf = image.load(image_file)
         return (image_surf.get_width(), image_surf.get_height())
 
+    def reset(self):
+        self.__dynamic_data.load_defaults();
+        
     @property
     def vegetation_size(self):
         return self.get_image_size(self.__static_data.vegetation[0])

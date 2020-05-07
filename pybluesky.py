@@ -164,7 +164,6 @@ def play():
                         hint_sprite = Text(game_env, general_hint_text, 22, pos_x=game_env.static.screen_width/2 , pos_y= 145)
                         [game_env.dynamic.all_sprites.add(sprite) for sprite in (active_sprite, hint_sprite)]
                         game_env.dynamic.active_screen = Screen.GAMEMENU
-                        
                 elif event.key == game_env.K_h and game_env.dynamic.active_screen != Screen.HELP:                   # displyaing the help menu
                     game_env.dynamic.all_sprites.remove(active_sprite)
                     active_sprite = HelpText(game_env)
@@ -185,7 +184,7 @@ def play():
                         game_env.dynamic.active_screen = Screen.REPLAYMENU
                     game_env.dynamic.all_sprites.add(active_sprite)
                 elif event.key == game_env.K_RETURN:                                                                # handling all [ENTER] key press activity
-                    if game_env.dynamic.active_screen == Screen.GAMEMENU:                                      # selecting input mode in gamemenu screen
+                    if game_env.dynamic.active_screen == Screen.GAMEMENU:                                           # selecting input mode in gamemenu screen
                         pygame.mouse.set_visible(True if game_env.dynamic.game_input == InputMode.MOUSE else False) # displaying mouse cursor based on user input mode
                         screen_color = game_env.static.background_default                                           # restoring screen colot
                         [sprite.kill() for sprite in title_sprites]                                                 # kill all the title_sprites sprite sprite
@@ -197,12 +196,11 @@ def play():
                         if game_env.dynamic.replay:
                             gameover = False                                                                        # setting gameover variable to false as user as opted to replay
                             jet = Jet(game_env)                                                                     # re-creating the jet
-                            game_env.dynamic.ammo = 100
                             missiles.empty()                                                                        # empting the missle group                    
                             game_env.dynamic.all_sprites = pygame.sprite.Group()                                    # re-creating group of sprites 
                             [game_env.dynamic.all_sprites.add(sprite) for sprite in (jet, scoretext_sprite)]        # adding the jet and scoreboard to all_sprites
                             screen_color = game_env.static.background_default                                       # restoring  screen color
-                            game_env.dynamic.game_playtime, game_env.dynamic.game_score, game_env.dynamic.game_level = 0, 0, 1 # resetting game data 
+                            game_env.reset()                                                                        # reseting game data
                             star_shown = False
                             pygame.time.set_timer(ADD_MISSILE, int(1000/game_env.static.missile_per_sec))
                             create_vegetation(game_env, vegetations)
@@ -233,6 +231,7 @@ def play():
                         game_env.dynamic.game_level += 1                                            # increasing the game level
                         pygame.time.set_timer(ADD_MISSILE, int(1000/(game_env.static.missile_per_sec + int(game_env.dynamic.game_level/2)))) # updating timer of ADD_MISSLE for more missiles to be added
                         game_env.dynamic.ammo += 50                                                 # adding 50 ammo on each level up
+                        game_env.dynamic.game_score += 10                                           # increasing game score by 10 after each level
                         game_env.dynamic.all_sprites.remove(game_env.dynamic.noammo_sprite)         # removing no ammo sprite when ammo is refilled
                         
 
@@ -256,6 +255,7 @@ def play():
         if len(collision) > 0 and not gameover:
             game_env.dynamic.hit_sound.play()                                                       # play missile destroyed sound
             game_env.dynamic.game_score += len(collision) * 10                                      # 1 missle destroyed = 10 pts.
+            game_env.dynamic.missiles_destroyed += len(collision)                                   # to calulate player accuracy
 
         # powerup hit
         if pygame.sprite.spritecollideany(jet, stars):                                              # collition between jet and star (powerup)

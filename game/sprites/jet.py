@@ -43,6 +43,7 @@ class Jet(pygame.sprite.Sprite):
             self.__game_env.dynamic.all_sprites.add(bullet)                                       # add the bullet tp all_sprites
             self.__game_env.dynamic.shoot_sound.play()                                            # play shooting sound
             self.__game_env.dynamic.ammo -= 1
+            self.__game_env.dynamic.bullets_fired += 1
         else:
             self.__game_env.dynamic.all_sprites.add(self.__game_env.dynamic.noammo_sprite)      # show noammo sprite
 

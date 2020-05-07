@@ -1,10 +1,12 @@
 import pickle
 import os
+from game.handlers import Handlers
 from game.handlers.network import NetworkHandler
 
-class LeaderBoardHandler():
+class LeaderBoardHandler(Handlers):
     def __init__(self):
-        self.__db = 'leaderboard.dat'
+        super().__init__()
+        self.__db = 'leaders.dat'
 
     def load(self):
         leaders = []
@@ -13,7 +15,7 @@ class LeaderBoardHandler():
                 with open(self.__db, 'rb') as file_reader:
                     leaders = pickle.load(file_reader)
         except Exception:
-            print('Failed to load leaders from file')
+            self.log('Failed to load leaders from file')
         finally:
             return leaders
 
@@ -25,7 +27,7 @@ class LeaderBoardHandler():
             with open(self.__db, 'wb') as file_writter:
                 pickle.dump(leaders, file_writter)
         except Exception:
-            print('Failed to dump leaders to file')
+            self.log('Failed to dump leaders to file')
     
     def update(self, api_key):
         self.dump(NetworkHandler().get_leaders(api_key))

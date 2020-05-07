@@ -11,18 +11,18 @@ class LeaderBoardText(Text):
         self.__game_env = game_env
         name_length = self.__game_env.static.name_length * 2
         leaders = LeaderBoardHandler().load()
-        seperator = self.font.render('=========================================================================', 1, self.color)
+        seperator = self.font.render('============================================================================', 1, self.color)
         header = self.font.render('=== HALL OF FAME ===', 1, self.color)
         all_surfaces = []
         all_surfaces.append(seperator)
-        all_surfaces.append(self.font.render('{}- {}- {}- {}'.format('RANK'.ljust(5), 'NAME'.ljust(name_length), 'SCORE'.ljust(10), 'LEVEL'.ljust(5)), 1, self.color))
+        all_surfaces.append(self.font.render('{}-{}-{}-{}-{}'.format('RANK'.center(5), 'NAME'.center(name_length), 'SCORE'.center(10), 'LEVEL'.center(5), 'ACCURACY'), 1, self.color))
         all_surfaces.append(seperator)
         try:
             if len(leaders) == 0:
                 all_surfaces.append(self.font.render('No records, make sure you have working internet connectivity', 1, self.color))
 
             for index, score in enumerate(leaders['scores']):
-                all_surfaces.append(self.font.render('{}- {}- {}- {}'.format(str(index+1).ljust(5), score['name'][:name_length].ljust(name_length), str(score['score']).ljust(10), str(score['level']).ljust(5)), 1, self.color))
+                all_surfaces.append(self.font.render('{}-{}-{}-{}-{}'.format(str(index+1).center(5), score['name'][:name_length].center(name_length), str(score['score']).center(10), str(score['level']).center(5), str(score['accuracy'] + '%').center(9)), 1, self.color))
         except:
             pass
         all_surfaces.append(seperator)

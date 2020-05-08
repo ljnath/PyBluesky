@@ -94,7 +94,7 @@ class StaticData():
 
     @property
     def player_file(self):
-        return 'player.dat'
+        return 'data/player.dat'
 
     @property
     def name_length(self):

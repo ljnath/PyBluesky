@@ -1,6 +1,7 @@
 from game.data.static import StaticData
 from game.data.dynamic import DynamicData
 import random
+import os
 from pygame import image
  # importing here to avoid reimporting in all the sub modules
 from pygame.locals import (
@@ -30,6 +31,7 @@ class GameEnvironment():
     def __init__(self):
         self.__static_data = StaticData()
         self.__dynamic_data = DynamicData()
+        os.makedirs('data', exist_ok=True)
 
     def get_random_point_on_right(self):
         pos_x = random.randint(self.__static_data.screen_width + 20, self.__static_data.screen_width + 100)     # generating random x position

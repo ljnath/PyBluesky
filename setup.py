@@ -88,8 +88,7 @@ setup(
                 'font/',
                 'image/',
                 'icon/',
-                'LICENSE',
-                'README.md'
+                'LICENSE'
             ]
         }
     }

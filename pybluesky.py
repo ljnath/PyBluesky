@@ -58,14 +58,16 @@ def load_leaders():
     leader_thread.join()
 
 def check_update(game_env):
-    check_update_thread = Thread(target=NetworkHandler().check_game_update, args=([API_KEY, game_env]))
+    network_handler = NetworkHandler(API_KEY)
+    check_update_thread = Thread(target=network_handler.check_game_update, args=([game_env]))
     check_update_thread.start()
     check_update_thread.join()
     load_leaders()
 
 def submit_result(game_env):
     if game_env.dynamic.game_score > 0:
-        network_thread = Thread(target=NetworkHandler().submit_result, args=([API_KEY, game_env]))
+        network_handler = NetworkHandler(API_KEY)
+        network_thread = Thread(target=network_handler.submit_result, args=([game_env]))
         network_thread.start()
         network_thread.join()
     load_leaders()

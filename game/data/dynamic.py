@@ -177,4 +177,4 @@ class DynamicData():
 
     @property
     def accuracy(self):
-        return round(self.missiles_destroyed / self.bullets_fired *100, 3)
+        return 0 if self.bullets_fired == 0 else round(self.missiles_destroyed / self.bullets_fired *100, 3)

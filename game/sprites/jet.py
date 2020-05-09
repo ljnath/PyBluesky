@@ -1,16 +1,16 @@
-import pygame
+from pygame import sprite, image
 import math
 from .bullet import Bullet
 
 # Jet class which holds jet attributes and behaviour
-class Jet(pygame.sprite.Sprite):
+class Jet(sprite.Sprite):
     """ Jet sprite class for creating and updating the jet in the game screen
     """
     def __init__(self, game_env):
         super(Jet, self).__init__()                                 # initilizing parent class pygame.sprite.Sprite
         self.__speed = 7                                            # setting jet speed as 5
         self.__game_env = game_env
-        self.surf = pygame.image.load(game_env.static.jet_image).convert()                   # loading jet image from file;  image source https://www.flaticon.com/authors/iconixar
+        self.surf = image.load(game_env.static.jet_image).convert()                   # loading jet image from file;  image source https://www.flaticon.com/authors/iconixar
         self.surf.set_colorkey((255, 255, 255), self.__game_env.RLEACCEL)                       # setting the white color as the transperant area; RLEACCEL is used for better performance on non accelerated displays
         self.rect = self.surf.get_rect(center=(50,self.__game_env.static.screen_height/2))   # getting rectangle from jet screen; setting the jet position as the middle of the scrren on the left
 

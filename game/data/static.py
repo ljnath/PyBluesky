@@ -49,6 +49,18 @@ class StaticData():
         return ('image/vegetation_plain.png', 'image/vegetation_tree.png')
 
     @property
+    def ground(self):
+        return 'image/ground.png'
+
+    @property
+    def grass(self):
+        return 'image/grass.png'
+
+    @property
+    def tank(self):
+        return 'image/tank.png'
+
+    @property
     def missile_activated_image(self):
         return 'image/missile_activated.png'    # missle image path
 

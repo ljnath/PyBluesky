@@ -1,14 +1,14 @@
-import pygame
+from pygame import sprite, image
 import random
 from pygame.font import Font
 
-class Cloud(pygame.sprite.Sprite):
+class Cloud(sprite.Sprite):
     """ Cloud sprite class for creating and updating the cloud in the game screen
     """
     def __init__(self, game_env):
         super(Cloud, self).__init__()                                                               # initilizing parent class pygame.sprite.Sprite
         self.__game_env = game_env
-        self.surf = pygame.image.load(random.choice(self.__game_env.static.clouds)).convert()    # loading cloud image
+        self.surf = image.load(random.choice(self.__game_env.static.clouds)).convert()    # loading cloud image
         self.surf.set_colorkey((255, 255, 255), self.__game_env.RLEACCEL)                           # setting the white color as the transperant area; RLEACCEL is used for better performance on non accelerated displays
         self.__speed = 5
         pos_x = random.randint(self.__game_env.static.screen_width + 10, self.__game_env.static.screen_width + 50)

@@ -93,7 +93,7 @@ def play():
     pygame.mixer.music.play(loops=-1)                                                                       # lopping the main game music
     pygame.mixer.music.set_volume(.3)
 
-    # screen = pygame.display.set_mode((game_env.static.screen_width, game_env.static.screen_height))         # creating game screen with custom width and height
+    screen = pygame.display.set_mode((game_env.static.screen_width, game_env.static.screen_height))         # creating game screen with custom width and height
     screen = pygame.display.set_mode((game_env.static.screen_width, game_env.static.screen_height), game_env.FULLSCREEN)     # creating game screen with custom width and height
     pygame.display.set_caption('{} ver. {}'.format(game_env.static.name, game_env.static.version))          # setting name of game window
     pygame.display.set_icon(pygame.image.load(game_env.static.game_icon))                                   # updating game icon to the jet image

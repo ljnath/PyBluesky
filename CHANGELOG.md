@@ -6,6 +6,7 @@
 - added support to calulate player accuracy
 - added support to upload offline scores when internet connectivity is available thus so scores are lost
 - added common logging and serilization for both network-handler and leaderboard-handler
+- added ground and grass to the vegetation
 - moved all gama data files under the /data/ directory
 - changed log file name to game.log
 - changed API key handling from network-handler to main game file
@@ -13,6 +14,7 @@
 - changes game asset path name for UNIX comaptibity
 - fixed hint text in player name input screen
 - fixed invalid player name input via file
+- fixed unwanted library imports in game classes
 - removed unused game assets
 - removed README file from final game distrubution build
 

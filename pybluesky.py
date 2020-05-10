@@ -32,9 +32,7 @@ Website: https://www.ljnath.com
 import pygame
 import random
 import math
-import os
-import platform
-import subprocess
+import webbrowser
 from game.environment import GameEnvironment
 from game.sprites.jet import Jet
 from game.sprites.missile import Missile
@@ -84,17 +82,10 @@ def create_vegetation(game_env, vegetations):
                                                                                 # just adding sprite to vegetations group, to updating on screen for now
 def notify_user_of_update(game_env):
     if game_env.dynamic.update_url:
-        current_platform = platform.system()
         try:
-            if current_platform == 'Windows':
-                os.startfile(game_env.dynamic.update_url)
-            elif current_platform=='Darwin':
-                subprocess.Popen(['open', game_env.dynamic.update_url])
-            elif current_platform == 'Linux':
-                subprocess.Popen(['xdg-open', game_env.dynamic.update_url])
+            webbrowser.open(game_env.dynamic.update_url)
         except:
             pass
-
 
 def play():
     pygame.mixer.init()                                                 # initializing same audio mixer with default settings

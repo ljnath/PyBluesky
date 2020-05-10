@@ -29,6 +29,7 @@ class NetworkHandler(Handlers):
             json_reponse = loads(response.read().decode('utf-8'))
             if json_reponse['version'] != game_env.static.version:
                 game_env.dynamic.update_available = True
+                game_env.dynamic.update_url = json_reponse['url']
                 self.log('New game version {} detected'.format(json_reponse['version']))
         except:
             self.log('Failed to check for game update')

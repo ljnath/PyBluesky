@@ -61,7 +61,7 @@ if sys.platform == "win32":
 
     bdist_msi_options = {
         'data': {
-            "Shortcut": shortcut_metadata  
+            "Shortcut": shortcut_metadata
         }
     }
 else:

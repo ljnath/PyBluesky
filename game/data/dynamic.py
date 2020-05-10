@@ -24,8 +24,9 @@ class DynamicData():
         self.__noammo_sprite = None
         self.__update_available = False
         self.__replay = True
+        self.__update_url = None
         self.__player_name = ''
-
+    
         # loading the player name from file, name can be max 20 character long
         if os.path.exists(self.__static.player_file):
             with open(self.__static.player_file) as file_reader:
@@ -194,3 +195,11 @@ class DynamicData():
     @property
     def accuracy(self):
         return 0 if self.bullets_fired == 0 else round(self.missiles_destroyed / self.bullets_fired *100, 3)
+
+    @property
+    def update_url(self):
+        return self.__update_url
+
+    @update_url.setter
+    def update_url(self, value):
+        self.__update_url = value

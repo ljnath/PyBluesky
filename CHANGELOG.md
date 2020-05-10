@@ -8,6 +8,7 @@
 - added support to upload offline scores when internet connectivity is available thus so scores are lost
 - added common logging and serilization for both network-handler and leaderboard-handler
 - added ground and grass to the vegetation
+- added support to automatically open the update URL incase an update is available
 - moved all gama data files under the /data/ directory
 - changed log file name to game.log
 - changed API key handling from network-handler to main game file

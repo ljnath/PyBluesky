@@ -32,6 +32,9 @@ Website: https://www.ljnath.com
 import pygame
 import random
 import math
+import os
+import platform
+import subprocess
 from game.environment import GameEnvironment
 from game.sprites.jet import Jet
 from game.sprites.missile import Missile
@@ -77,7 +80,21 @@ def create_vegetation(game_env, vegetations):
     vegetations.empty()
     for i in range(math.ceil(game_env.static.screen_width / game_env.vegetation_size[0])):                          # drawing the 1st vegetations required to fill the 1st sceen (max is the screen width)
         vegetation = Vegetation(game_env, x_pos= i * game_env.vegetation_size[0] + game_env.vegetation_size[0]/2)   # creating a new vegetation
-        vegetations.add(vegetation)                                                                                 # just adding sprite to vegetations group, to updating on screen for now
+        vegetations.add(vegetation)         
+                                                                                # just adding sprite to vegetations group, to updating on screen for now
+def notify_user_of_update(game_env):
+    if game_env.dynamic.update_url:
+        current_platform = platform.system()
+        try:
+            if current_platform == 'Windows':
+                os.startfile(game_env.dynamic.update_url)
+            elif current_platform=='Darwin':
+                subprocess.Popen(['open', game_env.dynamic.update_url])
+            elif current_platform == 'Linux':
+                subprocess.Popen(['xdg-open', game_env.dynamic.update_url])
+        except:
+            pass
+
 
 def play():
     pygame.mixer.init()                                                 # initializing same audio mixer with default settings
@@ -95,7 +112,7 @@ def play():
     pygame.mixer.music.play(loops=-1)                                                                       # lopping the main game music
     pygame.mixer.music.set_volume(.3)
 
-    screen = pygame.display.set_mode((game_env.static.screen_width, game_env.static.screen_height))         # creating game screen with custom width and height
+    # screen = pygame.display.set_mode((game_env.static.screen_width, game_env.static.screen_height))         # creating game screen with custom width and height
     screen = pygame.display.set_mode((game_env.static.screen_width, game_env.static.screen_height), game_env.FULLSCREEN)     # creating game screen with custom width and height
     pygame.display.set_caption('{} ver. {}'.format(game_env.static.name, game_env.static.version))          # setting name of game window
     pygame.display.set_icon(pygame.image.load(game_env.static.game_icon))                                   # updating game icon to the jet image
@@ -250,35 +267,36 @@ def play():
         [screen.blit(sprite.surf, sprite.rect) for sprite in backgrounds]                           # drawing all backgrounds sprites
         [screen.blit(sprite.surf, sprite.rect) for sprite in game_env.dynamic.all_sprites]          # drawing all sprites in the screen
 
-        # missile hit
-        if pygame.sprite.spritecollideany(jet, missiles) or pygame.sprite.spritecollideany(jet, game_env.dynamic.sam_missiles) and not gameover:    # Check if any missiles have collided with the player; if so
-            active_sprite = ReplayText(game_env)
-            game_env.dynamic.active_screen = Screen.REPLAYMENU
-            jet.kill()                                                                              # killing the jet
-            [sam_missile.kill() for sam_missile in game_env.dynamic.sam_missiles]                   # killing the SAM missile
-            game_env.dynamic.collision_sound.play()
-            [game_env.dynamic.all_sprites.add(sprite) for sprite in (active_sprite, hint_sprite)]   # adding the gameover and the hint sprite
-            game_env.dynamic.all_sprites.remove(game_env.dynamic.noammo_sprite)
-            gameover = True                                                                         # setting gameover to true to prevent new missiles from spawning
-            submit_result(game_env)
+        if not gameover:
+            # missile hit
+            if pygame.sprite.spritecollideany(jet, missiles) or pygame.sprite.spritecollideany(jet, game_env.dynamic.sam_missiles):    # Check if any missiles have collided with the player; if so
+                gameover = True                                                                         # setting gameover to true to prevent new missiles from spawning
+                active_sprite = ReplayText(game_env)
+                game_env.dynamic.active_screen = Screen.REPLAYMENU
+                jet.kill()                                                                              # killing the jet
+                [sam_missile.kill() for sam_missile in game_env.dynamic.sam_missiles]                   # killing the SAM missile
+                game_env.dynamic.collision_sound.play()
+                [game_env.dynamic.all_sprites.add(sprite) for sprite in (active_sprite, hint_sprite)]   # adding the gameover and the hint sprite
+                game_env.dynamic.all_sprites.remove(game_env.dynamic.noammo_sprite)
+                submit_result(game_env)
 
-        # missile hit
-        collision = pygame.sprite.groupcollide(missiles, game_env.dynamic.bullets, True, True) # checking for collision between bullets and missiles, killing each one of them on collision
-        if len(collision) > 0 and not gameover:
-            game_env.dynamic.hit_sound.play()                                                       # play missile destroyed sound
-            game_env.dynamic.game_score += len(collision) * 10                                      # 1 missle destroyed = 10 pts.
-            game_env.dynamic.missiles_destroyed += len(collision)                                   # to calulate player accuracy
+            # missile hit
+            collision = pygame.sprite.groupcollide(missiles, game_env.dynamic.bullets, True, True) # checking for collision between bullets and missiles, killing each one of them on collision
+            if len(collision) > 0:
+                game_env.dynamic.hit_sound.play()                                                       # play missile destroyed sound
+                game_env.dynamic.game_score += len(collision) * 10                                      # 1 missle destroyed = 10 pts.
+                game_env.dynamic.missiles_destroyed += len(collision)                                   # to calulate player accuracy
 
-        # powerup hit
-        if pygame.sprite.spritecollideany(jet, stars):                                              # collition between jet and star (powerup)
-            game_env.dynamic.powerup_sound.play()
-            [game_env.dynamic.all_sprites.remove(s) for s in stars.sprites()]                       # removing the star from all_sprites to hide from screen
-            game_env.dynamic.game_score += 100 * game_env.dynamic.game_level                        # increasing game score by 100
-            stars.empty()                                                                           # removing star from stars group
-            for missile in missiles.sprites():                                                      
-                missile.deactivate()                                                                # making missile as deactivated
-                deactivated_missile.add(missile)                                                    # adding missile to deactivated_missile group
-                missiles.remove(missile)                                                            # remove missiles from missles group to avoid collision with jet 
+            # powerup hit
+            if pygame.sprite.spritecollideany(jet, stars):                             # collition between jet and star (powerup)
+                game_env.dynamic.powerup_sound.play()
+                [game_env.dynamic.all_sprites.remove(s) for s in stars.sprites()]                       # removing the star from all_sprites to hide from screen
+                game_env.dynamic.game_score += 100 * game_env.dynamic.game_level                        # increasing game score by 100
+                stars.empty()                                                                           # removing star from stars group
+                for missile in missiles.sprites():                                                      
+                    missile.deactivate()                                                                # making missile as deactivated
+                    deactivated_missile.add(missile)                                                    # adding missile to deactivated_missile group
+                    missiles.remove(missile)                                                            # remove missiles from missles group to avoid collision with jet 
             
         pygame.display.flip()                                                                       # updating display to the screen
         gameclock.tick(game_env.static.fps)                                                         # ticking game clock at 30 to maintain 30fps
@@ -308,6 +326,7 @@ def play():
 
     pygame.mixer.music.stop()                                                                       # stopping game music
     pygame.mixer.quit()                                                                             # stopping game sound mixer
+    notify_user_of_update(game_env)
 
 
 if __name__ == '__main__':  

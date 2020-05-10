@@ -57,8 +57,12 @@ class StaticData():
         return 'image/grass.png'
 
     @property
-    def tank(self):
-        return 'image/tank.png'
+    def sam_launcher(self):
+        return 'image/samlauncher.png'
+
+    @property
+    def sam(self):
+        return 'image/sam.png'
 
     @property
     def missile_activated_image(self):
@@ -120,6 +124,7 @@ class StaticData():
             'levelup' : 'audio/levelup.ogg',
             'shoot' : 'audio/shoot.ogg',
             'hit' : 'audio/missile_hit.ogg',
-            'powerup' : 'audio/powerup.ogg'
+            'powerup' : 'audio/powerup.ogg',
+            'samfire' : 'audio/fire.ogg'
         }
 

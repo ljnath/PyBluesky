@@ -16,13 +16,16 @@ class DynamicData():
         self.__shoot_sound = Sound(self.__static.game_sound.get('shoot'))
         self.__hit_sound = Sound(self.__static.game_sound.get('hit'))
         self.__powerup_sound = Sound(self.__static.game_sound.get('powerup'))
+        self.__samfire_sound = Sound(self.__static.game_sound.get('samfire'))
         self.__game_input = InputMode.KEYBOARD
         self.__all_sprites = Group()
         self.__bullets = Group()
+        self.__sam_missiles = Group()
         self.__noammo_sprite = None
         self.__update_available = False
         self.__replay = True
         self.__player_name = ''
+
         # loading the player name from file, name can be max 20 character long
         if os.path.exists(self.__static.player_file):
             with open(self.__static.player_file) as file_reader:
@@ -39,6 +42,7 @@ class DynamicData():
         self.__game_playtime = 0
         self.__bullet_fired = 0
         self.__missles_destroyed = 0
+        self.__sam_missiles.empty()
 
     @property
     def collision_sound(self):
@@ -59,6 +63,10 @@ class DynamicData():
     @property
     def powerup_sound(self):
         return self.__powerup_sound
+
+    @property
+    def samfire_sound(self):
+        return self.__samfire_sound
 
     @property
     def game_input(self):
@@ -83,6 +91,14 @@ class DynamicData():
     @bullets.setter
     def bullets(self, value):
         self.__bullets = value
+
+    @property
+    def sam_missiles(self):
+        return self.__sam_missiles
+
+    @sam_missiles.setter
+    def sam_missiles(self, value):
+        self.__sam_missiles = value
 
     @property
     def ammo(self):

@@ -38,7 +38,7 @@ class Jet(sprite.Sprite):
 
     def shoot(self):
         if self.__game_env.dynamic.ammo > 0:
-            bullet = Bullet(self.__game_env, self.rect.x+self.rect.width+10, self.rect.y+22)           # create a bullet where the jet is located
+            bullet = Bullet(self.__game_env, self.rect.x+self.rect.width+10, self.rect.y+22)      # create a bullet where the jet is located
             self.__game_env.dynamic.bullets.add(bullet)                                           # add the bullet to bullet group
             self.__game_env.dynamic.all_sprites.add(bullet)                                       # add the bullet tp all_sprites
             self.__game_env.dynamic.shoot_sound.play()                                            # play shooting sound

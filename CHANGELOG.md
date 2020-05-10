@@ -2,6 +2,7 @@
 
 ## [1.0.3] - Unreleased
 - added support for new api
+- added sam launcher, they appear after level 5 and fire targeted missiles
 - added support to add 10 pts on each level up
 - added support to calulate player accuracy
 - added support to upload offline scores when internet connectivity is available thus so scores are lost

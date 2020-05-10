@@ -12,7 +12,7 @@ class StaticData():
 
     @property
     def version(self):
-        return '1.0.2'
+        return '1.0.3'
 
     @property
     def screen_width(self):
@@ -47,6 +47,22 @@ class StaticData():
     @property
     def vegetation(self):
         return ('image/vegetation_plain.png', 'image/vegetation_tree.png')
+
+    @property
+    def ground(self):
+        return 'image/ground.png'
+
+    @property
+    def grass(self):
+        return 'image/grass.png'
+
+    @property
+    def sam_launcher(self):
+        return 'image/samlauncher.png'
+
+    @property
+    def sam(self):
+        return 'image/sam.png'
 
     @property
     def missile_activated_image(self):
@@ -94,7 +110,7 @@ class StaticData():
 
     @property
     def player_file(self):
-        return 'player.dat'
+        return 'data/player.dat'
 
     @property
     def name_length(self):
@@ -108,6 +124,7 @@ class StaticData():
             'levelup' : 'audio/levelup.ogg',
             'shoot' : 'audio/shoot.ogg',
             'hit' : 'audio/missile_hit.ogg',
-            'powerup' : 'audio/powerup.ogg'
+            'powerup' : 'audio/powerup.ogg',
+            'samfire' : 'audio/fire.ogg'
         }
 

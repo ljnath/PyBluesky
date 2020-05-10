@@ -1,31 +1,35 @@
 import pickle
 import os
+from game.handlers import Handlers
 from game.handlers.network import NetworkHandler
+from game.handlers.serialize import SerializeHandler
 
-class LeaderBoardHandler():
+class LeaderBoardHandler(Handlers):
     def __init__(self):
-        self.__db = 'leaderboard.dat'
+        super().__init__()
+        self.__leaders_file = 'data/leaders.dat'
+        self.__serialize_handler = SerializeHandler(self.__leaders_file)
 
     def load(self):
         leaders = []
         try:
-            if os.path.exists(self.__db):
-                with open(self.__db, 'rb') as file_reader:
-                    leaders = pickle.load(file_reader)
+            deserialized_object = self.__serialize_handler.deserialize()
+            if deserialized_object:
+                leaders = dict(deserialized_object)
         except Exception:
-            print('Failed to load leaders from file')
+            self.log('Failed to read leaders from file {}'.format(self.__leaders_file))
         finally:
             return leaders
 
-    def dump(self, leaders):
+    def save(self, leaders):
         try:
-            if not leaders:
+            if leaders is None:
                 return
-
-            with open(self.__db, 'wb') as file_writter:
-                pickle.dump(leaders, file_writter)
+            
+            self.__serialize_handler.serialize(leaders)
         except Exception:
-            print('Failed to dump leaders to file')
+            self.log('Failed to save leaders to file {}'.format(self.__leaders_file))
     
     def update(self, api_key):
-        self.dump(NetworkHandler().get_leaders(api_key))
+        network_handler = NetworkHandler(api_key)
+        self.save(network_handler.get_leaders())

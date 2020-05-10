@@ -23,7 +23,7 @@ SOFTWARE.
 
 cx freeze setup file for building the game
 
-Version: 1.0.2
+Version: 1.0.3
 Author: Lakhya Jyoti Nath (ljnath)
 Email:  ljnath@ljnath.com
 Website: https://www.ljnath.com
@@ -45,8 +45,7 @@ shortcut_metadata = [
      None,                              # IconIndex
      False,                             # ShowCmd
      'TARGETDIR'                        # WkDir
-     )
-    ]
+    )]
 
 
 bdist_msi_options= {}
@@ -62,14 +61,18 @@ if sys.platform == "win32":
 
     bdist_msi_options = {
         'data': {
-            "Shortcut": shortcut_metadata  
+            "Shortcut": shortcut_metadata
         }
     }
+else:
+    executables = [Executable(
+        script="pybluesky.py"
+    )]
 
 
 setup(
     name = "PyBluesky",
-    version = '1.0.2',
+    version = '1.0.3',
     description = 'A simple python game to navigate your jet and fight though a massive missiles attack based on pygame framework',
     executables = executables,
     options={
@@ -85,8 +88,7 @@ setup(
                 'font/',
                 'image/',
                 'icon/',
-                'LICENSE',
-                'README.md'
+                'LICENSE'
             ]
         }
     }

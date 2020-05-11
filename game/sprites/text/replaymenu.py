@@ -1,7 +1,7 @@
 from pygame.surface import Surface
 from game.sprites.text import Text
 
-class ReplayText(Text):
+class ReplayMenuText(Text):
     """ ReplayText class extended from Text class.
         It creates the game replay menu sprite
     """
@@ -20,7 +20,6 @@ class ReplayText(Text):
         self.__replaytext_pos_x = self.__gameover.surf.get_width()/2 - (self.__replaytext_surf.get_width() + self.__y_selected_surf.get_width() + self.__n_surf.get_width())/2 
 
         self.__highlightY()                                                                                     # calling method to highlight Yes (the default choice)
-        self.replay_choice = True                                                                               # setting replay to True
         
     def __recreate_surf(self):
         # creating default surface of combination of expected length
@@ -46,4 +45,3 @@ class ReplayText(Text):
         self.__recreate_surf()
         self.surf.blit(self.__y_surf, (self.__replaytext_pos_x + self.__replaytext_surf.get_width(), self.__gameover.surf.get_height()))                                           # updating the surface by drawing the Yes after the prefix
         self.surf.blit(self.__n_selected_surf, (self.__replaytext_pos_x + self.__replaytext_surf.get_width() + self.__y_surf.get_width(), self.__gameover.surf.get_height()))      # updating the surface by drawing the highlighted No after the Yes
-

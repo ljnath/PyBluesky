@@ -10,9 +10,10 @@ class InputMode(Enum):
 class Screen(Enum):
     """ TitleScreen enumerator which holds the available title screens
     """
-    GAMEMENU = 0,
+    GAME_MENU = 0,
     HELP = 1,
     LEADERBOARD = 2
-    REPLAYMENU = 3
-    NAMEINPUT = 4
-    
+    REPLAY_MENU = 3
+    NAME_INPUT = 4
+    EXIT_MENU = 5
+    GAME_SCREEN = 6

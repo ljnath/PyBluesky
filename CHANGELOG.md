@@ -1,6 +1,9 @@
 # Changelog
 
-## [1.0.3] - Unreleased
+## [1.0.4] - Unreleased
+
+
+## [1.0.3] - 2020-05-10
 - added support for new api
 - added sam launcher, they appear after level 5 and fire targeted missiles
 - added support to add 10 pts on each level up

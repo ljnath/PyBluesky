@@ -1,62 +1,62 @@
-import http.client
-import mimetypes
-import platform
+import asyncio
 import os
 import pickle
+import platform
 from datetime import datetime
+from json import dumps, loads
 from time import time
-from json import loads, dumps
+
+import aiohttp
+
 from game.handlers import Handlers
 from game.handlers.serialize import SerializeHandler
+
 
 class NetworkHandler(Handlers):
     def __init__(self, api_key):
         Handlers().__init__()
         self.__api_key = api_key
-        self.__api_host = 'app.ljnath.com'
-        self.__endpoint = '/pybluesky/'
+        self.__api_endpoint = 'https://app.ljnath.com/pybluesky/'
         self.__sync_file = 'data/offline.dat'
-        self.__headers = { 'Content-Type': 'application/json' }
-        self.__https_connection = http.client.HTTPSConnection(self.__api_host)
         self.__serialize_handler = SerializeHandler(self.__sync_file)
 
-    def check_game_update(self, game_env):
+    async def check_game_update(self, game_env):
         try:
-            self.__https_connection.request("GET", "{}?action=getUpdate&apiKey={}".format(self.__endpoint, self.__api_key), headers=self.__headers )
-            response = self.__https_connection.getresponse()
-            if response.code != 200:
-                raise Exception()
-            json_reponse = loads(response.read().decode('utf-8'))
-            if json_reponse['version'] != game_env.static.version:
-                game_env.dynamic.update_available = True
-                game_env.dynamic.update_url = json_reponse['url']
-                self.log('New game version {} detected'.format(json_reponse['version']))
+            get_parameters = {'action': 'getUpdate', 'apiKey': self.__api_key}
+            async with aiohttp.ClientSession() as session:
+                async with session.get(self.__api_endpoint, params=get_parameters) as response:
+                    if response.status != 200:
+                        raise Exception()
+                    json_response = loads(await response.text())
+                    if json_response['version'] != game_env.static.version:
+                        game_env.dynamic.update_available = True
+                        game_env.dynamic.update_url = json_response['url']
+                        self.log('New game version {} detected'.format(json_response['version']))
         except:
             self.log('Failed to check for game update')
-            
-        self.submit_result(game_env, sync_only=True)
+        await self.submit_result(game_env, only_sync=True)
 
-    def get_leaders(self):
+    async def get_leaders(self):
         leaders = {}
         try:
-            self.__https_connection.request("GET", "{}?action=getTopScores&apiKey={}".format(self.__endpoint, self.__api_key), headers=self.__headers)
-            response = self.__https_connection.getresponse()
-            if response.code != 200:
-                raise Exception()
-            leaders = loads(response.read().decode('utf-8'))
-        except Exception as e:
-            print(e)
-            self.log('Failed to get game leaders')
+            get_parameters = {'action': 'getTopScores', 'apiKey': self.__api_key}
+            async with aiohttp.ClientSession() as session:
+                async with session.get(self.__api_endpoint, params=get_parameters) as response:
+                    if response.status != 200:
+                        raise Exception()
+                    leaders = loads(await response.text())
+        except:
+            self.log('Failed to get game leaders from remote server')
         finally:
             return leaders
         
-    def submit_result(self, game_env, sync_only = False):
+    async def submit_result(self, game_env, only_sync = False):
         payloads = []
         deserialized_object = self.__serialize_handler.deserialize()
         if deserialized_object:
             payloads = list(deserialized_object)
 
-        if not sync_only:
+        if not only_sync:
             payload = {
                 'apiKey' : self.__api_key,
                 'name' : game_env.dynamic.player_name,
@@ -68,25 +68,28 @@ class NetworkHandler(Handlers):
             }
             payloads.append(payload)
 
-        unprocessed_payloads = []
-        for payload in payloads:
-            if self.__post_results(payload):
-                self.log('Successfully submitted result: score={}, name={}, level={}'.format(payload.get('score'), payload.get('name'), payload.get('level')))
-            else:
-                payload.update({'apiKey':''})
-                unprocessed_payloads.append(payload)
-                self.log('Falied to submit result: score={}, name={}, level={}'.format(payload.get('score'), payload.get('name'), payload.get('level')))
-        self.__serialize_handler.serialize(unprocessed_payloads)
+        unprocessed_payloads = []       
+        async with aiohttp.ClientSession() as session:
+            put_tasks = [asyncio.ensure_future(self.__post_results(session, payload)) for payload in payloads]
+            await asyncio.gather(*put_tasks, return_exceptions=False)
 
-    def __post_results(self, payload):
+            for task, payload in zip(put_tasks, payloads):
+                if task._result:
+                    self.log('Successfully submitted result: score={}, name={}, level={}'.format(payload.get('score'), payload.get('name'), payload.get('level')))
+                else:
+                    payload.update({'apiKey':''})
+                    unprocessed_payloads.append(payload)
+                    self.log('Falied to submit result: score={}, name={}, level={}'.format(payload.get('score'), payload.get('name'), payload.get('level')))
+
+        self.__serialize_handler.serialize(unprocessed_payloads)    
+    
+    async def __post_results(self, session, payload):
         result = True
         try:
             payload['apiKey'] = self.__api_key
-            self.__https_connection = http.client.HTTPSConnection(self.__api_host)
-            self.__https_connection.request("PUT", self.__endpoint, dumps(payload), headers=self.__headers)
-            response = self.__https_connection.getresponse()
-            if response.code != 201:
-                raise Exception()
+            async with session.put(self.__api_endpoint, json=payload) as response:
+                if response.status != 201:
+                    result = False
         except:
             result = False
         finally:

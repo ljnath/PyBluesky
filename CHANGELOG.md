@@ -5,7 +5,9 @@
 - changed size of sam missile
 - changed the probabity of a sam-launcher firing from 50% to 33%
 - changed the sam speed increase, now speed increases by 1 every 2 level instead of 1 level
+- changes the jet speed based on input mode; in mouse mode jet speed it slightly faster
 - changed the cloud and vegetation speed by increasing the vegetation's speed and reducing the cloud's speed
+- replaces threading in network communication with asyncio
 - renamed ReplayText to ReplayMenuText
 
 ## [1.0.3] - 2020-05-10

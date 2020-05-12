@@ -29,51 +29,45 @@ Email:  ljnath@ljnath.com
 Website: https://www.ljnath.com
 """
 
-import pygame
-import random
+import asyncio
 import math
+import random
 import webbrowser
+from threading import Thread
+
+import pygame
+
+from game.data.enums import InputMode, Screen
 from game.environment import GameEnvironment
+from game.handlers.leaderboard import LeaderBoardHandler
+from game.handlers.network import NetworkHandler
+from game.sprites.cloud import Cloud
 from game.sprites.jet import Jet
 from game.sprites.missile import Missile
-from game.sprites.cloud import Cloud
-from game.sprites.vegetation import Vegetation
 from game.sprites.samlauncher import SamLauncher
 from game.sprites.star import Star
 from game.sprites.text import Text
-from game.sprites.text.score import ScoreText
-from game.sprites.text.replaymenu import ReplayMenuText
+from game.sprites.text.exitmenu import ExitMenuText
 from game.sprites.text.gamemenu import GameMenuText
 from game.sprites.text.help import HelpText
-from game.sprites.text.exitmenu import ExitMenuText
-from game.sprites.text.leaderboard import LeaderBoardText
 from game.sprites.text.input.name import NameInputText
-from game.handlers.network import NetworkHandler
-from game.handlers.leaderboard import LeaderBoardHandler
-from game.data.enums import InputMode, Screen
-from threading import Thread
+from game.sprites.text.leaderboard import LeaderBoardText
+from game.sprites.text.replaymenu import ReplayMenuText
+from game.sprites.text.score import ScoreText
+from game.sprites.vegetation import Vegetation
 
 API_KEY = ''
 
-def load_leaders():
-    leader_thread = Thread(target=LeaderBoardHandler().update, args=([API_KEY]))
-    leader_thread.start()
-    leader_thread.join()  
-
 def check_update(game_env):
     network_handler = NetworkHandler(API_KEY)
-    check_update_thread = Thread(target=network_handler.check_game_update, args=([game_env]))
-    check_update_thread.start()
-    check_update_thread.join()
-    load_leaders()
+    asyncio.get_event_loop().run_until_complete(network_handler.check_game_update(game_env))
+    asyncio.get_event_loop().run_until_complete(LeaderBoardHandler().update(API_KEY))           # updating the leaderboard asynchronously
 
 def submit_result(game_env):
     if game_env.dynamic.game_score > 0:
         network_handler = NetworkHandler(API_KEY)
-        network_thread = Thread(target=network_handler.submit_result, args=([game_env]))
-        network_thread.start()
-        network_thread.join()
-    load_leaders()
+        asyncio.get_event_loop().run_until_complete(network_handler.submit_result(game_env))
+    asyncio.get_event_loop().run_until_complete(LeaderBoardHandler().update(API_KEY))           # updating the leaderboard asynchronously
 
 def create_vegetation(game_env, vegetations):
     vegetations.empty()
@@ -348,3 +342,4 @@ def play():
 
 if __name__ == '__main__':  
     play()                                                                                          # starting game
+    

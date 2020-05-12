@@ -16,7 +16,7 @@ class ExitMenuText(Text):
         self.__n_selected_surf = self.font.render("No",1, self.__game_env.static.text_selection_color)          # creating surface with No text when highlighted
 
         self.__choices = self.__title.surf.get_width()/2 - (self.__y_selected_surf.get_width() + self.__n_surf.get_width())/2 
-        self.__highlight_no()
+        self.__highlight_yes()
         
     def __recreate_surf(self):
         self.surf = Surface((self.__title.surf.get_width(), self.__title.surf.get_height() + self.__y_surf.get_height()), self.__game_env.SRCALPHA)

@@ -78,7 +78,11 @@ setup(
     options={
         "bdist_msi": bdist_msi_options,
         "build_exe": {
-            "packages":["pygame"],
+            "packages":[
+                "pygame",
+                "asyncio",
+                "aiohttp"
+            ],
             "includes":[
                 'math',
                 'random'

@@ -1,6 +1,8 @@
-from pygame import sprite, image, transform
-import random
 import math
+import random
+
+from pygame import image, sprite, transform
+
 
 class Vegetation(sprite.Sprite):
     """ Vegetation sprite class for creating and updating the vegetation in the game screen

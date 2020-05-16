@@ -1,5 +1,7 @@
-from pygame import sprite, image
 import random
+
+from pygame import image, sprite
+
 
 # Missile class which holds missile attributes and behaviour
 class Missile(sprite.Sprite):

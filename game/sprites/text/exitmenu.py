@@ -1,5 +1,7 @@
 from pygame.surface import Surface
+
 from game.sprites.text import Text
+
 
 class ExitMenuText(Text):
     """ ExitText class extended from Text class.
@@ -40,5 +42,4 @@ class ExitMenuText(Text):
         self.surf.blit(self.__y_surf, (self.__choices, self.__title.surf.get_height()))
         self.surf.blit(self.__n_selected_surf, (self.__choices + self.__y_surf.get_width(), self.__title.surf.get_height()))
         self.__game_env.dynamic.exit  = False
-
 

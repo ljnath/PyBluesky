@@ -8,7 +8,7 @@ from game.handlers.serialize import SerializeHandler
 
 class LeaderBoardHandler(Handlers):
     def __init__(self):
-        super().__init__()
+        Handlers().__init__()
         self.__leaders_file = 'data/leaders.dat'
         self.__serialize_handler = SerializeHandler(self.__leaders_file)
 

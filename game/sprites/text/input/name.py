@@ -1,6 +1,9 @@
-from pygame.surface import Surface
-from game.sprites.text import Text
 import re
+
+from pygame.surface import Surface
+
+from game.sprites.text import Text
+
 
 class NameInputText(Text):
     """ NameInputText class extended from Text class.

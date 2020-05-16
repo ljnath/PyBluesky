@@ -29,8 +29,9 @@ Email:  ljnath@ljnath.com
 Website: https://www.ljnath.com
 """
 
-from cx_Freeze import setup, Executable
 import sys
+
+from cx_Freeze import Executable, setup
 
 shortcut_metadata = [
     ("DesktopShortcut",                 # Shortcut

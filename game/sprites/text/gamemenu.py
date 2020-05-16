@@ -1,7 +1,9 @@
-from game.data.enums import InputMode
-from game.sprites.text import Text
-from game.sprites.jet import Jet
 from pygame.surface import Surface
+
+from game.data.enums import InputMode
+from game.sprites.jet import Jet
+from game.sprites.text import Text
+
 
 class GameMenuText(Text):
     """ GameMenuText class extended from Text class.

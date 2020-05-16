@@ -1,5 +1,7 @@
-from pygame import sprite, image, transform
 import math
+
+from pygame import image, sprite, transform
+
 
 class Sam(sprite.Sprite):
     """ SurfaceToAirMissile (SAM) sprite for create and moving bullet

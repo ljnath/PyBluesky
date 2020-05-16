@@ -1,6 +1,5 @@
 from enum import Enum
 
-
 class InputMode(Enum):
     """ InputMode enumerator which holds the supported input modes for the game
     """

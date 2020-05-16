@@ -33,7 +33,6 @@ import asyncio
 import math
 import random
 import webbrowser
-from threading import Thread
 
 import pygame
 
@@ -342,4 +341,3 @@ def play():
 
 if __name__ == '__main__':  
     play()                                                                                          # starting game
-    

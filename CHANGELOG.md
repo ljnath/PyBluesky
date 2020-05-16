@@ -1,6 +1,6 @@
 # Changelog
 
-## [1.0.4] - Unreleased
+## [1.0.4] - 2020-05-17
 - added exit prompt in the game, this also acts as a game pause feature
 - changed size of sam missile
 - changed the probabity of a sam-launcher firing from 50% to 33%

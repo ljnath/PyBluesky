@@ -12,7 +12,7 @@ class StaticData():
 
     @property
     def version(self):
-        return '1.0.3'
+        return '1.0.4'
 
     @property
     def screen_width(self):

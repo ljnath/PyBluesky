@@ -1,5 +1,7 @@
 from pygame.surface import Surface
+
 from game.sprites.text import Text
+
 
 class ReplayMenuText(Text):
     """ ReplayText class extended from Text class.

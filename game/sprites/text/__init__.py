@@ -1,5 +1,6 @@
-from pygame.sprite import Sprite
 from pygame.font import Font
+from pygame.sprite import Sprite
+
 
 class Text(Sprite):
     """ Text class for create sprite out of text

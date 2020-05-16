@@ -1,5 +1,7 @@
-from game.sprites.text import Text
 from pygame.surface import Surface
+
+from game.sprites.text import Text
+
 
 class HelpText(Text):
     """ HelpText class extended from Text class.

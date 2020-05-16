@@ -5,7 +5,7 @@ A simple python game to navigate your jet and fight though a massive missiles at
 Based on https://realpython.com/blog/python/pygame-a-primer
 
 Author : Lakhya Jyoti Nath (ljnath)<br>
-Date : April 2020<br>
+Date : April 2020 - May 2020<br>
 Email : ljnath@ljnath.com<br>
 Website : https://www.ljnath.com
 

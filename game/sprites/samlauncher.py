@@ -1,7 +1,10 @@
-from pygame import sprite, image, transform
-import random
 import math
+import random
+
+from pygame import image, sprite, transform
+
 from game.sprites.sam import Sam
+
 
 class SamLauncher(sprite.Sprite):
     """ SamLauncher sprite class for creating and updating the vegetation in the game screen

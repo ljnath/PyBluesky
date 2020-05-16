@@ -1,10 +1,13 @@
 
-from game.data.static import StaticData
-from game.data.enums import InputMode, Screen
-from pygame.mixer import Sound
-from pygame.sprite import Group
 import os
 import re
+
+from pygame.mixer import Sound
+from pygame.sprite import Group
+
+from game.data.enums import InputMode, Screen
+from game.data.static import StaticData
+
 
 class DynamicData():
     """ Class which holds all the game variables

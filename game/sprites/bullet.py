@@ -1,5 +1,7 @@
-from pygame import sprite, image
 import math
+
+from pygame import image, sprite
+
 
 class Bullet(sprite.Sprite):
     """ Bullet sprite for create and moving bullet

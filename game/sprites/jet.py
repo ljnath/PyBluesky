@@ -3,8 +3,7 @@ import math
 from pygame import image, sprite
 
 from game.data.enums import InputMode
-
-from .bullet import Bullet
+from game.sprites.bullet import Bullet
 
 
 # Jet class which holds jet attributes and behaviour

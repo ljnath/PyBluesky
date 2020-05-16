@@ -1,7 +1,10 @@
-from game.sprites.text import Text
-from pygame.surface import Surface
-from game.handlers.leaderboard import LeaderBoardHandler
 import time
+
+from pygame.surface import Surface
+
+from game.handlers.leaderboard import LeaderBoardHandler
+from game.sprites.text import Text
+
 
 class LeaderBoardText(Text):
     """ LeaderBoardText class extended from Text class.

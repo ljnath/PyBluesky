@@ -1,18 +1,22 @@
-from pygame import sprite, image
 import math
-from .bullet import Bullet
+
+from pygame import image, sprite
+
+from game.data.enums import InputMode
+from game.sprites.bullet import Bullet
+
 
 # Jet class which holds jet attributes and behaviour
 class Jet(sprite.Sprite):
     """ Jet sprite class for creating and updating the jet in the game screen
     """
     def __init__(self, game_env):
-        super(Jet, self).__init__()                                 # initilizing parent class pygame.sprite.Sprite
-        self.__speed = 7                                            # setting jet speed as 5
+        super(Jet, self).__init__()                                                             # initilizing parent class pygame.sprite.Sprite
         self.__game_env = game_env
-        self.surf = image.load(game_env.static.jet_image).convert()                   # loading jet image from file;  image source https://www.flaticon.com/authors/iconixar
+        self.__speed = 7 if self.__game_env.dynamic.game_input == InputMode.KEYBOARD else 9     # setting jet speed as 7 in keyboard and 9 in mouse mode
+        self.surf = image.load(game_env.static.jet_image).convert()                             # loading jet image from file
         self.surf.set_colorkey((255, 255, 255), self.__game_env.RLEACCEL)                       # setting the white color as the transperant area; RLEACCEL is used for better performance on non accelerated displays
-        self.rect = self.surf.get_rect(center=(50,self.__game_env.static.screen_height/2))   # getting rectangle from jet screen; setting the jet position as the middle of the scrren on the left
+        self.rect = self.surf.get_rect(center=(50,self.__game_env.static.screen_height/2))      # getting rectangle from jet screen; setting the jet position as the middle of the scrren on the left
 
     def update(self, pressed_keys):
         if pressed_keys[self.__game_env.K_UP]:                                  # if the UP key is pressed
@@ -54,4 +58,3 @@ class Jet(sprite.Sprite):
             self.rect.right = self.__game_env.static.screen_width            # if the jet has moved right and have crossed the screen; the right position is set to screen width as it is the boundary
         if self.rect.bottom > self.__game_env.static.screen_height - self.__game_env.vegetation_size[1]/2:
             self.rect.bottom = self.__game_env.static.screen_height - self.__game_env.vegetation_size[1]/2   # if the jet has moved bottom and have crossed the screen; the bottom position is set to screen width as it is the boundary
-

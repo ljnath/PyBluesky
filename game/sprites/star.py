@@ -1,5 +1,7 @@
-from pygame import sprite, image
 import random
+
+from pygame import image, sprite
+
 
 # Star class which holds star attributes and behaviour
 class Star(sprite.Sprite):

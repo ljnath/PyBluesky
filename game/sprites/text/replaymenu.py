@@ -1,7 +1,9 @@
 from pygame.surface import Surface
+
 from game.sprites.text import Text
 
-class ReplayText(Text):
+
+class ReplayMenuText(Text):
     """ ReplayText class extended from Text class.
         It creates the game replay menu sprite
     """
@@ -19,8 +21,7 @@ class ReplayText(Text):
 
         self.__replaytext_pos_x = self.__gameover.surf.get_width()/2 - (self.__replaytext_surf.get_width() + self.__y_selected_surf.get_width() + self.__n_surf.get_width())/2 
 
-        self.__highlightY()                                                                                     # calling method to highlight Yes (the default choice)
-        self.replay_choice = True                                                                               # setting replay to True
+        self.__highlight_yes()                                                                                     # calling method to highlight Yes (the default choice)
         
     def __recreate_surf(self):
         # creating default surface of combination of expected length
@@ -31,19 +32,18 @@ class ReplayText(Text):
     def update(self, pressed_keys):
         if pressed_keys[self.__game_env.K_LEFT]:                                                                # checking if user has pressed LEFT
             self.__game_env.dynamic.replay = True                                                               # setting game replay choice as True
-            self.__highlightY()                                                                                 # calling method to highlight Yes
+            self.__highlight_yes()                                                                                 # calling method to highlight Yes
         elif pressed_keys[self.__game_env.K_RIGHT]:                                                             # checking if user has pressed RIGHT
             self.__game_env.dynamic.replay  = False                                                             # setting game replay choice as False
-            self.__highlightN()                                                                                 # calling method to highlight No
+            self.__highlight_no()                                                                                 # calling method to highlight No
         self.rect = self.surf.get_rect(center=(self.__game_env.static.screen_width/2, self.__game_env.static.screen_height/2 + 10))   # creating default rect and setting its position center below the GAME OVER text
 
-    def __highlightY(self):
+    def __highlight_yes(self):
         self.__recreate_surf()
         self.surf.blit(self.__y_selected_surf, (self.__replaytext_pos_x + self.__replaytext_surf.get_width(), self.__gameover.surf.get_height()))                                  # updating the surface by drawing the highlighted Yes after the prefix
         self.surf.blit(self.__n_surf, (self.__replaytext_pos_x + self.__replaytext_surf.get_width() + self.__y_selected_surf.get_width(), self.__gameover.surf.get_height()))      # updating the surface by drawing the No after the highlighted Yes
 
-    def __highlightN(self):
+    def __highlight_no(self):
         self.__recreate_surf()
         self.surf.blit(self.__y_surf, (self.__replaytext_pos_x + self.__replaytext_surf.get_width(), self.__gameover.surf.get_height()))                                           # updating the surface by drawing the Yes after the prefix
         self.surf.blit(self.__n_selected_surf, (self.__replaytext_pos_x + self.__replaytext_surf.get_width() + self.__y_surf.get_width(), self.__gameover.surf.get_height()))      # updating the surface by drawing the highlighted No after the Yes
-

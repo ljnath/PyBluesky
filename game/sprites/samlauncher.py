@@ -1,7 +1,10 @@
-from pygame import sprite, image, transform
-import random
 import math
+import random
+
+from pygame import image, sprite, transform
+
 from game.sprites.sam import Sam
+
 
 class SamLauncher(sprite.Sprite):
     """ SamLauncher sprite class for creating and updating the vegetation in the game screen
@@ -13,7 +16,7 @@ class SamLauncher(sprite.Sprite):
         self.surf.set_colorkey((255,255,255), self.__game_env.RLEACCEL) 
         self.__speed = random.randint(8,12)                                 # speed of the sam launcher
         self.__flip = random.choice([True, False])                          # random filp choice, filp-launcher will travel from left2right, else from right2left
-        self.__fired = random.choice([False, True])                         # random choice is the launcher will fire or nor
+        self.__fired = False if random.choice([0,1,2]) == 0 else True     # random choice is the launcher will fire or not; reducing launch probabity to 25%
         self.__min_distance = int(random.randint(10,30) * self.__game_env.static.screen_width / 100)  # min distance to cover before the launcher can fire
 
         # flip logic

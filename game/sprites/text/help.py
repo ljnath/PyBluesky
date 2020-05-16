@@ -1,5 +1,7 @@
-from game.sprites.text import Text
 from pygame.surface import Surface
+
+from game.sprites.text import Text
+
 
 class HelpText(Text):
     """ HelpText class extended from Text class.
@@ -23,7 +25,7 @@ class HelpText(Text):
         all_surfaces.append(self.font.render('to shoot. With mouse as input, you should use your mouse to navigate your jet and', 1, self.color))
         all_surfaces.append(self.font.render('mouse click to shoot', 1, self.color))
         all_surfaces.append(self.font.render(' ', 1, self.color))
-        all_surfaces.append(self.font.render('POINTS: Destroy Missle -> 10 pts. Power-up Star -> 100 pts.', 1, self.color))
+        all_surfaces.append(self.font.render('POINTS: Destroy Missle -> 10 pts. Power-up Star -> 100 pts. Level-up -> 10 pts.', 1, self.color))
         all_surfaces.append(seperator)
 
         self.surf = Surface((all_surfaces[1].get_width(), all_surfaces[0].get_height() * (len(all_surfaces) + 2)), self.__game_env.SRCALPHA)

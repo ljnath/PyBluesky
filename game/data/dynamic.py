@@ -1,10 +1,13 @@
 
-from game.data.static import StaticData
-from game.data.enums import InputMode, Screen
-from pygame.mixer import Sound
-from pygame.sprite import Group
 import os
 import re
+
+from pygame.mixer import Sound
+from pygame.sprite import Group
+
+from game.data.enums import InputMode, Screen
+from game.data.static import StaticData
+
 
 class DynamicData():
     """ Class which holds all the game variables
@@ -24,6 +27,7 @@ class DynamicData():
         self.__noammo_sprite = None
         self.__update_available = False
         self.__replay = True
+        self.__exit = True
         self.__update_url = None
         self.__player_name = ''
     
@@ -33,7 +37,7 @@ class DynamicData():
                 name = file_reader.read().strip()[:self.__static.name_length]
                 self.__player_name = name if name and re.match(r'[a-zA-Z0-9@. ]',name) else ''
         
-        self.__active_screen = Screen.NAMEINPUT if not self.__player_name else Screen.GAMEMENU
+        self.__active_screen = Screen.NAME_INPUT if not self.__player_name else Screen.GAME_MENU
         self.load_defaults()
 
     def load_defaults(self):
@@ -164,6 +168,14 @@ class DynamicData():
     @replay.setter
     def replay(self, value):
         self.__replay = value
+
+    @property
+    def exit(self):
+        return self.__exit
+
+    @exit.setter
+    def exit(self, value):
+        self.__exit = value
 
     @property
     def player_name(self):

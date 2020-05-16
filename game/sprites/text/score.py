@@ -1,4 +1,6 @@
 from game.sprites.text import Text
+
+
 # Define a ScoreText class object by Text class
 class ScoreText(Text):
     """ ScoreText class extended from Text class.

@@ -1,6 +1,8 @@
-from pygame import sprite, image, transform
-import random
 import math
+import random
+
+from pygame import image, sprite, transform
+
 
 class Vegetation(sprite.Sprite):
     """ Vegetation sprite class for creating and updating the vegetation in the game screen
@@ -22,7 +24,7 @@ class Vegetation(sprite.Sprite):
         x_pos = self.__game_env.static.screen_width if x_pos is None else x_pos
         y_pos = self.__game_env.static.screen_height - self.surf.get_height() / 2 if y_pos is None else y_pos
         self.rect = self.surf.get_rect(center=(x_pos, y_pos))
-        self.__speed = 2
+        self.__speed = 6
 
     def update(self):
         self.rect.move_ip(-self.__speed, 0)

@@ -1,6 +1,8 @@
-from pygame import sprite, image
 import random
+
+from pygame import image, sprite
 from pygame.font import Font
+
 
 class Cloud(sprite.Sprite):
     """ Cloud sprite class for creating and updating the cloud in the game screen

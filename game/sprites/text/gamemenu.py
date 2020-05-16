@@ -1,7 +1,9 @@
-from game.data.enums import InputMode
-from game.sprites.text import Text
-from game.sprites.jet import Jet
 from pygame.surface import Surface
+
+from game.data.enums import InputMode
+from game.sprites.jet import Jet
+from game.sprites.text import Text
+
 
 class GameMenuText(Text):
     """ GameMenuText class extended from Text class.
@@ -25,7 +27,7 @@ class GameMenuText(Text):
         self.__mouse_selected.blit(self.__jet.surf, (0,0))                                                              # drawing the jet
         self.__mouse_selected.blit(mouse_surf, (self.__jet.surf.get_width(), 0))                                        # drawing the highligted mouse text after the jet image 
         self.__left_padding = self.__prefix_surf.get_width()/2 - self.__keybrd_selected.get_width() / 2
-        self.__highlightKeyboard()                                                                                      # calling method to highlight keyboard (the default choice)
+        self.__highlight_keyboard()                                                                                      # calling method to highlight keyboard (the default choice)
         
     def __recreate_surface(self):
         self.surf = Surface((self.__prefix_surf.get_width(), self.__prefix_surf.get_height() * 3), self.__game_env.SRCALPHA)                # creating default surface of combinted expected length
@@ -34,18 +36,18 @@ class GameMenuText(Text):
     def update(self, pressed_keys):
         if pressed_keys[self.__game_env.K_UP]:                                                                          # checking if user has pressed UP
             self.__game_env.dynamic.game_input = InputMode.KEYBOARD                                                     # setting game input mode as keyboard
-            self.__highlightKeyboard()                                                                                  # calling method to highlight keyboard
+            self.__highlight_keyboard()                                                                                  # calling method to highlight keyboard
         elif pressed_keys[self.__game_env.K_DOWN]:                                                                      # checking if user has pressed DOWN
             self.__game_env.dynamic.game_input = InputMode.MOUSE                                                        # setting game input mode as mouse
-            self.__highlightMouse()                                                                                     # calling method to highlight mouse
+            self.__highlight_mouse()                                                                                     # calling method to highlight mouse
         self.rect = self.surf.get_rect(center=(self.__game_env.static.screen_width/2, self.__game_env.static.screen_height/2 + 50))        # creating default rect and setting its position center
 
-    def __highlightKeyboard(self):
+    def __highlight_keyboard(self):
         self.__recreate_surface()                                                                                           # recreating the surface, as we will re-draw
         self.surf.blit(self.__keybrd_selected, (self.__left_padding ,self.__prefix_surf.get_height()))                                     # drawing the jet+keyboard text
         self.surf.blit(self.__mouse, (self.__left_padding  + self.__jet.surf.get_width(), self.__prefix_surf.get_height() * 2))                # drawing the mouse text
 
-    def __highlightMouse(self):
+    def __highlight_mouse(self):
         self.__recreate_surface()                                                                                           # recreating the surface, as we will re-draw
         self.surf.blit(self.__keybrd, (self.__left_padding  + self.__jet.surf.get_width(), self.__prefix_surf.get_height()))                   # drawing keyboard text
         self.surf.blit(self.__mouse_selected, (self.__left_padding , self.__prefix_surf.get_height()*2))                                   # drawing jet+mouse text

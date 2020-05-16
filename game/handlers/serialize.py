@@ -1,10 +1,12 @@
-from game.handlers import Handlers
 import os
 import pickle
 
+from game.handlers import Handlers
+
+
 class SerializeHandler(Handlers):
     def __init__(self, file):
-        super().__init__()
+        Handlers().__init__()
         self.__file = file
 
     def serialize(self, object):

@@ -63,7 +63,8 @@ if sys.platform == "win32":
     bdist_msi_options = {
         'data': {
             "Shortcut": shortcut_metadata
-        }
+        },
+        'install_icon':'icon/pybluesky.ico'
     }
 else:
     executables = [Executable(
@@ -74,11 +75,13 @@ else:
 setup(
     name = "PyBluesky",
     version = '1.0.4',
+    author = "Lakhya's Innovation Inc.",
     description = 'A simple python game to navigate your jet and fight though a massive missiles attack based on pygame framework',
     executables = executables,
     options={
         "bdist_msi": bdist_msi_options,
         "build_exe": {
+            "optimize" : 2,
             "packages":[
                 "pygame",
                 "asyncio",

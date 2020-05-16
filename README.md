@@ -20,4 +20,5 @@ Website : https://www.ljnath.com
 
 ### Dependencies
 
+- `pip install cx-Freeze==6.1` for creating distribution
 - `sudo apt install zlib1g-dev`  for cx-Freeze installaion in ubuntu

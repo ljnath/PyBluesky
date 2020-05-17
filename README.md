@@ -1,5 +1,5 @@
 # PyBluesky
-### Version : 1.0.4
+### Version : 1.0.5
 
 A simple python game to navigate your jet and fight though a massive missiles attack based on pygame framework</br>
 Based on https://realpython.com/blog/python/pygame-a-primer

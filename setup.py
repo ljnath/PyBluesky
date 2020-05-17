@@ -23,7 +23,7 @@ SOFTWARE.
 
 cx freeze setup file for building the game
 
-Version: 1.0.4
+Version: 1.0.5
 Author: Lakhya Jyoti Nath (ljnath)
 Email:  ljnath@ljnath.com
 Website: https://www.ljnath.com
@@ -74,7 +74,7 @@ else:
 
 setup(
     name = "PyBluesky",
-    version = '1.0.4',
+    version = '1.0.5',
     author = "Lakhya's Innovation Inc.",
     description = 'A simple python game to navigate your jet and fight though a massive missiles attack based on pygame framework',
     executables = executables,

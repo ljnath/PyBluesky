@@ -154,6 +154,34 @@ def play():
     menu_screens = {Screen.REPLAY_MENU, Screen.GAME_MENU, Screen.EXIT_MENU}
     last_active_sprite = (game_env.dynamic.active_screen, active_sprite)
 
+    def hide_exit_menu():
+        nonlocal game_pause, game_started, active_sprite
+        pygame.mixer.music.unpause()
+        game_started, game_pause = game_pause, game_started
+        game_env.dynamic.all_sprites.remove(active_sprite)
+        game_env.dynamic.active_screen, active_sprite = last_active_sprite
+        if game_env.dynamic.active_screen != Screen.GAME_SCREEN:
+            [game_env.dynamic.all_sprites.add(sprite) for sprite in (active_sprite, hint_sprite)]
+
+    def start_gameplay():
+        nonlocal gameover, jet, star_shown, screen_color, game_started
+        pygame.mouse.set_visible(True if game_env.dynamic.game_input == InputMode.MOUSE else False)     # displaying mouse cursor based on user input mode
+        screen_color = game_env.static.background_default                                               # restoring  screen color
+        [sprite.kill() for sprite in title_sprites]                                                     # kill all the title_sprites sprite sprite
+        jet = Jet(game_env)                                                                             # re-creating the jet
+        missiles.empty()                                                                                # empting the missle group                    
+        game_env.dynamic.all_sprites = pygame.sprite.Group()                                            # re-creating group of sprites 
+        [game_env.dynamic.all_sprites.remove(sprite) for sprite in (active_sprite, hint_sprite)]        # removing active sprite and hint sprite
+        [game_env.dynamic.all_sprites.add(sprite) for sprite in (jet, scoretext_sprite)]                # adding the jet and scoreboard to all_sprites
+        game_env.reset()                                                                                # reseting game data
+        pygame.time.set_timer(ADD_MISSILE, int(1000/game_env.static.missile_per_sec))                   # resetting missile creation event timer
+        create_vegetation(game_env, vegetations)                                                        # creating vegetation
+        [backgrounds.add(sprite) for sprite in vegetations.sprites()]                                   # adding vegetation to background
+        game_env.dynamic.active_screen = Screen.GAME_SCREEN                                             # setting gamescreen as the active sprite
+        game_started = True                                                                             # game has started
+        gameover = False                                                                                # game is not over yet
+        star_shown = False                                                                              # no star is displayed
+
     # Main game loop
     while running:
         for event in pygame.event.get():                                                                            # Look at every event in the queue
@@ -165,6 +193,8 @@ def play():
                 active_sprite = ExitMenuText(game_env)
                 game_env.dynamic.all_sprites.add(active_sprite)
                 game_env.dynamic.active_screen = Screen.EXIT_MENU
+            elif game_env.dynamic.active_screen == Screen.EXIT_MENU and (event.type == game_env.KEYDOWN and event.key == game_env.K_ESCAPE):
+                hide_exit_menu()
             elif game_started and not gameover:
                 if game_env.dynamic.game_input ==  InputMode.MOUSE and event.type == game_env.MOUSEMOTION:          # moving jet based on mouse movement
                     mouse_pos = pygame.mouse.get_pos()                                                              # saving the mouse co-ordinate for smooth movement later
@@ -199,46 +229,24 @@ def play():
                     game_env.dynamic.active_screen = Screen.LEADERBOARD
                 elif event.key == game_env.K_m:
                     game_env.dynamic.all_sprites.remove(active_sprite)
-                    if not gameover and game_env.dynamic.active_screen not in {Screen.EXIT_MENU, Screen.GAME_MENU}:# displyaing the game menu
+                    if not gameover and game_env.dynamic.active_screen not in {Screen.EXIT_MENU, Screen.GAME_MENU}: # displyaing the game menu
                         active_sprite = GameMenuText(game_env)
                         game_env.dynamic.active_screen = Screen.GAME_MENU
-                    elif gameover and game_env.dynamic.active_screen not in {Screen.EXIT_MENU, Screen.REPLAY_MENU}:# displaying the replay menu
+                    elif gameover and game_env.dynamic.active_screen not in {Screen.EXIT_MENU, Screen.REPLAY_MENU}: # displaying the replay menu
                         active_sprite = ReplayMenuText(game_env)
                         game_env.dynamic.active_screen = Screen.REPLAY_MENU
                     game_env.dynamic.all_sprites.add(active_sprite)
                 elif event.key == game_env.K_RETURN:                                                                # handling all [ENTER] key press activity
                     if game_env.dynamic.active_screen == Screen.GAME_MENU:                                          # selecting input mode in gamemenu screen
-                        pygame.mouse.set_visible(True if game_env.dynamic.game_input == InputMode.MOUSE else False) # displaying mouse cursor based on user input mode
-                        screen_color = game_env.static.background_default                                           # restoring screen colot
-                        [sprite.kill() for sprite in title_sprites]                                                 # kill all the title_sprites sprite sprite
-                        [game_env.dynamic.all_sprites.remove(sprite) for sprite in (active_sprite, hint_sprite)]
-                        [game_env.dynamic.all_sprites.add(sprite) for sprite in (jet, scoretext_sprite)]            # adding the jet and scoreboard to all_sprites
-                        [backgrounds.add(sprite) for sprite in vegetations.sprites()]
-                        game_env.dynamic.active_screen = Screen.GAME_SCREEN
-                        game_started = True                                                                         # starting game 
+                        start_gameplay()                                                                            # starting game  on 1st start
                     elif game_env.dynamic.active_screen == Screen.REPLAY_MENU:                                      # selecting reply option in replaymenu screen
                         if game_env.dynamic.replay:
-                            gameover = False                                                                        # setting gameover variable to false as user as opted to replay
-                            jet = Jet(game_env)                                                                     # re-creating the jet
-                            missiles.empty()                                                                        # empting the missle group                    
-                            game_env.dynamic.all_sprites = pygame.sprite.Group()                                    # re-creating group of sprites 
-                            [game_env.dynamic.all_sprites.add(sprite) for sprite in (jet, scoretext_sprite)]        # adding the jet and scoreboard to all_sprites
-                            screen_color = game_env.static.background_default                                       # restoring  screen color
-                            game_env.reset()                                                                        # reseting game data
-                            star_shown = False
-                            pygame.time.set_timer(ADD_MISSILE, int(1000/game_env.static.missile_per_sec))
-                            create_vegetation(game_env, vegetations)
-                            [backgrounds.add(sprite) for sprite in vegetations.sprites()]
+                            start_gameplay()                                                                        # starting game on replay
                         else:
                             running = False                                                                         # stopping game as user as opted not to replay
                     elif game_env.dynamic.active_screen == Screen.EXIT_MENU:
                         if not game_env.dynamic.exit:
-                            pygame.mixer.music.unpause()
-                            game_started, game_pause = game_pause, game_started
-                            game_env.dynamic.all_sprites.remove(active_sprite)
-                            game_env.dynamic.active_screen, active_sprite = last_active_sprite
-                            if game_env.dynamic.active_screen != Screen.GAME_SCREEN:
-                                [game_env.dynamic.all_sprites.add(sprite) for sprite in (active_sprite, hint_sprite)]
+                            hide_exit_menu()                                                                        # hide exitmenu if user opts to no exit the game
                         else:
                             running = False
                     

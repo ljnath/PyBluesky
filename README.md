@@ -22,6 +22,10 @@ PyBluesky is a simple 2D python game developed using the pygame framework.</br>
 Based on https://realpython.com/blog/python/pygame-a-primer
 </br></br>
 
+## DEMO
+<img src="demo.gif" aligh="center"/>
+<br><br>
+
 ## GAME MECHANICS
 The game is simple where the objective is to navigate and shoot your way through the sky.
 There are enemy missiles which travels from right-to-left with varied speed. These enemy missiles can be destroyed by shooting at them. With increase in game level, SAM launchers also moves on the ground, which can fire targeted missile at the jet. These missiles cannot be destroyed, so user needs to evade them.
@@ -48,7 +52,6 @@ Alternately you can download and install the game binary from [sourceforge.com](
 The game also features a network-controlled leaderboard. User scores along with few other metadata are published to a remote server.
 
 During the game startup, the updated scores are download from the server and displayed as leaderboard.
-
 </br></br>
 
 ## DEVELOPMENT
@@ -57,5 +60,4 @@ Following are the required dependencies for building the binary of this game.
 
 - `pip install cx-Freeze==6.1` for creating distribution
 - `sudo apt install zlib1g-dev`  for cx-Freeze installaion in ubuntu
-
-
+</br></br>

@@ -97,7 +97,7 @@ def play():
     pygame.mixer.music.play(loops=-1)                                                                       # lopping the main game music
     pygame.mixer.music.set_volume(.3)
 
-    screen = pygame.display.set_mode((game_env.static.screen_width, game_env.static.screen_height))         # creating game screen with custom width and height
+    # screen = pygame.display.set_mode((game_env.static.screen_width, game_env.static.screen_height))         # creating game screen with custom width and height
     screen = pygame.display.set_mode((game_env.static.screen_width, game_env.static.screen_height), game_env.FULLSCREEN)     # creating game screen with custom width and height
     pygame.display.set_caption('{} version. {}'.format(game_env.static.name, game_env.static.version))          # setting name of game window
     pygame.display.set_icon(pygame.image.load(game_env.static.game_icon))                                   # updating game icon to the jet image
@@ -185,7 +185,8 @@ def play():
     # Main game loop
     while running:
         for event in pygame.event.get():                                                                            # Look at every event in the queue
-            if (event.type == game_env.KEYDOWN and event.key == game_env.K_ESCAPE or event.type == game_env.QUIT) and game_env.dynamic.active_screen != Screen.EXIT_MENU:    # stopping game when ESC key is pressed or when the game window is closed
+            # stopping game when ESC key is pressed or when the game window is closed
+            if (event.type == game_env.KEYDOWN and event.key == game_env.K_ESCAPE or event.type == game_env.QUIT) and game_env.dynamic.active_screen != Screen.EXIT_MENU:
                 pygame.mixer.music.pause()
                 last_active_sprite = (game_env.dynamic.active_screen, active_sprite)
                 game_started, game_pause = game_pause, game_started
@@ -193,8 +194,12 @@ def play():
                 active_sprite = ExitMenuText(game_env)
                 game_env.dynamic.all_sprites.add(active_sprite)
                 game_env.dynamic.active_screen = Screen.EXIT_MENU
+            
+            # showing the exit menu when [ESC] key is pressed
             elif game_env.dynamic.active_screen == Screen.EXIT_MENU and (event.type == game_env.KEYDOWN and event.key == game_env.K_ESCAPE):
                 hide_exit_menu()
+                
+            # start the game
             elif game_started and not gameover:
                 if game_env.dynamic.game_input ==  InputMode.MOUSE and event.type == game_env.MOUSEMOTION:          # moving jet based on mouse movement
                     mouse_pos = pygame.mouse.get_pos()                                                              # saving the mouse co-ordinate for smooth movement later
@@ -208,6 +213,8 @@ def play():
                     samlauncher = SamLauncher(game_env)
                     samlaunchers.add(samlauncher)
                     game_env.dynamic.all_sprites.add(samlauncher)
+            
+            # all keyboard key interaction
             elif event.type == game_env.KEYDOWN:                                                                    # handling all the VALID key press, action varies based on current active screen
                 if not game_started and game_env.dynamic.active_screen == Screen.NAME_INPUT:
                     active_sprite.render(event.unicode)
@@ -296,7 +303,7 @@ def play():
                 game_env.dynamic.all_sprites.remove(game_env.dynamic.noammo_sprite)
                 submit_result(game_env)
 
-            # missile hit
+            # bullet hit
             collision = pygame.sprite.groupcollide(missiles, game_env.dynamic.bullets, True, True)      # checking for collision between bullets and missiles, killing each one of them on collision
             if len(collision) > 0:
                 game_env.dynamic.hit_sound.play()                                                       # play missile destroyed sound

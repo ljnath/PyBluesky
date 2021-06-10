@@ -12,13 +12,13 @@ class StaticData():
 
     @property
     def version(self):
-        return '1.0.4'
+        return '1.0.5'
 
     @property
     def screen_width(self):
         # return 1024
         return self.__display_info.current_w                        # game resolution is same as monitor resolution
-        
+
 
     @property
     def screen_height(self):

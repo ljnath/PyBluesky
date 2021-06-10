@@ -23,11 +23,11 @@ Based on https://realpython.com/blog/python/pygame-a-primer
 </br></br>
 
 ## GAME MECHANICS
-The game is simple where the objective is to navigate and shoot your way through the sky.<br>
-There are enemy missiles which travels from right-to-left direction with varied speed. These enemy missiles can be destroyed by shooting at them. With increase in game level, SAM launchers also moves on the ground, which can fire targeted missile at the jet. These missiles cannot be destroyed, so user needs to evade them.
+The game is simple where the objective is to navigate and shoot your way through the sky.
+There are enemy missiles which travels from right-to-left with varied speed. These enemy missiles can be destroyed by shooting at them. With increase in game level, SAM launchers also moves on the ground, which can fire targeted missile at the jet. These missiles cannot be destroyed, so user needs to evade them.
 
 The jet can be controlled both my keyboard and mouse. It can move in all directions viz. forward, backward, up and down. It can also be navigated diagonally with key combinations.
-For moving in north-east directory, you can press both the RIGHT and UP arrow key.
+For example, in order to move in north-east directory, you can press both the RIGHT and UP arrow key.
 
 While playing with keyboard, you can shoot bullets using the SPACEBAR and you can use your LEFT mouse button while playing with mouse.<br>
 
@@ -36,17 +36,24 @@ It also gives 50 new ammo to the jet as well as the game score is bumped up by 1
 
 The game also features a power-up star which falls across the sky at each level.
 Catching the power-up star will destroy all the enemy bullets in the current game frame.
-
 </br></br>
+
 ## HOW TO PLAY
 You can either download these code and directly play from it. For this you need to have python3 and the dependencies  mentioned in the requirements.txt file needs to be installed.
-Alternately you can download and install the game binary from [sourceforge.com](https://sourceforge.net/p/ljnath/)  
-This does not need any pre-requisite, as all the required pre-requisites are built into the binary package.
+
+Alternately you can download and install the game binary from [sourceforge.com](https://sourceforge.net/p/ljnath/). This does not need any pre-requisite, as all the required pre-requisites are built into the binary package.
+</br></br>
+
+## LEADERBOARD
+The game also features a network-controlled leaderboard. User scores along with few other metadata are published to a remote server.
+
+During the game startup, the updated scores are download from the server and displayed as leaderboard.
+
 </br></br>
 
 ## DEVELOPMENT
 
-### Dependencies
+Following are the required dependencies for building the binary of this game.
 
 - `pip install cx-Freeze==6.1` for creating distribution
 - `sudo apt install zlib1g-dev`  for cx-Freeze installaion in ubuntu

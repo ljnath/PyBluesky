@@ -1,7 +1,7 @@
 """
 MIT License
 
-Copyright (c) 2020 Lakhya Jyoti Nath
+Copyright (c) 2021 Lakhya Jyoti Nath
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -23,7 +23,7 @@ SOFTWARE.
 
 PyBluesky - A simple python game to navigate your jet and fight though a massive missiles attack based on pygame framework.
 
-Version: 1.0.4
+Version: 1.0.5
 Author: Lakhya Jyoti Nath (ljnath)
 Email:  ljnath@ljnath.com
 Website: https://www.ljnath.com
@@ -97,7 +97,7 @@ def play():
     pygame.mixer.music.play(loops=-1)                                                                       # lopping the main game music
     pygame.mixer.music.set_volume(.3)
 
-    screen = pygame.display.set_mode((game_env.static.screen_width, game_env.static.screen_height))         # creating game screen with custom width and height
+    # screen = pygame.display.set_mode((game_env.static.screen_width, game_env.static.screen_height))         # creating game screen with custom width and height
     screen = pygame.display.set_mode((game_env.static.screen_width, game_env.static.screen_height), game_env.FULLSCREEN)     # creating game screen with custom width and height
     pygame.display.set_caption('{} version. {}'.format(game_env.static.name, game_env.static.version))          # setting name of game window
     pygame.display.set_icon(pygame.image.load(game_env.static.game_icon))                                   # updating game icon to the jet image
@@ -136,7 +136,7 @@ def play():
     active_sprite = NameInputText(game_env)
     hint_sprite = Text(game_env, "Enter your name and press [ENTER] or press [ESC] to quit", 22, pos_x=game_env.static.screen_width/2 , pos_y= 145)  # creating game help
     title_banner_sprite = Text(game_env, "{} {}".format(game_env.static.name, game_env.static.version), 100, pos_x=game_env.static.screen_width/2 , pos_y=100)                  # creating title_banner_sprite text sprite with game name
-    title_author_sprite = Text(game_env, "Written by: Lakhya Jyoti Nath (www.ljnath.com)", 26, pos_x=game_env.static.screen_width/2 , pos_y= game_env.static.screen_height-20)  # creating game author
+    title_author_sprite = Text(game_env, "By Lakhya Jyoti Nath (www.ljnath.com)", 26, pos_x=game_env.static.screen_width/2 , pos_y= game_env.static.screen_height-20)  # creating game author
 
     if game_env.dynamic.player_name:
         hint_sprite = Text(game_env, general_hint_text, 22, pos_x=game_env.static.screen_width/2 , pos_y= 145)  # creating game help
@@ -154,10 +154,39 @@ def play():
     menu_screens = {Screen.REPLAY_MENU, Screen.GAME_MENU, Screen.EXIT_MENU}
     last_active_sprite = (game_env.dynamic.active_screen, active_sprite)
 
+    def hide_exit_menu():
+        nonlocal game_pause, game_started, active_sprite
+        pygame.mixer.music.unpause()
+        game_started, game_pause = game_pause, game_started
+        game_env.dynamic.all_sprites.remove(active_sprite)
+        game_env.dynamic.active_screen, active_sprite = last_active_sprite
+        if game_env.dynamic.active_screen != Screen.GAME_SCREEN:
+            [game_env.dynamic.all_sprites.add(sprite) for sprite in (active_sprite, hint_sprite)]
+
+    def start_gameplay():
+        nonlocal gameover, jet, star_shown, screen_color, game_started
+        pygame.mouse.set_visible(True if game_env.dynamic.game_input == InputMode.MOUSE else False)     # displaying mouse cursor based on user input mode
+        screen_color = game_env.static.background_default                                               # restoring  screen color
+        [sprite.kill() for sprite in title_sprites]                                                     # kill all the title_sprites sprite sprite
+        jet = Jet(game_env)                                                                             # re-creating the jet
+        missiles.empty()                                                                                # empting the missle group                    
+        game_env.dynamic.all_sprites = pygame.sprite.Group()                                            # re-creating group of sprites 
+        [game_env.dynamic.all_sprites.remove(sprite) for sprite in (active_sprite, hint_sprite)]        # removing active sprite and hint sprite
+        [game_env.dynamic.all_sprites.add(sprite) for sprite in (jet, scoretext_sprite)]                # adding the jet and scoreboard to all_sprites
+        game_env.reset()                                                                                # reseting game data
+        pygame.time.set_timer(ADD_MISSILE, int(1000/game_env.static.missile_per_sec))                   # resetting missile creation event timer
+        create_vegetation(game_env, vegetations)                                                        # creating vegetation
+        [backgrounds.add(sprite) for sprite in vegetations.sprites()]                                   # adding vegetation to background
+        game_env.dynamic.active_screen = Screen.GAME_SCREEN                                             # setting gamescreen as the active sprite
+        game_started = True                                                                             # game has started
+        gameover = False                                                                                # game is not over yet
+        star_shown = False                                                                              # no star is displayed
+
     # Main game loop
     while running:
         for event in pygame.event.get():                                                                            # Look at every event in the queue
-            if (event.type == game_env.KEYDOWN and event.key == game_env.K_ESCAPE or event.type == game_env.QUIT) and game_env.dynamic.active_screen != Screen.EXIT_MENU:    # stopping game when ESC key is pressed or when the game window is closed
+            # stopping game when ESC key is pressed or when the game window is closed
+            if (event.type == game_env.KEYDOWN and event.key == game_env.K_ESCAPE or event.type == game_env.QUIT) and game_env.dynamic.active_screen != Screen.EXIT_MENU:
                 pygame.mixer.music.pause()
                 last_active_sprite = (game_env.dynamic.active_screen, active_sprite)
                 game_started, game_pause = game_pause, game_started
@@ -165,6 +194,12 @@ def play():
                 active_sprite = ExitMenuText(game_env)
                 game_env.dynamic.all_sprites.add(active_sprite)
                 game_env.dynamic.active_screen = Screen.EXIT_MENU
+            
+            # showing the exit menu when [ESC] key is pressed
+            elif game_env.dynamic.active_screen == Screen.EXIT_MENU and (event.type == game_env.KEYDOWN and event.key == game_env.K_ESCAPE):
+                hide_exit_menu()
+                
+            # start the game
             elif game_started and not gameover:
                 if game_env.dynamic.game_input ==  InputMode.MOUSE and event.type == game_env.MOUSEMOTION:          # moving jet based on mouse movement
                     mouse_pos = pygame.mouse.get_pos()                                                              # saving the mouse co-ordinate for smooth movement later
@@ -178,6 +213,8 @@ def play():
                     samlauncher = SamLauncher(game_env)
                     samlaunchers.add(samlauncher)
                     game_env.dynamic.all_sprites.add(samlauncher)
+            
+            # all keyboard key interaction
             elif event.type == game_env.KEYDOWN:                                                                    # handling all the VALID key press, action varies based on current active screen
                 if not game_started and game_env.dynamic.active_screen == Screen.NAME_INPUT:
                     active_sprite.render(event.unicode)
@@ -199,46 +236,24 @@ def play():
                     game_env.dynamic.active_screen = Screen.LEADERBOARD
                 elif event.key == game_env.K_m:
                     game_env.dynamic.all_sprites.remove(active_sprite)
-                    if not gameover and game_env.dynamic.active_screen not in {Screen.EXIT_MENU, Screen.GAME_MENU}:# displyaing the game menu
+                    if not gameover and game_env.dynamic.active_screen not in {Screen.EXIT_MENU, Screen.GAME_MENU}: # displyaing the game menu
                         active_sprite = GameMenuText(game_env)
                         game_env.dynamic.active_screen = Screen.GAME_MENU
-                    elif gameover and game_env.dynamic.active_screen not in {Screen.EXIT_MENU, Screen.REPLAY_MENU}:# displaying the replay menu
+                    elif gameover and game_env.dynamic.active_screen not in {Screen.EXIT_MENU, Screen.REPLAY_MENU}: # displaying the replay menu
                         active_sprite = ReplayMenuText(game_env)
                         game_env.dynamic.active_screen = Screen.REPLAY_MENU
                     game_env.dynamic.all_sprites.add(active_sprite)
                 elif event.key == game_env.K_RETURN:                                                                # handling all [ENTER] key press activity
                     if game_env.dynamic.active_screen == Screen.GAME_MENU:                                          # selecting input mode in gamemenu screen
-                        pygame.mouse.set_visible(True if game_env.dynamic.game_input == InputMode.MOUSE else False) # displaying mouse cursor based on user input mode
-                        screen_color = game_env.static.background_default                                           # restoring screen colot
-                        [sprite.kill() for sprite in title_sprites]                                                 # kill all the title_sprites sprite sprite
-                        [game_env.dynamic.all_sprites.remove(sprite) for sprite in (active_sprite, hint_sprite)]
-                        [game_env.dynamic.all_sprites.add(sprite) for sprite in (jet, scoretext_sprite)]            # adding the jet and scoreboard to all_sprites
-                        [backgrounds.add(sprite) for sprite in vegetations.sprites()]
-                        game_env.dynamic.active_screen = Screen.GAME_SCREEN
-                        game_started = True                                                                         # starting game 
+                        start_gameplay()                                                                            # starting game  on 1st start
                     elif game_env.dynamic.active_screen == Screen.REPLAY_MENU:                                      # selecting reply option in replaymenu screen
                         if game_env.dynamic.replay:
-                            gameover = False                                                                        # setting gameover variable to false as user as opted to replay
-                            jet = Jet(game_env)                                                                     # re-creating the jet
-                            missiles.empty()                                                                        # empting the missle group                    
-                            game_env.dynamic.all_sprites = pygame.sprite.Group()                                    # re-creating group of sprites 
-                            [game_env.dynamic.all_sprites.add(sprite) for sprite in (jet, scoretext_sprite)]        # adding the jet and scoreboard to all_sprites
-                            screen_color = game_env.static.background_default                                       # restoring  screen color
-                            game_env.reset()                                                                        # reseting game data
-                            star_shown = False
-                            pygame.time.set_timer(ADD_MISSILE, int(1000/game_env.static.missile_per_sec))
-                            create_vegetation(game_env, vegetations)
-                            [backgrounds.add(sprite) for sprite in vegetations.sprites()]
+                            start_gameplay()                                                                        # starting game on replay
                         else:
                             running = False                                                                         # stopping game as user as opted not to replay
                     elif game_env.dynamic.active_screen == Screen.EXIT_MENU:
                         if not game_env.dynamic.exit:
-                            pygame.mixer.music.unpause()
-                            game_started, game_pause = game_pause, game_started
-                            game_env.dynamic.all_sprites.remove(active_sprite)
-                            game_env.dynamic.active_screen, active_sprite = last_active_sprite
-                            if game_env.dynamic.active_screen != Screen.GAME_SCREEN:
-                                [game_env.dynamic.all_sprites.add(sprite) for sprite in (active_sprite, hint_sprite)]
+                            hide_exit_menu()                                                                        # hide exitmenu if user opts to no exit the game
                         else:
                             running = False
                     
@@ -288,7 +303,7 @@ def play():
                 game_env.dynamic.all_sprites.remove(game_env.dynamic.noammo_sprite)
                 submit_result(game_env)
 
-            # missile hit
+            # bullet hit
             collision = pygame.sprite.groupcollide(missiles, game_env.dynamic.bullets, True, True)      # checking for collision between bullets and missiles, killing each one of them on collision
             if len(collision) > 0:
                 game_env.dynamic.hit_sound.play()                                                       # play missile destroyed sound

@@ -1,5 +1,10 @@
 # Changelog
 
+## [1.0.5] - 2021-06-10
+- changed default quit choice to No in ExitMenu
+- added support to hide the exit menu if ESCAPE key is pressed
+- code refactoring
+
 ## [1.0.4] - 2020-05-17
 - added exit prompt in the game, this also acts as a game pause feature
 - changed size of sam missile

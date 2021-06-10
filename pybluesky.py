@@ -1,7 +1,7 @@
 """
 MIT License
 
-Copyright (c) 2020 Lakhya Jyoti Nath
+Copyright (c) 2021 Lakhya Jyoti Nath
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -136,7 +136,7 @@ def play():
     active_sprite = NameInputText(game_env)
     hint_sprite = Text(game_env, "Enter your name and press [ENTER] or press [ESC] to quit", 22, pos_x=game_env.static.screen_width/2 , pos_y= 145)  # creating game help
     title_banner_sprite = Text(game_env, "{} {}".format(game_env.static.name, game_env.static.version), 100, pos_x=game_env.static.screen_width/2 , pos_y=100)                  # creating title_banner_sprite text sprite with game name
-    title_author_sprite = Text(game_env, "Written by: Lakhya Jyoti Nath (www.ljnath.com)", 26, pos_x=game_env.static.screen_width/2 , pos_y= game_env.static.screen_height-20)  # creating game author
+    title_author_sprite = Text(game_env, "By Lakhya Jyoti Nath (www.ljnath.com)", 26, pos_x=game_env.static.screen_width/2 , pos_y= game_env.static.screen_height-20)  # creating game author
 
     if game_env.dynamic.player_name:
         hint_sprite = Text(game_env, general_hint_text, 22, pos_x=game_env.static.screen_width/2 , pos_y= 145)  # creating game help

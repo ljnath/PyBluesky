@@ -1,6 +1,6 @@
 # Changelog
 
-## [1.0.5] - Unreleased
+## [1.0.5] - 2021-06-10
 - changed default quit choice to No in ExitMenu
 - added support to hide the exit menu if ESCAPE key is pressed
 - code refactoring

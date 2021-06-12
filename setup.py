@@ -74,7 +74,7 @@ else:
 
 setup(
     name = "PyBluesky",
-    version = '1.0.5',
+    version = '1.0.6',
     author = "Lakhya's Innovation Inc.",
     description = 'A simple python game to navigate your jet and fight though a massive missiles attack based on pygame framework',
     executables = executables,

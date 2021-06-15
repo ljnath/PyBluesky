@@ -187,7 +187,7 @@ class DynamicData():
         # saving the player name to file for future reference
         with open(self.__static.player_file, 'w') as file_writter:
             file_writter.write(self.__player_name)
-
+            
     @property
     def bullets_fired(self):
         return self.__bullet_fired

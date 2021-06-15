@@ -1,4 +1,5 @@
 from pygame import display
+from android.storage import app_storage_path
 
 class StaticData():
     """ Class which holds all the static game values
@@ -12,79 +13,86 @@ class StaticData():
 
     @property
     def version(self):
-        return '1.0.5'
+        return '1.0.0'
+
+    @property
+    def android_app_directory(self):
+        return f'{app_storage_path()}/app'
 
     @property
     def screen_width(self):
-        # return 1024
         return self.__display_info.current_w                        # game resolution is same as monitor resolution
-
 
     @property
     def screen_height(self):
-        # return 768
         return self.__display_info.current_h                        # game resolution is same as monitor resolution
         
+    @property
+    def text_default_color(self):
+        return (255,0,0)                                            # default color is red
     
     @property
-    def text_default_color(sef):
-        return (255,0,0)                    # default color is red
-    
-    @property
-    def text_selection_color(sef):
-        return (0,0,255)                    # selection color is blue
+    def text_selection_color(self):
+        return (0,0,255)                                            # selection color is blue
 
     @property
     def game_icon(self):
-        return 'icon/pybluesky.ico'                  # jet image path
+        return f'{self.android_app_directory}/icon/pybluesky.ico'   # jet image path
 
     @property
     def game_font(self):
-        return 'font/arcade.ttf'            # game font file path
+        return f'{self.android_app_directory}/font/arcade.ttf'      # game font file path
 
     @property
     def clouds(self):
-        return ('image/cloud1.png', 'image/cloud2.png', 'image/cloud3.png') # all game cloud designs
+        return (
+            f'{self.android_app_directory}/image/cloud1.png', 
+            f'{self.android_app_directory}/image/cloud2.png', 
+            f'{self.android_app_directory}/image/cloud3.png'
+            )                                                       # all game cloud designs
 
     @property
     def vegetation(self):
-        return ('image/vegetation_plain.png', 'image/vegetation_tree.png')
+        return (
+            f'{self.android_app_directory}/image/vegetation_plain.png', 
+            f'{self.android_app_directory}/image/vegetation_tree.png'
+            )
 
     @property
     def ground(self):
-        return 'image/ground.png'
+        return f'{self.android_app_directory}/image/ground.png'
 
     @property
     def grass(self):
-        return 'image/grass.png'
+        return f'{self.android_app_directory}/image/grass.png'
 
     @property
     def sam_launcher(self):
-        return 'image/samlauncher.png'
+        return f'{self.android_app_directory}/image/samlauncher.png'
 
     @property
     def sam(self):
-        return 'image/sam.png'
+        return f'{self.android_app_directory}/image/sam.png'
 
     @property
     def missile_activated_image(self):
-        return 'image/missile_activated.png'    # missle image path
+        return f'{self.android_app_directory}/image/missile_activated.png'    # missle image path
 
     @property
     def missile_deactivated_image(self):
-        return 'image/missile_deactivated.png'  # missle image path
+        return f'{self.android_app_directory}/image/missile_deactivated.png'  # missle image path
 
     @property
     def jet_image(self):
-        return 'image/jet.png'                  # jet image path
+        return f'{self.android_app_directory}/image/jet.png'                  # jet image path
 
     @property
     def powerup_image(self):
-        return 'image/star.png'                 # jet image path
+        return f'{self.android_app_directory}/image/star.png'                 # jet image path
 
     @property
     def bullet_image(self):
-        return 'image/bullet.png'               # bullet image path
+        return f'{self.android_app_directory}/image/bullet.png'               # bullet image path
 
     @property
     def cloud_per_sec(self):
@@ -112,7 +120,7 @@ class StaticData():
 
     @property
     def player_file(self):
-        return 'data/player.dat'
+        return f'{self.android_app_directory}/data/player.dat'
 
     @property
     def name_length(self):
@@ -121,12 +129,12 @@ class StaticData():
     @property
     def game_sound(self):
         return {
-            'music' : 'audio/music.ogg',
-            'collision' : 'audio/collision.ogg',
-            'levelup' : 'audio/levelup.ogg',
-            'shoot' : 'audio/shoot.ogg',
-            'hit' : 'audio/missile_hit.ogg',
-            'powerup' : 'audio/powerup.ogg',
-            'samfire' : 'audio/fire.ogg'
+            'music' : f'{self.android_app_directory}/audio/music.ogg',
+            'collision' : f'{self.android_app_directory}/audio/collision.ogg',
+            'levelup' : f'{self.android_app_directory}/audio/levelup.ogg',
+            'shoot' : f'{self.android_app_directory}/audio/shoot.ogg',
+            'hit' : f'{self.android_app_directory}/audio/missile_hit.ogg',
+            'powerup' : f'{self.android_app_directory}/audio/powerup.ogg',
+            'samfire' : f'{self.android_app_directory}/audio/fire.ogg'
         }
 

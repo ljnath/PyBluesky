@@ -20,16 +20,16 @@ class StaticData():
         return f'{app_storage_path()}/app'
     
     @property
-    def image_assest_directory(self):
-        return f'{self.android_app_directory}/images'
+    def image_asset_directory(self):
+        return f'{self.android_app_directory}/assets/images'
 
     @property
-    def audio_assest_directory(self):
-        return f'{self.android_app_directory}/audio'
+    def audio_asset_directory(self):
+        return f'{self.android_app_directory}/assets/audio'
     
     @property
-    def font_assest_directory(self):
-        return f'{self.android_app_directory}/fonts'
+    def font_asset_directory(self):
+        return f'{self.android_app_directory}/assets/fonts'
     
     @property
     def screen_width(self):
@@ -53,58 +53,58 @@ class StaticData():
 
     @property
     def game_font(self):
-        return f'{self.font_assest_directory}/arcade.ttf'      # game font file path
+        return f'{self.font_asset_directory}/arcade.ttf'      # game font file path
 
     @property
     def clouds(self):
         return (
-            f'{self.image_assest_directory}/cloud1.png', 
-            f'{self.image_assest_directory}/cloud2.png', 
-            f'{self.image_assest_directory}/cloud3.png'
+            f'{self.image_asset_directory}/cloud1.png', 
+            f'{self.image_asset_directory}/cloud2.png', 
+            f'{self.image_asset_directory}/cloud3.png'
             )                                                       # all game cloud designs
 
     @property
     def vegetation(self):
         return (
-            f'{self.image_assest_directory}/vegetation_plain.png', 
-            f'{self.image_assest_directory}/vegetation_tree.png'
+            f'{self.image_asset_directory}/vegetation_plain.png', 
+            f'{self.image_asset_directory}/vegetation_tree.png'
             )
 
     @property
     def ground(self):
-        return f'{self.image_assest_directory}/ground.png'
+        return f'{self.image_asset_directory}/ground.png'
 
     @property
     def grass(self):
-        return f'{self.image_assest_directory}/grass.png'
+        return f'{self.image_asset_directory}/grass.png'
 
     @property
     def sam_launcher(self):
-        return f'{self.image_assest_directory}/samlauncher.png'
+        return f'{self.image_asset_directory}/samlauncher.png'
 
     @property
     def sam(self):
-        return f'{self.image_assest_directory}/sam.png'
+        return f'{self.image_asset_directory}/sam.png'
 
     @property
     def missile_activated_image(self):
-        return f'{self.image_assest_directory}/missile_activated.png'    # missle image path
+        return f'{self.image_asset_directory}/missile_activated.png'    # missle image path
 
     @property
     def missile_deactivated_image(self):
-        return f'{self.image_assest_directory}/missile_deactivated.png'  # missle image path
+        return f'{self.image_asset_directory}/missile_deactivated.png'  # missle image path
 
     @property
     def jet_image(self):
-        return f'{self.image_assest_directory}/jet.png'                  # jet image path
+        return f'{self.image_asset_directory}/jet.png'                  # jet image path
 
     @property
     def powerup_image(self):
-        return f'{self.image_assest_directory}/star.png'                 # jet image path
+        return f'{self.image_asset_directory}/star.png'                 # jet image path
 
     @property
     def bullet_image(self):
-        return f'{self.image_assest_directory}/bullet.png'               # bullet image path
+        return f'{self.image_asset_directory}/bullet.png'               # bullet image path
 
     @property
     def cloud_per_sec(self):
@@ -141,12 +141,12 @@ class StaticData():
     @property
     def game_sound(self):
         return {
-            'music' : f'{self.audio_assest_directory}/music.ogg',
-            'collision' : f'{self.audio_assest_directory}/collision.ogg',
-            'levelup' : f'{self.audio_assest_directory}/levelup.ogg',
-            'shoot' : f'{self.audio_assest_directory}/shoot.ogg',
-            'hit' : f'{self.audio_assest_directory}/missile_hit.ogg',
-            'powerup' : f'{self.audio_assest_directory}/powerup.ogg',
-            'samfire' : f'{self.audio_assest_directory}/fire.ogg'
+            'music' : f'{self.audio_asset_directory}/music.ogg',
+            'collision' : f'{self.audio_asset_directory}/collision.ogg',
+            'levelup' : f'{self.audio_asset_directory}/levelup.ogg',
+            'shoot' : f'{self.audio_asset_directory}/shoot.ogg',
+            'hit' : f'{self.audio_asset_directory}/missile_hit.ogg',
+            'powerup' : f'{self.audio_asset_directory}/powerup.ogg',
+            'samfire' : f'{self.audio_asset_directory}/fire.ogg'
         }
 

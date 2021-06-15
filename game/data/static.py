@@ -20,7 +20,7 @@ class StaticData():
         return f'{app_storage_path()}/app'
     
     @property
-    def image_asset_directory(self):
+    def images_asset_directory(self):
         return f'{self.android_app_directory}/assets/images'
 
     @property
@@ -28,8 +28,12 @@ class StaticData():
         return f'{self.android_app_directory}/assets/audio'
     
     @property
-    def font_asset_directory(self):
+    def fonts_asset_directory(self):
         return f'{self.android_app_directory}/assets/fonts'
+    
+    @property
+    def icon_asset_directory(self):
+        return f'{self.android_app_directory}/assets/icon'
     
     @property
     def screen_width(self):
@@ -49,62 +53,62 @@ class StaticData():
 
     @property
     def game_icon(self):
-        return f'{self.android_app_directory}/icon/pybluesky.ico'   # jet image path
+        return f'{self.icon_asset_directory}/pybluesky.ico'   # jet image path
 
     @property
     def game_font(self):
-        return f'{self.font_asset_directory}/arcade.ttf'      # game font file path
+        return f'{self.fonts_asset_directory}/arcade.ttf'      # game font file path
 
     @property
     def clouds(self):
         return (
-            f'{self.image_asset_directory}/cloud1.png', 
-            f'{self.image_asset_directory}/cloud2.png', 
-            f'{self.image_asset_directory}/cloud3.png'
+            f'{self.s}/cloud1.png', 
+            f'{self.s}/cloud2.png', 
+            f'{self.s}/cloud3.png'
             )                                                       # all game cloud designs
 
     @property
     def vegetation(self):
         return (
-            f'{self.image_asset_directory}/vegetation_plain.png', 
-            f'{self.image_asset_directory}/vegetation_tree.png'
+            f'{self.s}/vegetation_plain.png', 
+            f'{self.s}/vegetation_tree.png'
             )
 
     @property
     def ground(self):
-        return f'{self.image_asset_directory}/ground.png'
+        return f'{self.s}/ground.png'
 
     @property
     def grass(self):
-        return f'{self.image_asset_directory}/grass.png'
+        return f'{self.s}/grass.png'
 
     @property
     def sam_launcher(self):
-        return f'{self.image_asset_directory}/samlauncher.png'
+        return f'{self.s}/samlauncher.png'
 
     @property
     def sam(self):
-        return f'{self.image_asset_directory}/sam.png'
+        return f'{self.s}/sam.png'
 
     @property
     def missile_activated_image(self):
-        return f'{self.image_asset_directory}/missile_activated.png'    # missle image path
+        return f'{self.s}/missile_activated.png'    # missle image path
 
     @property
     def missile_deactivated_image(self):
-        return f'{self.image_asset_directory}/missile_deactivated.png'  # missle image path
+        return f'{self.s}/missile_deactivated.png'  # missle image path
 
     @property
     def jet_image(self):
-        return f'{self.image_asset_directory}/jet.png'                  # jet image path
+        return f'{self.s}/jet.png'                  # jet image path
 
     @property
     def powerup_image(self):
-        return f'{self.image_asset_directory}/star.png'                 # jet image path
+        return f'{self.s}/star.png'                 # jet image path
 
     @property
     def bullet_image(self):
-        return f'{self.image_asset_directory}/bullet.png'               # bullet image path
+        return f'{self.s}/bullet.png'               # bullet image path
 
     @property
     def cloud_per_sec(self):

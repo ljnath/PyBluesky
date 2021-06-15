@@ -62,53 +62,53 @@ class StaticData():
     @property
     def clouds(self):
         return (
-            f'{self.s}/cloud1.png', 
-            f'{self.s}/cloud2.png', 
-            f'{self.s}/cloud3.png'
+            f'{self.images_asset_directory}/cloud1.png', 
+            f'{self.images_asset_directory}/cloud2.png', 
+            f'{self.images_asset_directory}/cloud3.png'
             )                                                       # all game cloud designs
 
     @property
     def vegetation(self):
         return (
-            f'{self.s}/vegetation_plain.png', 
-            f'{self.s}/vegetation_tree.png'
+            f'{self.images_asset_directory}/vegetation_plain.png', 
+            f'{self.images_asset_directory}/vegetation_tree.png'
             )
 
     @property
     def ground(self):
-        return f'{self.s}/ground.png'
+        return f'{self.images_asset_directory}/ground.png'
 
     @property
     def grass(self):
-        return f'{self.s}/grass.png'
+        return f'{self.images_asset_directory}/grass.png'
 
     @property
     def sam_launcher(self):
-        return f'{self.s}/samlauncher.png'
+        return f'{self.images_asset_directory}/samlauncher.png'
 
     @property
     def sam(self):
-        return f'{self.s}/sam.png'
+        return f'{self.images_asset_directory}/sam.png'
 
     @property
     def missile_activated_image(self):
-        return f'{self.s}/missile_activated.png'    # missle image path
+        return f'{self.images_asset_directory}/missile_activated.png'    # missle image path
 
     @property
     def missile_deactivated_image(self):
-        return f'{self.s}/missile_deactivated.png'  # missle image path
+        return f'{self.images_asset_directory}/missile_deactivated.png'  # missle image path
 
     @property
     def jet_image(self):
-        return f'{self.s}/jet.png'                  # jet image path
+        return f'{self.images_asset_directory}/jet.png'                  # jet image path
 
     @property
     def powerup_image(self):
-        return f'{self.s}/star.png'                 # jet image path
+        return f'{self.images_asset_directory}/star.png'                 # jet image path
 
     @property
     def bullet_image(self):
-        return f'{self.s}/bullet.png'               # bullet image path
+        return f'{self.images_asset_directory}/bullet.png'               # bullet image path
 
     @property
     def cloud_per_sec(self):

@@ -18,7 +18,19 @@ class StaticData():
     @property
     def android_app_directory(self):
         return f'{app_storage_path()}/app'
+    
+    @property
+    def image_assest_directory(self):
+        return f'{self.android_app_directory}/images'
 
+    @property
+    def audio_assest_directory(self):
+        return f'{self.android_app_directory}/audio'
+    
+    @property
+    def font_assest_directory(self):
+        return f'{self.android_app_directory}/fonts'
+    
     @property
     def screen_width(self):
         return self.__display_info.current_w                        # game resolution is same as monitor resolution
@@ -41,58 +53,58 @@ class StaticData():
 
     @property
     def game_font(self):
-        return f'{self.android_app_directory}/font/arcade.ttf'      # game font file path
+        return f'{self.font_assest_directory}/arcade.ttf'      # game font file path
 
     @property
     def clouds(self):
         return (
-            f'{self.android_app_directory}/image/cloud1.png', 
-            f'{self.android_app_directory}/image/cloud2.png', 
-            f'{self.android_app_directory}/image/cloud3.png'
+            f'{self.image_assest_directory}/cloud1.png', 
+            f'{self.image_assest_directory}/cloud2.png', 
+            f'{self.image_assest_directory}/cloud3.png'
             )                                                       # all game cloud designs
 
     @property
     def vegetation(self):
         return (
-            f'{self.android_app_directory}/image/vegetation_plain.png', 
-            f'{self.android_app_directory}/image/vegetation_tree.png'
+            f'{self.image_assest_directory}/vegetation_plain.png', 
+            f'{self.image_assest_directory}/vegetation_tree.png'
             )
 
     @property
     def ground(self):
-        return f'{self.android_app_directory}/image/ground.png'
+        return f'{self.image_assest_directory}/ground.png'
 
     @property
     def grass(self):
-        return f'{self.android_app_directory}/image/grass.png'
+        return f'{self.image_assest_directory}/grass.png'
 
     @property
     def sam_launcher(self):
-        return f'{self.android_app_directory}/image/samlauncher.png'
+        return f'{self.image_assest_directory}/samlauncher.png'
 
     @property
     def sam(self):
-        return f'{self.android_app_directory}/image/sam.png'
+        return f'{self.image_assest_directory}/sam.png'
 
     @property
     def missile_activated_image(self):
-        return f'{self.android_app_directory}/image/missile_activated.png'    # missle image path
+        return f'{self.image_assest_directory}/missile_activated.png'    # missle image path
 
     @property
     def missile_deactivated_image(self):
-        return f'{self.android_app_directory}/image/missile_deactivated.png'  # missle image path
+        return f'{self.image_assest_directory}/missile_deactivated.png'  # missle image path
 
     @property
     def jet_image(self):
-        return f'{self.android_app_directory}/image/jet.png'                  # jet image path
+        return f'{self.image_assest_directory}/jet.png'                  # jet image path
 
     @property
     def powerup_image(self):
-        return f'{self.android_app_directory}/image/star.png'                 # jet image path
+        return f'{self.image_assest_directory}/star.png'                 # jet image path
 
     @property
     def bullet_image(self):
-        return f'{self.android_app_directory}/image/bullet.png'               # bullet image path
+        return f'{self.image_assest_directory}/bullet.png'               # bullet image path
 
     @property
     def cloud_per_sec(self):
@@ -129,12 +141,12 @@ class StaticData():
     @property
     def game_sound(self):
         return {
-            'music' : f'{self.android_app_directory}/audio/music.ogg',
-            'collision' : f'{self.android_app_directory}/audio/collision.ogg',
-            'levelup' : f'{self.android_app_directory}/audio/levelup.ogg',
-            'shoot' : f'{self.android_app_directory}/audio/shoot.ogg',
-            'hit' : f'{self.android_app_directory}/audio/missile_hit.ogg',
-            'powerup' : f'{self.android_app_directory}/audio/powerup.ogg',
-            'samfire' : f'{self.android_app_directory}/audio/fire.ogg'
+            'music' : f'{self.audio_assest_directory}/music.ogg',
+            'collision' : f'{self.audio_assest_directory}/collision.ogg',
+            'levelup' : f'{self.audio_assest_directory}/levelup.ogg',
+            'shoot' : f'{self.audio_assest_directory}/shoot.ogg',
+            'hit' : f'{self.audio_assest_directory}/missile_hit.ogg',
+            'powerup' : f'{self.audio_assest_directory}/powerup.ogg',
+            'samfire' : f'{self.audio_assest_directory}/fire.ogg'
         }
 

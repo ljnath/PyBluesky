@@ -23,7 +23,8 @@ python setup.py bdist_msi
 * Ubuntu
 * Python 3.7.6 (also works withh 3.8.5) ; need to complile
 * virtualenv
-* python-for-android
+* python-for-android python package
+* JDK 8
 
 
 ### Steps
@@ -129,7 +130,12 @@ p4a --versoin
 # python project is places at ~/Desktop/PyBluesky
 # --requirements : all the requiremenents packages listed in the requirements.txt file is listed here
 #
-#
 
-p4a apk --private ~/Desktop/PyBluesky --requirements=pygame==2.0.1,aiohttp==3.7.4.post0,multidict==5.1.0,attrs==21.2.0,async-timeout==3.0.1,chardet==4.0.0,idna==3.2,typing-extensions==3.10.0.0,yarl==1.6.3 --icon /home/ljnath/Desktop/PyBluesky/assets/images/jet.png --sdk-dir ~/Desktop/android-sdk --ndk-dir ~/Desktop/android-ndk-r19c --android-api 28 --package=com.ljnath.pybluesky --name "PyBluesky" --version 1.0 --bootstrap=sdl2 --dist_name=PyBluesky --orientation=landscape
+p4a apk --private ~/Desktop/PyBluesky --requirements=pygame==2.0.0-dev7,aiohttp==3.7.4.post0,multidict==5.1.0,attrs==21.2.0,async-timeout==3.0.1,chardet==4.0.0,idna==3.2,typing-extensions==3.10.0.0,yarl==1.6.3 --icon /home/ljnath/Desktop/PyBluesky/assets/images/jet.png --sdk-dir ~/Desktop/android-sdk --ndk-dir ~/Desktop/android-ndk-r19c --android-api 28 --ndk-api 21 --ignore-setup-py --package=com.ljnath.pybluesky --name "PyBluesky" --version 1.0 --bootstrap=sdl2 --dist_name=PyBluesky --orientation=landscape
+```
+
+8. Build apk using setup.py file
+```
+cd ~/Desktop/PyBluesky
+python setup.py apk
 ```

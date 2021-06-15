@@ -131,5 +131,5 @@ p4a --versoin
 #
 #
 
-p4a apk --private ~/Desktop/PyBluesky --requirements=pygame==2.0.1,aiohttp==3.7.4.post0,multidict==5.1.0,attrs==21.2.0,async-timeout==3.0.1,chardet==4.0.0,idna==3.2,typing-extensions==3.10.0.0,yarl==1.6.3 --icon /home/ljnath/Desktop/PyBluesky/image/jet.png --sdk-dir ~/Desktop/android-sdk --ndk-dir ~/Desktop/android-ndk-r19c --android-api 28 --package=com.ljnath.pybluesky --name "PyBluesky" --version 1.0 --bootstrap=sdl2 --dist_name=PyBluesky --orientation=landscape
+p4a apk --private ~/Desktop/PyBluesky --requirements=pygame==2.0.1,aiohttp==3.7.4.post0,multidict==5.1.0,attrs==21.2.0,async-timeout==3.0.1,chardet==4.0.0,idna==3.2,typing-extensions==3.10.0.0,yarl==1.6.3 --icon /home/ljnath/Desktop/PyBluesky/assets/images/jet.png --sdk-dir ~/Desktop/android-sdk --ndk-dir ~/Desktop/android-ndk-r19c --android-api 28 --package=com.ljnath.pybluesky --name "PyBluesky" --version 1.0 --bootstrap=sdl2 --dist_name=PyBluesky --orientation=landscape
 ```

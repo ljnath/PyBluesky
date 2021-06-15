@@ -40,8 +40,8 @@ setup(
     packages = find_packages(),
     package_data = {
         '.': ['main.py'],
-        './*': ['*.py', '*.ico'],
-        '*/*': ['*.py', '*.ogg', '*.ttf', '*.png'],
+        './*': ['*.py'],
+        '*/*': ['*.py', '*.ogg', '*.ttf', '*.png', '*.ico'],
         '*/*/*': ['*.py'],
         '*/*/*/*': ['*.py']
         },

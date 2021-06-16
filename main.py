@@ -34,7 +34,12 @@ import math
 import random
 import webbrowser
 
+from android import loadingscreen
+from android.permissions import request_permissions, Permission
+from plyer import vibrator, accelerometer
+
 import pygame
+from pygame._sdl2 import touch
 
 from game.data.enums import InputMode, Screen
 from game.environment import GameEnvironment
@@ -354,5 +359,15 @@ def play():
     notify_user_of_update(game_env)
 
 
-if __name__ == '__main__':  
-    play()                                                                                          # starting game
+if __name__ == '__main__':
+    # hide loading screen as the game has been loaded
+    loadingscreen.hide_loading_screen()
+    
+    # request android permission
+    request_permissions([
+        Permission.VIBRATE,
+        Permission.INTERNET
+        ])
+    
+    # start the game
+    play()

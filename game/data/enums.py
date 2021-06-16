@@ -5,6 +5,12 @@ class InputMode(Enum):
     """
     KEYBOARD = 1,
     MOUSE = 2
+    
+class StartChoice(Enum):
+    """ StartChoice enumerator which holds the game start choice (start or exit) for the game
+    """
+    START = 1,
+    EXIT = 2
 
 class Screen(Enum):
     """ TitleScreen enumerator which holds the available title screens

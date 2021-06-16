@@ -5,7 +5,7 @@ import re
 from pygame.mixer import Sound
 from pygame.sprite import Group
 
-from game.data.enums import InputMode, Screen
+from game.data.enums import InputMode, Screen, StartChoice
 from game.data.static import StaticData
 
 
@@ -21,6 +21,7 @@ class DynamicData():
         self.__powerup_sound = Sound(self.__static.game_sound.get('powerup'))
         self.__samfire_sound = Sound(self.__static.game_sound.get('samfire'))
         self.__game_input = InputMode.KEYBOARD
+        self.__game_start_choice = StartChoice.START
         self.__all_sprites = Group()
         self.__bullets = Group()
         self.__sam_missiles = Group()
@@ -80,6 +81,14 @@ class DynamicData():
     @game_input.setter
     def game_input(self, value):
         self.__game_input = value
+        
+    @property
+    def game_start_choice(self):
+        return self.__game_start_choice
+
+    @game_start_choice.setter
+    def game_start_choice(self, value):
+        self.__game_start_choice = value
 
     @property
     def all_sprites(self):

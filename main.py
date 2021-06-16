@@ -207,10 +207,18 @@ def play():
     if not touch_id:
         print('Cannot initilize game as no valid touch input is detected')
     
+    # enabling acclerometer sensor to get accleration sensor data
+    accelerometer.enable()
+    
     # Main game loop
     while running:
-        # gettting the number of active touched by fingers on the touch device
+        # getting the number of active touched by fingers on the touch device
         active_touch = touch.get_num_fingers(touch_id)
+        
+        # getting the accleration sensor data from accelerometer
+        # acceleration_data is a tuple of (x, y, z) sensor data
+        acceleration_data = accelerometer.acceleration
+        
         
         for event in pygame.event.get():                                                                            # Look at every event in the queue
             # stopping game when ESC key is pressed or when the game window is closed
@@ -375,13 +383,13 @@ def play():
         pygame.display.flip()                                                                           # updating display to the screen
         gameclock.tick(game_env.static.fps)                                                             # ticking game clock at 30 to maintain 30fps
 
-        pressed_keys = pygame.key.get_pressed()                                                         # getting all the pressed keys
-        if not game_pause and game_started and not gameover and game_env.dynamic.game_input == InputMode.KEYBOARD:
-            jet.update(pressed_keys)
-        elif not game_pause and game_started and not gameover and game_env.dynamic.game_input == InputMode.MOUSE:          # performing the jet movement here for smooth movement till mouse cursor
-            jet.auto_move(mouse_pos)
-        elif game_env.dynamic.active_screen in menu_screens:
-            active_sprite.update(pressed_keys)                                                          # handling menu interactions for all the possible interactive screens
+        # pressed_keys = pygame.key.get_pressed()                                                         # getting all the pressed keys
+        # if not game_pause and game_started and not gameover and game_env.dynamic.game_input == InputMode.KEYBOARD:
+        #     jet.update(pressed_keys)
+        # elif not game_pause and game_started and not gameover and game_env.dynamic.game_input == InputMode.MOUSE:          # performing the jet movement here for smooth movement till mouse cursor
+        #     jet.auto_move(mouse_pos)
+        if game_env.dynamic.active_screen in menu_screens:
+            active_sprite.update(acceleration_data)                                                          # handling menu interactions for all the possible interactive screens
 
         if not game_started:
             title_author_sprite.moveOnXaxis(2)                                                          # moving the game author sprite across the X axis   

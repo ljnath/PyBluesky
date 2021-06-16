@@ -98,12 +98,18 @@ def play():
     game_env.dynamic.powerup_sound.set_volume(10)
     game_env.dynamic.samfire_sound.set_volume(5)
 
-    pygame.mixer.music.load(game_env.static.game_sound.get('music'))                                        # setting main game background musicm
-    pygame.mixer.music.play(loops=-1)                                                                       # lopping the main game music
-    pygame.mixer.music.set_volume(.3)
+    # setting main game background musicm
+    # lopping the main game music and setting game volume
+    pygame.mixer.music.load(game_env.static.game_sound.get('music'))
+    pygame.mixer.music.set_volume(.2)
+    pygame.mixer.music.play(loops=-1)
 
-    # screen = pygame.display.set_mode((game_env.static.screen_width, game_env.static.screen_height))         # creating game screen with custom width and height
-    screen = pygame.display.set_mode((game_env.static.screen_width, game_env.static.screen_height), game_env.FULLSCREEN)     # creating game screen with custom width and height
+    # settings flags to create screen in fullscreen, use HW-accleration and DoubleBuffer
+    flags = pygame.FULLSCREEN | pygame.DOUBLEBUF | pygame.HWSURFACE | pygame.SCALED
+    
+    # creating game screen with custom width and height
+    screen = pygame.display.set_mode((game_env.static.screen_width, game_env.static.screen_height), flags)
+         
     pygame.display.set_caption('{} version. {}'.format(game_env.static.name, game_env.static.version))          # setting name of game window
     pygame.display.set_icon(pygame.image.load(game_env.static.game_icon))                                   # updating game icon to the jet image
     pygame.mouse.set_visible(False)                                                     # hiding the mouse pointer from the game screen
@@ -125,7 +131,6 @@ def play():
     game_started = False                                                                # game is not started by default
     game_pause = False
     star_shown = False
-    mouse_pos = (game_env.static.screen_width, game_env.static.screen_height/2)         # default mouse position, let the jet move forward on a straight line
     screen_color = game_env.static.background_default if game_started else game_env.static.background_special
 
     backgrounds = pygame.sprite.Group()                                                 # creating seperate group for background sprites
@@ -138,8 +143,10 @@ def play():
     title_sprites = pygame.sprite.Group()
 
     general_hint_text = "Press M->Game menu, H->Help, L->LeaderBoard, ESC->Quit"
-    active_sprite = NameInputText(game_env)
-    hint_sprite = Text(game_env, "Enter your name and press [ENTER] or press [ESC] to quit", 22, pos_x=game_env.static.screen_width/2 , pos_y= 145)  # creating game help
+    
+    # active_sprite = NameInputText(game_env)
+    # hint_sprite = Text(game_env, "Enter your name and press [ENTER] or press [ESC] to quit", 22, pos_x=game_env.static.screen_width/2 , pos_y= 145)  # creating game help
+    
     title_banner_sprite = Text(game_env, "{} {}".format(game_env.static.name, game_env.static.version), 100, pos_x=game_env.static.screen_width/2 , pos_y=100)                  # creating title_banner_sprite text sprite with game name
     title_author_sprite = Text(game_env, "By Lakhya Jyoti Nath (www.ljnath.com)", 26, pos_x=game_env.static.screen_width/2 , pos_y= game_env.static.screen_height-20)  # creating game author
 

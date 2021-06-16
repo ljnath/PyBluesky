@@ -212,8 +212,14 @@ def play():
     
     # Main game loop
     while running:
-        # getting the number of active touched by fingers on the touch device
-        active_touch = touch.get_num_fingers(touch_id)
+        active_touch = 0
+        
+        try:
+            # TODO: take care of 'pygame.error: Surface doesn't have a colorkey' without this try-except
+            # getting the number of active touched by fingers on the touch device
+            active_touch = touch.get_num_fingers(touch_id)
+        except:
+            pass
         
         # getting the accleration sensor data from accelerometer
         # acceleration_data is a tuple of (x, y, z) sensor data

@@ -41,7 +41,7 @@ from plyer import vibrator, accelerometer
 import pygame
 from pygame._sdl2 import touch
 
-from game.data.enums import InputMode, Screen
+from game.data.enums import InputMode, Screen, StartChoice
 from game.environment import GameEnvironment
 from game.handlers.leaderboard import LeaderBoardHandler
 from game.handlers.network import NetworkHandler
@@ -193,9 +193,25 @@ def play():
         game_started = True                                                                             # game has started
         gameover = False                                                                                # game is not over yet
         star_shown = False                                                                              # no star is displayed
-
+        
+    def get_touch_id():
+        """ Get touch ID of valid touch input
+        """
+        touch_device_count = touch.get_num_devices()
+        for i in range(touch_device_count):
+            touch_id = touch.get_device(i)
+            if touch_id > 0:
+                return touch_id
+    
+    touch_id = get_touch_id()
+    if not touch_id:
+        print('Cannot initilize game as no valid touch input is detected')
+    
     # Main game loop
     while running:
+        # gettting the number of active touched by fingers on the touch device
+        active_touch = touch.get_num_fingers(touch_id)
+        
         for event in pygame.event.get():                                                                            # Look at every event in the queue
             # stopping game when ESC key is pressed or when the game window is closed
             if (event.type == game_env.KEYDOWN and event.key == game_env.K_ESCAPE or event.type == game_env.QUIT) and game_env.dynamic.active_screen != Screen.EXIT_MENU:
@@ -207,9 +223,9 @@ def play():
                 game_env.dynamic.all_sprites.add(active_sprite)
                 game_env.dynamic.active_screen = Screen.EXIT_MENU
             
-            # showing the exit menu when [ESC] key is pressed
-            elif game_env.dynamic.active_screen == Screen.EXIT_MENU and (event.type == game_env.KEYDOWN and event.key == game_env.K_ESCAPE):
-                hide_exit_menu()
+            # # showing the exit menu when [ESC] key is pressed
+            # elif game_env.dynamic.active_screen == Screen.EXIT_MENU and (event.type == game_env.KEYDOWN and event.key == game_env.K_ESCAPE):
+            #     hide_exit_menu()
                 
             # start the game
             elif game_started and not gameover:
@@ -225,6 +241,26 @@ def play():
                     samlauncher = SamLauncher(game_env)
                     samlaunchers.add(samlauncher)
                     game_env.dynamic.all_sprites.add(samlauncher)
+            
+            # all finger based interaction
+            elif event.type == game_env.FINGERDOWN:
+                if active_touch == 1:                                                                                                   # handling all 1 finger down events
+                    if game_env.dynamic.active_screen == Screen.GAME_MENU and game_env.dynamic.game_start_choice == StartChoice.START:  # starting game when user choice is to start game and when user is in GAME_MENU
+                        start_gameplay()                                                                                                # starting game
+                    elif game_env.dynamic.active_screen == Screen.GAME_MENU and game_env.dynamic.game_start_choice == StartChoice.EXIT: # exiting game when user choice is to exit game and when user is in GAME_MENU
+                        running = False                                                                                                 # exiting game
+                        
+                    # elif game_env.dynamic.active_screen == Screen.REPLAY_MENU:                                      # selecting reply option in replaymenu screen
+                    #     if game_env.dynamic.replay:
+                    #         start_gameplay()                                                                        # starting game on replay
+                    #     else:
+                    #         running = False                                                                         # stopping game as user as opted not to replay
+                    # elif game_env.dynamic.active_screen == Screen.EXIT_MENU:
+                    #     if not game_env.dynamic.exit:
+                    #         hide_exit_menu()                                                                        # hide exitmenu if user opts to no exit the game
+                    #     else:
+                    #         running = False
+                
             
             # all keyboard key interaction
             elif event.type == game_env.KEYDOWN:                                                                    # handling all the VALID key press, action varies based on current active screen

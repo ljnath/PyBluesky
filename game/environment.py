@@ -21,8 +21,10 @@ from pygame.locals import (
     QUIT,
     K_m,
     K_l,
-    K_h
-
+    K_h,
+    FINGERUP,
+    FINGERDOWN,
+    FINGERMOTION
 )
 
 class GameEnvironment():
@@ -133,3 +135,15 @@ class GameEnvironment():
     @property
     def K_l(self):
         return K_l
+    
+    @property
+    def FINGERUP(self):
+        return FINGERUP
+    
+    @property
+    def FINGERDOWN(self):
+        return FINGERDOWN
+    
+    @property
+    def FINGERMOTION(self):
+        return FINGERMOTION

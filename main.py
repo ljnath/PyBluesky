@@ -332,16 +332,19 @@ def play():
                         pygame.time.set_timer(ADD_MISSILE, int(1000/(game_env.static.missile_per_sec + int(game_env.dynamic.game_level/2)))) # updating timer of ADD_MISSLE for more missiles to be added
                         game_env.dynamic.ammo += 50                                                 # adding 50 ammo on each level up
                         game_env.dynamic.game_score += 10                                           # increasing game score by 10 after each level
-                        game_env.dynamic.all_sprites.remove(game_env.dynamic.noammo_sprite)         # removing no ammo sprite when ammo is refilled                       
+                        game_env.dynamic.all_sprites.remove(game_env.dynamic.noammo_sprite)         # removing no ammo sprite when ammo is refilled
+                        
 
         screen.fill(screen_color)                                                                   # Filling screen with sky blue color
         [screen.blit(sprite.surf, sprite.rect) for sprite in backgrounds]                           # drawing all backgrounds sprites
         [screen.blit(sprite.surf, sprite.rect) for sprite in game_env.dynamic.all_sprites]          # drawing all sprites in the screen
+        
 
         if not gameover:
             # missile hit
             if pygame.sprite.spritecollideany(jet, missiles) or pygame.sprite.spritecollideany(jet, game_env.dynamic.sam_missiles):    # Check if any missiles have collided with the player; if so
-                gameover = True                                                                     # setting gameover to true to prevent new missiles from spawning
+                vibrator.vibrate(1)                                                                     # vibrating device for 1s on game-over
+                gameover = True                                                                         # setting gameover to true to prevent new missiles from spawning
                 active_sprite = ReplayMenuText(game_env)
                 game_env.dynamic.active_screen = Screen.REPLAY_MENU
                 jet.kill()                                                                              # killing the jet

@@ -49,7 +49,7 @@ setup(
         'apk': {
             'ignore-setup-py': None,
             'package': 'com.ljnath.pybluesky',
-            'requirements': 'pygame==2.0.0-dev7,aiohttp==3.7.4.post0,multidict==5.1.0,attrs==21.2.0,async-timeout==3.0.1,chardet==4.0.0,idna==3.2,typing-extensions==3.10.0.0,yarl==1.6.3',
+            'requirements': 'pygame==2.0.0-dev7,aiohttp==3.7.4.post0,multidict==5.1.0,attrs==21.2.0,async-timeout==3.0.1,chardet==4.0.0,idna==3.2,typing-extensions==3.10.0.0,yarl==1.6.3,Plyer',
             'sdk-dir': '../android-sdk',
             'ndk-dir': '../android-ndk-r19c',
             'presplash':  'assets/images/presplash.png',
@@ -58,7 +58,7 @@ setup(
             'dist-name': 'PyBluesky',
             'android-api': 28,
             'bootstrap': 'sdl2',
-            'orientation': 'sensor',
+            'orientation': 'landscape',
             'wakelock': None
             }
         }

@@ -36,11 +36,11 @@ class ReplayMenuText(Text):
         y_axis = acceleration_values[1]
         print(y_axis)
         if y_axis > 3:                                                                                          # checking if android device is tiled LEFT
-            self.__game_env.dynamic.replay = True                                                               # setting game replay choice as True
-            self.__highlight_yes()                                                                              # calling method to highlight Yes
-        elif y_axis < -3:                                                                                       # checking if android device is tiled RIGHT
             self.__game_env.dynamic.replay  = False                                                             # setting game replay choice as False
-            self.__highlight_no()                                                                               # calling method to highlight No
+            self.__highlight_no()                                                                               # calling method to highlight Nos
+        elif y_axis < -3:                                                                                       # checking if android device is tiled RIGHT
+            self.__game_env.dynamic.replay = True                                                               # setting game replay choice as True
+            self.__highlight_yes()                                                                              # calling method to highlight Ye
             
         self.rect = self.surf.get_rect(center=(self.__game_env.static.screen_width/2, self.__game_env.static.screen_height/2 + 10))   # creating default rect and setting its position center below the GAME OVER text
 

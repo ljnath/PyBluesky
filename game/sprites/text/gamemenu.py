@@ -43,10 +43,10 @@ class GameMenuText(Text):
             return
         
         x_axis = acceleration_values[0]
-        if x_axis > self.__game_env.static.acceleration_threshold:                                                                          # when device accleration is moved DOWN
+        if x_axis > 3:                                                                                                                      # when device accleration is moved DOWN
             self.__game_env.dynamic.game_start_choice = StartChoice.EXIT                                                                    # StartChoice 'Exit'is selected
             self.__highlight_exit()                                                                                                         # StartChoice 'Exit'is highlighted
-        elif x_axis < 0 :#self.__game_env.static.acceleration_threshold * -1:                                                                   # when device accleration is moved UP
+        elif x_axis < 0 :                                                                                                                   # when device accleration is moved UP
             self.__game_env.dynamic.game_start_choice = StartChoice.START                                                                   # StartChoice 'Start Game'is selected
             self.__highlight_start_game()                                                                                                   # StartChoice 'Start Game'is highlighted
             

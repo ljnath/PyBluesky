@@ -241,26 +241,13 @@ def play():
             # # showing the exit menu when [ESC] key is pressed
             # elif game_env.dynamic.active_screen == Screen.EXIT_MENU and (event.type == game_env.KEYDOWN and event.key == game_env.K_ESCAPE):
             #     hide_exit_menu()
-                
-            # start the game
-            elif game_started and not gameover:
-                if game_env.dynamic.game_input ==  InputMode.MOUSE and event.type == game_env.MOUSEMOTION:          # moving jet based on mouse movement
-                    mouse_pos = pygame.mouse.get_pos()                                                              # saving the mouse co-ordinate for smooth movement later
-                elif (game_env.dynamic.game_input ==  InputMode.KEYBOARD and event.type == game_env.KEYDOWN and event.key == game_env.K_SPACE) or (game_env.dynamic.game_input ==  InputMode.MOUSE and event.type==game_env.MOUSEBUTTONDOWN):
-                    jet.shoot()
-                if event.type == ADD_MISSILE:                                                                       # is event to add missile is triggered; missles are not added during gameover
-                    new_missile = Missile(game_env)                                                                 # create a new missile
-                    missiles.add(new_missile)                                                                       # adding the missile to missle group
-                    game_env.dynamic.all_sprites.add(new_missile)                                                   # adding the missile to all_sprites group as well
-                if event.type == ADD_SAM_LAUNCHER and not samlaunchers.sprites() and game_env.dynamic.game_level > 5:
-                    samlauncher = SamLauncher(game_env)
-                    samlaunchers.add(samlauncher)
-                    game_env.dynamic.all_sprites.add(samlauncher)
+            
             
             # all finger based interaction
             elif event.type == game_env.FINGERDOWN:                                                                   
                 # handling all 1 finger-down events
                 if active_touch == 1:
+                    
                     # jet can shoot at use touch and when the game is running
                     if game_started and not gameover:
                         jet.shoot()
@@ -272,6 +259,17 @@ def play():
                     # exit the game when user has selected 'Exit' in GAME_MENU or 'No' in REPLAY_MENT
                     elif game_env.dynamic.active_screen == Screen.GAME_MENU and game_env.dynamic.game_start_choice == StartChoice.EXIT or (game_env.dynamic.active_screen == Screen.REPLAY_MENU and not game_env.dynamic.replay):
                         running = False
+                
+            # add missile and sam-launcher
+            elif game_started and not gameover:
+                if event.type == ADD_MISSILE:                                                                       # is event to add missile is triggered; missles are not added during gameover
+                    new_missile = Missile(game_env)                                                                 # create a new missile
+                    missiles.add(new_missile)                                                                       # adding the missile to missle group
+                    game_env.dynamic.all_sprites.add(new_missile)                                                   # adding the missile to all_sprites group as well
+                if event.type == ADD_SAM_LAUNCHER and not samlaunchers.sprites() and game_env.dynamic.game_level > 5:
+                    samlauncher = SamLauncher(game_env)
+                    samlaunchers.add(samlauncher)
+                    game_env.dynamic.all_sprites.add(samlauncher)
                         
                         
                     # elif game_env.dynamic.active_screen == Screen.REPLAY_MENU:                                      # selecting reply option in replaymenu screen
@@ -286,48 +284,48 @@ def play():
                     #         running = False
                 
             
-            # all keyboard key interaction
-            elif event.type == game_env.KEYDOWN:                                                                    # handling all the VALID key press, action varies based on current active screen
-                if not game_started and game_env.dynamic.active_screen == Screen.NAME_INPUT:
-                    active_sprite.render(event.unicode)
-                    if game_env.dynamic.player_name:                                                                # if user has entered the name, then gamemenu is shown
-                        [game_env.dynamic.all_sprites.remove(sprite) for sprite in (active_sprite, hint_sprite)]
-                        active_sprite = GameMenuText(game_env)
-                        hint_sprite = Text(game_env, general_hint_text, 22, pos_x=game_env.static.screen_width/2 , pos_y= 145)
-                        [game_env.dynamic.all_sprites.add(sprite) for sprite in (active_sprite, hint_sprite)]
-                        game_env.dynamic.active_screen = Screen.GAME_MENU
-                elif event.key == game_env.K_h and game_env.dynamic.active_screen not in {Screen.EXIT_MENU, Screen.HELP}:                   # displyaing the help menu
-                    game_env.dynamic.all_sprites.remove(active_sprite)
-                    active_sprite = HelpText(game_env)
-                    game_env.dynamic.all_sprites.add(active_sprite)
-                    game_env.dynamic.active_screen = Screen.HELP
-                elif event.key == game_env.K_l and game_env.dynamic.active_screen not in {Screen.EXIT_MENU, Screen.LEADERBOARD}:            # displyaing the leaderboard
-                    game_env.dynamic.all_sprites.remove(active_sprite)
-                    active_sprite = LeaderBoardText(game_env)
-                    game_env.dynamic.all_sprites.add(active_sprite)
-                    game_env.dynamic.active_screen = Screen.LEADERBOARD
-                elif event.key == game_env.K_m:
-                    game_env.dynamic.all_sprites.remove(active_sprite)
-                    if not gameover and game_env.dynamic.active_screen not in {Screen.EXIT_MENU, Screen.GAME_MENU}: # displyaing the game menu
-                        active_sprite = GameMenuText(game_env)
-                        game_env.dynamic.active_screen = Screen.GAME_MENU
-                    elif gameover and game_env.dynamic.active_screen not in {Screen.EXIT_MENU, Screen.REPLAY_MENU}: # displaying the replay menu
-                        active_sprite = ReplayMenuText(game_env)
-                        game_env.dynamic.active_screen = Screen.REPLAY_MENU
-                    game_env.dynamic.all_sprites.add(active_sprite)
-                elif event.key == game_env.K_RETURN:                                                                # handling all [ENTER] key press activity
-                    if game_env.dynamic.active_screen == Screen.GAME_MENU:                                          # selecting input mode in gamemenu screen
-                        start_gameplay()                                                                            # starting game  on 1st start
-                    elif game_env.dynamic.active_screen == Screen.REPLAY_MENU:                                      # selecting reply option in replaymenu screen
-                        if game_env.dynamic.replay:
-                            start_gameplay()                                                                        # starting game on replay
-                        else:
-                            running = False                                                                         # stopping game as user as opted not to replay
-                    elif game_env.dynamic.active_screen == Screen.EXIT_MENU:
-                        if not game_env.dynamic.exit:
-                            hide_exit_menu()                                                                        # hide exitmenu if user opts to no exit the game
-                        else:
-                            running = False
+            # # all keyboard key interaction
+            # elif event.type == game_env.KEYDOWN:                                                                    # handling all the VALID key press, action varies based on current active screen
+            #     if not game_started and game_env.dynamic.active_screen == Screen.NAME_INPUT:
+            #         active_sprite.render(event.unicode)
+            #         if game_env.dynamic.player_name:                                                                # if user has entered the name, then gamemenu is shown
+            #             [game_env.dynamic.all_sprites.remove(sprite) for sprite in (active_sprite, hint_sprite)]
+            #             active_sprite = GameMenuText(game_env)
+            #             hint_sprite = Text(game_env, general_hint_text, 22, pos_x=game_env.static.screen_width/2 , pos_y= 145)
+            #             [game_env.dynamic.all_sprites.add(sprite) for sprite in (active_sprite, hint_sprite)]
+            #             game_env.dynamic.active_screen = Screen.GAME_MENU
+            #     elif event.key == game_env.K_h and game_env.dynamic.active_screen not in {Screen.EXIT_MENU, Screen.HELP}:                   # displyaing the help menu
+            #         game_env.dynamic.all_sprites.remove(active_sprite)
+            #         active_sprite = HelpText(game_env)
+            #         game_env.dynamic.all_sprites.add(active_sprite)
+            #         game_env.dynamic.active_screen = Screen.HELP
+            #     elif event.key == game_env.K_l and game_env.dynamic.active_screen not in {Screen.EXIT_MENU, Screen.LEADERBOARD}:            # displyaing the leaderboard
+            #         game_env.dynamic.all_sprites.remove(active_sprite)
+            #         active_sprite = LeaderBoardText(game_env)
+            #         game_env.dynamic.all_sprites.add(active_sprite)
+            #         game_env.dynamic.active_screen = Screen.LEADERBOARD
+            #     elif event.key == game_env.K_m:
+            #         game_env.dynamic.all_sprites.remove(active_sprite)
+            #         if not gameover and game_env.dynamic.active_screen not in {Screen.EXIT_MENU, Screen.GAME_MENU}: # displyaing the game menu
+            #             active_sprite = GameMenuText(game_env)
+            #             game_env.dynamic.active_screen = Screen.GAME_MENU
+            #         elif gameover and game_env.dynamic.active_screen not in {Screen.EXIT_MENU, Screen.REPLAY_MENU}: # displaying the replay menu
+            #             active_sprite = ReplayMenuText(game_env)
+            #             game_env.dynamic.active_screen = Screen.REPLAY_MENU
+            #         game_env.dynamic.all_sprites.add(active_sprite)
+            #     elif event.key == game_env.K_RETURN:                                                                # handling all [ENTER] key press activity
+            #         if game_env.dynamic.active_screen == Screen.GAME_MENU:                                          # selecting input mode in gamemenu screen
+            #             start_gameplay()                                                                            # starting game  on 1st start
+            #         elif game_env.dynamic.active_screen == Screen.REPLAY_MENU:                                      # selecting reply option in replaymenu screen
+            #             if game_env.dynamic.replay:
+            #                 start_gameplay()                                                                        # starting game on replay
+            #             else:
+            #                 running = False                                                                         # stopping game as user as opted not to replay
+            #         elif game_env.dynamic.active_screen == Screen.EXIT_MENU:
+            #             if not game_env.dynamic.exit:
+            #                 hide_exit_menu()                                                                        # hide exitmenu if user opts to no exit the game
+            #             else:
+            #                 running = False
  
             # adding of clouds, backgroud, vegetation and power-up star is handled inside this
             if event.type == ADD_CLOUD:
@@ -406,7 +404,7 @@ def play():
         # elif not game_pause and game_started and not gameover and game_env.dynamic.game_input == InputMode.MOUSE:          # performing the jet movement here for smooth movement till mouse cursor
         #     jet.auto_move(mouse_pos)
         
-        if not game_pause and game_started and not gameover:
+        if game_started and not game_pause and not gameover:
             jet.update(acceleration_sensor_values)
         elif game_env.dynamic.active_screen in menu_screens:
             active_sprite.update(acceleration_sensor_values)                                            # handling menu interactions for all the possible interactive screens

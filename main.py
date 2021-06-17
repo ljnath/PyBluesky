@@ -41,7 +41,7 @@ from plyer import vibrator, accelerometer, orientation
 import pygame
 from pygame._sdl2 import touch
 
-from game.data.enums import InputMode, Screen, StartChoice
+from game.data.enums import Screen, StartChoice
 from game.environment import GameEnvironment
 from game.handlers.leaderboard import LeaderBoardHandler
 from game.handlers.network import NetworkHandler
@@ -229,15 +229,15 @@ def play():
         
         
         for event in pygame.event.get():                                                                            # Look at every event in the queue
-            # stopping game when ESC key is pressed or when the game window is closed
-            if (event.type == game_env.KEYDOWN and event.key == game_env.K_ESCAPE or event.type == game_env.QUIT) and game_env.dynamic.active_screen != Screen.EXIT_MENU:
-                pygame.mixer.music.pause()
-                last_active_sprite = (game_env.dynamic.active_screen, active_sprite)
-                game_started, game_pause = game_pause, game_started
-                [game_env.dynamic.all_sprites.remove(sprite) for sprite in (active_sprite, hint_sprite)]
-                active_sprite = ExitMenuText(game_env)
-                game_env.dynamic.all_sprites.add(active_sprite)
-                game_env.dynamic.active_screen = Screen.EXIT_MENU
+            # # stopping game when ESC key is pressed or when the game window is closed
+            # if (event.type == game_env.KEYDOWN and event.key == game_env.K_ESCAPE or event.type == game_env.QUIT) and game_env.dynamic.active_screen != Screen.EXIT_MENU:
+            #     pygame.mixer.music.pause()
+            #     last_active_sprite = (game_env.dynamic.active_screen, active_sprite)
+            #     game_started, game_pause = game_pause, game_started
+            #     [game_env.dynamic.all_sprites.remove(sprite) for sprite in (active_sprite, hint_sprite)]
+            #     active_sprite = ExitMenuText(game_env)
+            #     game_env.dynamic.all_sprites.add(active_sprite)
+            #     game_env.dynamic.active_screen = Screen.EXIT_MENU
             
             # # showing the exit menu when [ESC] key is pressed
             # elif game_env.dynamic.active_screen == Screen.EXIT_MENU and (event.type == game_env.KEYDOWN and event.key == game_env.K_ESCAPE):
@@ -245,7 +245,7 @@ def play():
             
             
             # all finger based interaction
-            elif event.type == game_env.FINGERDOWN:                                                                   
+            if event.type == game_env.FINGERDOWN:                                                                   
                 # handling all 1 finger-down events
                 if active_touch == 1:
                     

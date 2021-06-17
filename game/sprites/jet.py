@@ -2,7 +2,6 @@ import math
 
 from pygame import image, sprite
 
-from game.data.enums import InputMode
 from game.sprites.bullet import Bullet
 
 

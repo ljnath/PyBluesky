@@ -1,11 +1,5 @@
 from enum import Enum
 
-class InputMode(Enum):
-    """ InputMode enumerator which holds the supported input modes for the game
-    """
-    KEYBOARD = 1,
-    MOUSE = 2
-    
 class StartChoice(Enum):
     """ StartChoice enumerator which holds the game start choice (start or exit) for the game
     """

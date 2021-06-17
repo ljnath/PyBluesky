@@ -7,21 +7,8 @@ from pygame import image
 from pygame.locals import (
     SRCALPHA,
     RLEACCEL,
-    K_UP,
-    K_DOWN,
-    K_LEFT,
-    K_RIGHT,
-    K_ESCAPE,
-    K_RETURN,
-    K_SPACE,
-    KEYDOWN,
-    MOUSEMOTION,
-    MOUSEBUTTONDOWN,
     FULLSCREEN,
     QUIT,
-    K_m,
-    K_l,
-    K_h,
     FINGERUP,
     FINGERDOWN,
     FINGERMOTION
@@ -73,69 +60,13 @@ class GameEnvironment():
         return SRCALPHA
 
     @property
-    def K_UP(self):
-        return K_UP
-
-    @property
-    def K_DOWN(self):
-        return K_DOWN
-
-    @property
-    def K_LEFT(self):
-        return K_LEFT
-
-    @property
-    def K_RIGHT(self):
-        return K_RIGHT
-
-    @property
-    def K_ESCAPE(self):
-        return K_ESCAPE
-
-    @property
-    def K_RETURN(self):
-        return K_RETURN
-
-    @property
-    def KEYDOWN(self):
-        return KEYDOWN
-
-    @property
     def FULLSCREEN(self):
         return FULLSCREEN
-
-    @property
-    def RLEACCEL(self):
-        return RLEACCEL
 
     @property
     def QUIT(self):
         return QUIT
 
-    @property
-    def MOUSEMOTION(self):
-        return MOUSEMOTION
-
-    @property
-    def K_SPACE(self):
-        return K_SPACE
-
-    @property
-    def MOUSEBUTTONDOWN(self):
-        return MOUSEBUTTONDOWN
-    
-    @property
-    def K_h(self):
-        return K_h
-
-    @property
-    def K_m(self):
-        return K_m
-
-    @property
-    def K_l(self):
-        return K_l
-    
     @property
     def FINGERUP(self):
         return FINGERUP

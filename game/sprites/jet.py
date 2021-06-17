@@ -19,7 +19,7 @@ class Jet(sprite.Sprite):
         
 
     def update(self, acceleration_values):
-        if not acceleration_values or len(acceleration_values) != 3 or not acceleration_values[0] or not acceleration_values[1]:
+        if not acceleration_values or len(acceleration_values) != 3 or None in  acceleration_values:
             return
         
         # maginfy the acceleration value factor to calculate the projected new jet position

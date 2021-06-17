@@ -30,7 +30,7 @@ class ReplayMenuText(Text):
         self.surf.blit(self.__replaytext_surf, (self.__replaytext_pos_x, self.__gameover.surf.get_height()))    # updating the surface by drawing the prefex surface
 
     def update(self, acceleration_values):
-        if not acceleration_values or len(acceleration_values) != 3 or not acceleration_values[1]:              # validation of acceleration_values
+        if not acceleration_values or len(acceleration_values) != 3 or None in  acceleration_values:            # validation of acceleration_values
             return
         
         y_axis = acceleration_values[1]

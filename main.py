@@ -412,7 +412,6 @@ def play():
         #     jet.auto_move(mouse_pos)
         
         if not game_pause and game_started and not gameover:
-            print('movment expected')
             jet.update(acceleration_sensor_values)
         elif game_env.dynamic.active_screen in menu_screens:
             active_sprite.update(acceleration_sensor_values)                                            # handling menu interactions for all the possible interactive screens

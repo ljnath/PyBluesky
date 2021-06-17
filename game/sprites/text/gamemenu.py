@@ -39,7 +39,7 @@ class GameMenuText(Text):
         self.surf.blit(self.__prefix_surf, (0,0))                                                                                           # drawing the prefix text
 
     def update(self, acceleration_values):
-        if not acceleration_values or len(acceleration_values) != 3 or not acceleration_values[0]:                                          # validation of acceleration_values
+        if not acceleration_values or len(acceleration_values) != 3 or None in  acceleration_values:                                        # validation of acceleration_values
             return
         
         x_axis = acceleration_values[0]

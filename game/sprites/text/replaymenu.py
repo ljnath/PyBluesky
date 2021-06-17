@@ -29,13 +29,19 @@ class ReplayMenuText(Text):
         self.surf.blit(self.__gameover.surf, (self.surf.get_width()/2 - self.__gameover.surf.get_width()/2, 0)) # updating the surface by drawing the prefex surface
         self.surf.blit(self.__replaytext_surf, (self.__replaytext_pos_x, self.__gameover.surf.get_height()))    # updating the surface by drawing the prefex surface
 
-    def update(self, pressed_keys):
-        if pressed_keys[self.__game_env.K_LEFT]:                                                                # checking if user has pressed LEFT
+    def update(self, acceleration_values):
+        if not acceleration_values or len(acceleration_values) != 3 or not acceleration_values[1]:              # validation of acceleration_values
+            return
+        
+        y_axis = acceleration_values[1]
+        
+        if y_axis > self.__game_env.static.acceleration_threshold:                                              # checking if android device is tiled LEFT
             self.__game_env.dynamic.replay = True                                                               # setting game replay choice as True
-            self.__highlight_yes()                                                                                 # calling method to highlight Yes
-        elif pressed_keys[self.__game_env.K_RIGHT]:                                                             # checking if user has pressed RIGHT
+            self.__highlight_yes()                                                                              # calling method to highlight Yes
+        elif y_axis > self.__game_env.static.acceleration_threshold * -1:                                       # checking if android device is tiled RIGHT
             self.__game_env.dynamic.replay  = False                                                             # setting game replay choice as False
-            self.__highlight_no()                                                                                 # calling method to highlight No
+            self.__highlight_no()                                                                               # calling method to highlight No
+            
         self.rect = self.surf.get_rect(center=(self.__game_env.static.screen_width/2, self.__game_env.static.screen_height/2 + 10))   # creating default rect and setting its position center below the GAME OVER text
 
     def __highlight_yes(self):

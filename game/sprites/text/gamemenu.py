@@ -38,11 +38,11 @@ class GameMenuText(Text):
         self.surf = Surface((self.__prefix_surf.get_width(), self.__prefix_surf.get_height() * 3), self.__game_env.SRCALPHA)                # creating default surface of combinted expected length
         self.surf.blit(self.__prefix_surf, (0,0))                                                                                           # drawing the prefix text
 
-    def update(self, accleration_value):
-        if not accleration_value or len(accleration_value) != 3 or not accleration_value[0]:                                                # validation of accleration_value
+    def update(self, acceleration_values):
+        if not acceleration_values or len(acceleration_values) != 3 or not acceleration_values[0]:                                          # validation of acceleration_values
             return
         
-        x_axis = accleration_value[0]
+        x_axis = acceleration_values[0]
         if x_axis > self.__game_env.static.acceleration_threshold:                                                                          # when device accleration is moved DOWN
             self.__game_env.dynamic.game_start_choice = StartChoice.EXIT                                                                    # StartChoice 'Exit'is selected
             self.__highlight_exit()                                                                                                         # StartChoice 'Exit'is highlighted

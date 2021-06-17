@@ -144,7 +144,7 @@ class StaticData():
     
     @property
     def acceleration_threshold(self):
-        return 2                            # threshold value for acceleration; after this value; action will be taken
+        return 3                            # threshold value for acceleration; after this value; action will be taken
         
     @property
     def game_sound(self):

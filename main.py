@@ -258,12 +258,21 @@ def play():
                     game_env.dynamic.all_sprites.add(samlauncher)
             
             # all finger based interaction
-            elif event.type == game_env.FINGERDOWN:
-                if active_touch == 1:                                                                                                   # handling all 1 finger down events
-                    if game_env.dynamic.active_screen == Screen.GAME_MENU and game_env.dynamic.game_start_choice == StartChoice.START:  # starting game when user choice is to start game and when user is in GAME_MENU
-                        start_gameplay()                                                                                                # starting game
-                    elif game_env.dynamic.active_screen == Screen.GAME_MENU and game_env.dynamic.game_start_choice == StartChoice.EXIT: # exiting game when user choice is to exit game and when user is in GAME_MENU
-                        running = False                                                                                                 # exiting game
+            elif event.type == game_env.FINGERDOWN:                                                                   
+                # handling all 1 finger-down events
+                if active_touch == 1:
+                    # jet can shoot at use touch and when the game is running
+                    if game_started and not gameover:
+                        jet.shoot()
+                    
+                    # start the game when user has selected 'Start Game' in GAME_MENU or 'Yes' in REPLAY_MENT
+                    elif (game_env.dynamic.active_screen == Screen.GAME_MENU and game_env.dynamic.game_start_choice == StartChoice.START) or (game_env.dynamic.active_screen == Screen.REPLAY_MENU and game_env.dynamic.replay):
+                        start_gameplay()
+                        
+                    # exit the game when user has selected 'Exit' in GAME_MENU or 'No' in REPLAY_MENT
+                    elif game_env.dynamic.active_screen == Screen.GAME_MENU and game_env.dynamic.game_start_choice == StartChoice.EXIT or (game_env.dynamic.active_screen == Screen.REPLAY_MENU and not game_env.dynamic.replay):
+                        running = False
+                        
                         
                     # elif game_env.dynamic.active_screen == Screen.REPLAY_MENU:                                      # selecting reply option in replaymenu screen
                     #     if game_env.dynamic.replay:

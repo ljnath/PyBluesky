@@ -59,7 +59,8 @@ setup(
             'android-api': 28,
             'bootstrap': 'sdl2',
             'orientation': 'landscape',
-            'wakelock': None
+            'wakelock': None,
+            'permission': 'VIBRATE'
             }
         }
 )

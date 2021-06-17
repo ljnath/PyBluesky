@@ -13,7 +13,6 @@ class Jet(sprite.Sprite):
     def __init__(self, game_env):
         super(Jet, self).__init__()                                                             # initilizing parent class pygame.sprite.Sprite
         self.__game_env = game_env
-        self.__speed = 7 if self.__game_env.dynamic.game_input == InputMode.KEYBOARD else 9     # setting jet speed as 7 in keyboard and 9 in mouse mode
         self.surf = image.load(game_env.static.jet_image).convert()                             # loading jet image from file
         self.surf.set_colorkey((255, 255, 255), self.__game_env.RLEACCEL)                       # setting the white color as the transperant area; RLEACCEL is used for better performance on non accelerated displays
         self.rect = self.surf.get_rect(center=(50,self.__game_env.static.screen_height/2))      # getting rectangle from jet screen; setting the jet position as the middle of the scrren on the left
@@ -37,13 +36,14 @@ class Jet(sprite.Sprite):
         self.auto_move((projected_x, projected_y))
 
     def auto_move(self, position):
+        speed = 9
         dx = position[0] - self.rect.x                                                                              # calculating x-coordinate difference of mouse and current jet position
         dy = position[1] - self.rect.y                                                                              # caluclating y-coordinate difference of mouse and current jet position
-        if (dx >= -self.__speed and dx <= self.__speed) and (dy >= -self.__speed and dy <= self.__speed):           # jet will not move if the delta is less then its speed
+        if (dx >= -speed and dx <= speed) and (dy >= -speed and dy <= speed):                                       # jet will not move if the delta is less then its speed
             return
         angle = math.atan2(dy, dx)                                                                                  # calculating angle
-        self.rect.x += self.__speed * math.cos(angle)                                                               # moving the x-coordinate of jet towards the mouse cursor
-        self.rect.y += self.__speed * math.sin(angle)                                                               # moving the y-coordinate of jet towards the mouse cursor
+        self.rect.x += speed * math.cos(angle)                                                               # moving the x-coordinate of jet towards the mouse cursor
+        self.rect.y += speed * math.sin(angle)                                                               # moving the y-coordinate of jet towards the mouse cursor
         self.__maintain_boundary()
 
     def shoot(self):

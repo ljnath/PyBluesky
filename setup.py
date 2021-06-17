@@ -60,7 +60,10 @@ setup(
             'bootstrap': 'sdl2',
             'orientation': 'landscape',
             'wakelock': None,
-            'permission': 'VIBRATE'
+            'permission': [
+                'VIBRATE',
+                'INTERNET'
+                ]
             }
         }
 )

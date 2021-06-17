@@ -35,7 +35,7 @@ import random
 import webbrowser
 
 from android import loadingscreen
-from android.permissions import request_permissions, Permission
+from android.permissions import request_permissions, Permission, check_permissions
 from plyer import vibrator, accelerometer, orientation
 
 import pygame
@@ -90,11 +90,6 @@ def play():
     pygame.mixer.init()                                                 # initializing same audio mixer with default settings
     pygame.init()                                                       # initializing pygame
     game_env = GameEnvironment()                                        # initializing game environment
-
-    request_permissions([
-        Permission.VIBRATE,
-        Permission.INTERNET
-        ])
     
     game_env.dynamic.collision_sound.set_volume(1.5)
     game_env.dynamic.levelup_sound.set_volume(1.5)
@@ -147,16 +142,14 @@ def play():
     samlaunchers = pygame.sprite.GroupSingle()                                          # creating missile group for storing all the samlaunchers in the game
     title_sprites = pygame.sprite.Group()
 
-    general_hint_text = "Press M->Game menu, H->Help, L->LeaderBoard, ESC->Quit"
+    general_hint_text = "Move your phone for changing selection and tap on screen to confirm the selection"
     
-    # active_sprite = NameInputText(game_env)
-    # hint_sprite = Text(game_env, "Enter your name and press [ENTER] or press [ESC] to quit", 22, pos_x=game_env.static.screen_width/2 , pos_y= 145)  # creating game help
     
     title_banner_sprite = Text(game_env, "{} {}".format(game_env.static.name, game_env.static.version), 100, pos_x=game_env.static.screen_width/2 , pos_y=100)                  # creating title_banner_sprite text sprite with game name
     title_author_sprite = Text(game_env, "By Lakhya Jyoti Nath (www.ljnath.com)", 26, pos_x=game_env.static.screen_width/2 , pos_y= game_env.static.screen_height-20)  # creating game author
 
     if game_env.dynamic.player_name:
-        hint_sprite = Text(game_env, general_hint_text, 22, pos_x=game_env.static.screen_width/2 , pos_y= 145)  # creating game help
+        hint_sprite = Text(game_env, general_hint_text, 24, pos_x=game_env.static.screen_width/2 , pos_y= 145)  # creating game help
         active_sprite = GameMenuText(game_env)
 
     game_env.dynamic.all_sprites.add(hint_sprite)
@@ -445,8 +438,11 @@ if __name__ == '__main__':
     # hide loading screen as the game has been loaded
     loadingscreen.hide_loading_screen()
     
-    # request android permission
-    
+    print(f"{check_permission('android.permission.VIBRATE')}")
+    print(f"{check_permission('android.permission.INTERNET')}")
+    print(f"{check_permission('android.permission.MANAGE_USERS')}")
+    print(f"{check_permission('android.permission.READ_PRIVILEGED_PHONE_STATE')}")
+      
     
     # start the game
     play()

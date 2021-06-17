@@ -35,7 +35,7 @@ import random
 import webbrowser
 
 from android import loadingscreen
-from android.permissions import request_permissions, Permission, check_permissions
+from android.permissions import request_permissions, Permission, check_permission
 from plyer import vibrator, accelerometer, orientation
 
 import pygame

@@ -30,8 +30,9 @@ class Jet(sprite.Sprite):
         y_axis = acceleration_values[1]
         
         # calculating projected jet position based on current position and accelertation change
-        projected_x = self.rect.x + (x_axis * acceleration_magnify_factor)
-        projected_y = self.rect.y + (y_axis * acceleration_magnify_factor)
+        # the values are reversed as the gameplay will be in landscape mode
+        projected_x = self.rect.y + (y_axis * acceleration_magnify_factor)
+        projected_y = self.rect.x + (x_axis * acceleration_magnify_factor)
         
         self.auto_move((projected_x, projected_y))
 

@@ -36,7 +36,7 @@ import webbrowser
 
 from android import loadingscreen
 from android.permissions import request_permissions, Permission
-from plyer import vibrator, accelerometer
+from plyer import vibrator, accelerometer, orientation
 
 import pygame
 from pygame._sdl2 import touch
@@ -106,8 +106,8 @@ def play():
     # setting main game background musicm
     # lopping the main game music and setting game volume
     pygame.mixer.music.load(game_env.static.game_sound.get('music'))
-    pygame.mixer.music.set_volume(.2)
     pygame.mixer.music.play(loops=-1)
+    pygame.mixer.music.set_volume(.2)
 
     # settings flags to create screen in fullscreen, use HW-accleration and DoubleBuffer
     flags = pygame.FULLSCREEN | pygame.DOUBLEBUF | pygame.HWSURFACE | pygame.SCALED
@@ -215,6 +215,9 @@ def play():
     
     # enabling acclerometer sensor to get accleration sensor data
     accelerometer.enable()
+    
+    # fixing orientation to landscape only to precent auto-rotation
+    orientation.set_sensor(mode='landscape')
     
     # Main game loop
     while running:
@@ -371,7 +374,7 @@ def play():
         if not gameover:
             # missile hit
             if pygame.sprite.spritecollideany(jet, missiles) or pygame.sprite.spritecollideany(jet, game_env.dynamic.sam_missiles):    # Check if any missiles have collided with the player; if so
-                # vibrator.vibrate(1)                                                                     # vibrating device for 1s on game-over
+                vibrator.vibrate(1)                                                                     # vibrating device for 1s on game-over
                 gameover = True                                                                         # setting gameover to true to prevent new missiles from spawning
                 active_sprite = ReplayMenuText(game_env)
                 game_env.dynamic.active_screen = Screen.REPLAY_MENU

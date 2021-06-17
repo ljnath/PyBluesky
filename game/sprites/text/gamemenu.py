@@ -39,14 +39,14 @@ class GameMenuText(Text):
         self.surf.blit(self.__prefix_surf, (0,0))                                                                                           # drawing the prefix text
 
     def update(self, accleration_value):
-        if not accleration_value or len(accleration_value) != 3:                                                                            # validation of accleration_value
+        if not accleration_value or len(accleration_value) != 3 or not accleration_value[0]:                                                # validation of accleration_value
             return
         
         x_axis = accleration_value[0]
-        if x_axis > 0:                                                                                                                      # when device accleration is moved DOWN
+        if x_axis > self.__game_env.static.acceleration_threshold:                                                                          # when device accleration is moved DOWN
             self.__game_env.dynamic.game_start_choice = StartChoice.EXIT                                                                    # StartChoice 'Exit'is selected
             self.__highlight_exit()                                                                                                         # StartChoice 'Exit'is highlighted
-        elif x_axis < 0:                                                                                                                    # when device accleration is moved UP
+        elif x_axis < self.__game_env.static.acceleration_threshold * -1:                                                                   # when device accleration is moved UP
             self.__game_env.dynamic.game_start_choice = StartChoice.START                                                                   # StartChoice 'Start Game'is selected
             self.__highlight_start_game()                                                                                                   # StartChoice 'Start Game'is highlighted
             

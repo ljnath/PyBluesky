@@ -198,7 +198,8 @@ def play():
         """ Get touch ID of valid touch input
         """
         touch_device_count = touch.get_num_devices()
-        for i in range(touch_device_count):
+        # check for touch-id for all touch devices, looping from high to low; becuase the higher one usually works
+        for i in range(touch_device_count - 1, -1, -1):
             touch_id = touch.get_device(i)
             if touch_id > 0:
                 return touch_id

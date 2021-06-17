@@ -175,7 +175,6 @@ def play():
 
     def start_gameplay():
         nonlocal gameover, jet, star_shown, screen_color, game_started
-        pygame.mouse.set_visible(True if game_env.dynamic.game_input == InputMode.MOUSE else False)     # displaying mouse cursor based on user input mode
         screen_color = game_env.static.background_default                                               # restoring  screen color
         [sprite.kill() for sprite in title_sprites]                                                     # kill all the title_sprites sprite sprite
         jet = Jet(game_env)                                                                             # re-creating the jet

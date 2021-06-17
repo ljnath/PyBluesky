@@ -43,7 +43,7 @@ class GameMenuText(Text):
             return
         
         x_axis = acceleration_values[0]
-        print(x_axis)
+        # print(x_axis)
         if x_axis < 0 :                                                                                                                     # when device accleration is moved UP
             self.__game_env.dynamic.game_start_choice = StartChoice.START                                                                   # StartChoice 'Start Game'is selected
             self.__highlight_start_game()                                                                                                   # StartChoice 'Start Game'is highlighted

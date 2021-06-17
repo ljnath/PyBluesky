@@ -91,6 +91,11 @@ def play():
     pygame.init()                                                       # initializing pygame
     game_env = GameEnvironment()                                        # initializing game environment
 
+    request_permissions([
+        Permission.VIBRATE,
+        Permission.INTERNET
+        ])
+    
     game_env.dynamic.collision_sound.set_volume(1.5)
     game_env.dynamic.levelup_sound.set_volume(1.5)
     game_env.dynamic.shoot_sound.set_volume(1.5)
@@ -366,7 +371,7 @@ def play():
         if not gameover:
             # missile hit
             if pygame.sprite.spritecollideany(jet, missiles) or pygame.sprite.spritecollideany(jet, game_env.dynamic.sam_missiles):    # Check if any missiles have collided with the player; if so
-                vibrator.vibrate(1)                                                                     # vibrating device for 1s on game-over
+                # vibrator.vibrate(1)                                                                     # vibrating device for 1s on game-over
                 gameover = True                                                                         # setting gameover to true to prevent new missiles from spawning
                 active_sprite = ReplayMenuText(game_env)
                 game_env.dynamic.active_screen = Screen.REPLAY_MENU
@@ -404,7 +409,8 @@ def play():
         # elif not game_pause and game_started and not gameover and game_env.dynamic.game_input == InputMode.MOUSE:          # performing the jet movement here for smooth movement till mouse cursor
         #     jet.auto_move(mouse_pos)
         
-        if game_started and not game_pause and not gameover:
+        if not game_pause and game_started and not gameover:
+            print('movment expected')
             jet.update(acceleration_sensor_values)
         elif game_env.dynamic.active_screen in menu_screens:
             active_sprite.update(acceleration_sensor_values)                                            # handling menu interactions for all the possible interactive screens
@@ -436,10 +442,7 @@ if __name__ == '__main__':
     loadingscreen.hide_loading_screen()
     
     # request android permission
-    request_permissions([
-        Permission.VIBRATE,
-        Permission.INTERNET
-        ])
+    
     
     # start the game
     play()

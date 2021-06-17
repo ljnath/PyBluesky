@@ -41,7 +41,7 @@ class GameMenuText(Text):
     def update(self, acceleration_values):
         if not acceleration_values or len(acceleration_values) != 3 or not acceleration_values[0]:                                          # validation of acceleration_values
             return
-        
+        print(f'x-axis in game-menu  = {x_axis}')
         x_axis = acceleration_values[0]
         if x_axis > self.__game_env.static.acceleration_threshold:                                                                          # when device accleration is moved DOWN
             self.__game_env.dynamic.game_start_choice = StartChoice.EXIT                                                                    # StartChoice 'Exit'is selected

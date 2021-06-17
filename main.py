@@ -400,8 +400,7 @@ def play():
                     deactivated_missile.add(missile)                                                    # adding missile to deactivated_missile group
                     missiles.remove(missile)                                                            # remove missiles from missles group to avoid collision with jet 
             
-        pygame.display.flip()                                                                           # updating display to the screen
-        gameclock.tick(game_env.static.fps)                                                             # ticking game clock at 30 to maintain 30fps
+        
 
         # pressed_keys = pygame.key.get_pressed()                                                         # getting all the pressed keys
         # if not game_pause and game_started and not gameover and game_env.dynamic.game_input == InputMode.KEYBOARD:
@@ -414,6 +413,9 @@ def play():
             jet.update(acceleration_sensor_values)
         elif game_env.dynamic.active_screen in menu_screens:
             active_sprite.update(acceleration_sensor_values)                                            # handling menu interactions for all the possible interactive screens
+            
+        pygame.display.flip()                                                                           # updating display to the screen
+        gameclock.tick(game_env.static.fps)                                                             # ticking game clock at 30 to maintain 30fps
 
         if not game_started:
             title_author_sprite.moveOnXaxis(2)                                                          # moving the game author sprite across the X axis   

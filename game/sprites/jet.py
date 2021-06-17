@@ -17,18 +17,23 @@ class Jet(sprite.Sprite):
         self.surf = image.load(game_env.static.jet_image).convert()                             # loading jet image from file
         self.surf.set_colorkey((255, 255, 255), self.__game_env.RLEACCEL)                       # setting the white color as the transperant area; RLEACCEL is used for better performance on non accelerated displays
         self.rect = self.surf.get_rect(center=(50,self.__game_env.static.screen_height/2))      # getting rectangle from jet screen; setting the jet position as the middle of the scrren on the left
+        
 
-    def update(self, pressed_keys):
-        if pressed_keys[self.__game_env.K_UP]:                                  # if the UP key is pressed
-            self.rect.move_ip(0, -self.__speed)                                 # moving the jet on negtaive y-axis
-        if pressed_keys[self.__game_env.K_DOWN]:                                # if the DOWN key is pressed
-            self.rect.move_ip(0, self.__speed)                                  # moving the jet on positive y-axis
-        if pressed_keys[self.__game_env.K_LEFT]:                                # if the LEFT key is presssed
-            self.rect.move_ip(-self.__speed, 0)                                 # moving the jet on negative x-axis
-        if pressed_keys[self.__game_env.K_RIGHT]:                               # if the RIGHT key is pressed
-            self.rect.move_ip(self.__speed, 0)                                  # moving the jet on positive x-axis
-
-        self.__maintain_boundary()
+    def update(self, acceleration_values):
+        if not acceleration_values or len(acceleration_values) != 3 or not acceleration_values[0] or acceleration_values[1]:
+            return
+        
+        # maginfy the acceleration value factor to calculate the projected new jet position
+        acceleration_magnify_factor = 50
+        
+        x_axis = acceleration_values[0]
+        y_axis = acceleration_values[1]
+        
+        # calculating projected jet position based on current position and accelertation change
+        projected_x = self.rect.x + (x_axis * acceleration_magnify_factor)
+        projected_y = self.rect.y + (y_axis * acceleration_magnify_factor)
+        
+        self.auto_move((projected_x, projected_y))
 
     def auto_move(self, position):
         dx = position[0] - self.rect.x                                                                              # calculating x-coordinate difference of mouse and current jet position

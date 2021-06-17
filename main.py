@@ -223,8 +223,8 @@ def play():
             pass
         
         # getting the accleration sensor data from accelerometer
-        # acceleration_data is a tuple of (x, y, z) sensor data
-        acceleration_data = accelerometer.acceleration
+        # acceleration_sensor_values is a tuple of (x, y, z) sensor data
+        acceleration_sensor_values = accelerometer.acceleration
         
         
         for event in pygame.event.get():                                                                            # Look at every event in the queue
@@ -328,7 +328,8 @@ def play():
                             hide_exit_menu()                                                                        # hide exitmenu if user opts to no exit the game
                         else:
                             running = False
-                    
+ 
+            # adding of clouds, backgroud, vegetation and power-up star is handled inside this
             if event.type == ADD_CLOUD:
                 if game_pause:
                     continue
@@ -404,8 +405,11 @@ def play():
         #     jet.update(pressed_keys)
         # elif not game_pause and game_started and not gameover and game_env.dynamic.game_input == InputMode.MOUSE:          # performing the jet movement here for smooth movement till mouse cursor
         #     jet.auto_move(mouse_pos)
-        if game_env.dynamic.active_screen in menu_screens:
-            active_sprite.update(acceleration_data)                                                          # handling menu interactions for all the possible interactive screens
+        
+        if not game_pause and game_started and not gameover:
+            jet.update(acceleration_sensor_values)
+        elif game_env.dynamic.active_screen in menu_screens:
+            active_sprite.update(acceleration_sensor_values)                                            # handling menu interactions for all the possible interactive screens
 
         if not game_started:
             title_author_sprite.moveOnXaxis(2)                                                          # moving the game author sprite across the X axis   

@@ -34,7 +34,6 @@ class ReplayMenuText(Text):
             return
         
         y_axis = acceleration_values[1]
-        print(y_axis)
         if y_axis > 3:                                                                                          # checking if android device is tiled LEFT
             self.__game_env.dynamic.replay  = False                                                             # setting game replay choice as False
             self.__highlight_no()                                                                               # calling method to highlight Nos

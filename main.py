@@ -105,7 +105,7 @@ def play():
     pygame.mixer.music.set_volume(.2)
 
     # settings flags to create screen in fullscreen, use HW-accleration and DoubleBuffer
-    flags = pygame.FULLSCREEN | pygame.DOUBLEBUF | pygame.HWSURFACE | pygame.SCALED
+    flags = pygame.FULLSCREEN | pygame.DOUBLEBUF | pygame.HWSURFACE | pygame.SCALED | pygame.RESIZABLE
     
     # creating game screen with custom width and height
     screen = pygame.display.set_mode((game_env.static.screen_width, game_env.static.screen_height), flags)
@@ -207,10 +207,7 @@ def play():
     
     # enabling acclerometer sensor to get accleration sensor data
     accelerometer.enable()
-    
-    # fixing orientation to landscape only to precent auto-rotation
-    orientation.set_sensor(mode='landscape')
-    
+        
     # Main game loop
     while running:
         active_touch = 0
@@ -226,8 +223,15 @@ def play():
         # acceleration_sensor_values is a tuple of (x, y, z) sensor data
         acceleration_sensor_values = accelerometer.acceleration
         
-        
-        for event in pygame.event.get():                                                                            # Look at every event in the queue
+        # Look at every event in the queue
+        for event in pygame.event.get():
+            
+            # checking for VIDEORESIZE event, this event is used to prevent auto-rotate in android device
+            # if any change in the screensize is detected, then the orienatation is forcefully re-applied
+            if event.type == pygame.VIDEORESIZE:
+                orientation.set_landscape(reverse=False)            
+             
+             
             # # stopping game when ESC key is pressed or when the game window is closed
             # if (event.type == game_env.KEYDOWN and event.key == game_env.K_ESCAPE or event.type == game_env.QUIT) and game_env.dynamic.active_screen != Screen.EXIT_MENU:
             #     pygame.mixer.music.pause()

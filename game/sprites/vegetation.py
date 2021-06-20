@@ -10,7 +10,7 @@ class Vegetation(sprite.Sprite):
     """
     def __init__(self, x_pos=None, y_pos=None):
         super(Vegetation, self).__init__()
-        game_env= GameEnvironment()
+        game_env = GameEnvironment()
         self.surf = image.load(random.choice(game_env.static.vegetation)).convert()
         ground = image.load(game_env.static.ground).convert()
         grass = image.load(game_env.static.grass).convert()

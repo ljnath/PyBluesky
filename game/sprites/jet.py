@@ -11,10 +11,10 @@ class Jet(sprite.Sprite):
     """
     def __init__(self):
         super(Jet, self).__init__()                                                             # initilizing parent class pygame.sprite.Sprite
-        self.__game_env = GameEnvironment()
-        self.surf = image.load(self.__game_env.static.jet_image).convert()                             # loading jet image from file
-        self.surf.set_colorkey((255, 255, 255), self.__game_env.RLEACCEL)                       # setting the white color as the transperant area; RLEACCEL is used for better performance on non accelerated displays
-        self.rect = self.surf.get_rect(center=(50,self.__game_env.static.screen_height/2))      # getting rectangle from jet screen; setting the jet position as the middle of the scrren on the left
+        game_env = GameEnvironment()
+        self.surf = image.load(game_env.static.jet_image).convert()                             # loading jet image from file
+        self.surf.set_colorkey((255, 255, 255), game_env.RLEACCEL)                       # setting the white color as the transperant area; RLEACCEL is used for better performance on non accelerated displays
+        self.rect = self.surf.get_rect(center=(50,game_env.static.screen_height/2))      # getting rectangle from jet screen; setting the jet position as the middle of the scrren on the left
         
 
     def update(self, acceleration_values):
@@ -46,20 +46,22 @@ class Jet(sprite.Sprite):
         self.__maintain_boundary()
 
     def shoot(self):
-        if self.__game_env.dynamic.ammo > 0:
+        game_env = GameEnvironment()
+        if game_env.dynamic.ammo > 0:
             bullet = Bullet(self.rect.x+self.rect.width+10, self.rect.y+22)      # create a bullet where the jet is located
-            self.__game_env.dynamic.bullets.add(bullet)                                           # add the bullet to bullet group
-            self.__game_env.dynamic.all_sprites.add(bullet)                                       # add the bullet tp all_sprites
-            self.__game_env.dynamic.shoot_sound.play()                                            # play shooting sound
-            self.__game_env.dynamic.ammo -= 1
-            self.__game_env.dynamic.bullets_fired += 1
+            game_env.dynamic.bullets.add(bullet)                                           # add the bullet to bullet group
+            game_env.dynamic.all_sprites.add(bullet)                                       # add the bullet tp all_sprites
+            game_env.dynamic.shoot_sound.play()                                            # play shooting sound
+            game_env.dynamic.ammo -= 1
+            game_env.dynamic.bullets_fired += 1
         else:
-            self.__game_env.dynamic.all_sprites.add(self.__game_env.dynamic.noammo_sprite)      # show noammo sprite
+            game_env.dynamic.all_sprites.add(game_env.dynamic.noammo_sprite)      # show noammo sprite
 
     def __maintain_boundary(self):
+        game_env = GameEnvironment()
         if self.rect.left < 0: self.rect.left = 0                               # if the jet has moved left and have crossed the screen; the left position is set to 0 as it is the boundary
         if self.rect.top < 0: self.rect.top = 0                                 # if the jet has moved top and have crossed the screen; the top position is set to 0 as it is the boundary
-        if self.rect.right > self.__game_env.static.screen_width:
-            self.rect.right = self.__game_env.static.screen_width            # if the jet has moved right and have crossed the screen; the right position is set to screen width as it is the boundary
-        if self.rect.bottom > self.__game_env.static.screen_height - self.__game_env.vegetation_size[1]/2:
-            self.rect.bottom = self.__game_env.static.screen_height - self.__game_env.vegetation_size[1]/2   # if the jet has moved bottom and have crossed the screen; the bottom position is set to screen width as it is the boundary
+        if self.rect.right > game_env.static.screen_width:
+            self.rect.right = game_env.static.screen_width            # if the jet has moved right and have crossed the screen; the right position is set to screen width as it is the boundary
+        if self.rect.bottom > game_env.static.screen_height - game_env.vegetation_size[1]/2:
+            self.rect.bottom = game_env.static.screen_height - game_env.vegetation_size[1]/2   # if the jet has moved bottom and have crossed the screen; the bottom position is set to screen width as it is the boundary

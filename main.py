@@ -67,26 +67,29 @@ def check_update():
     asyncio.get_event_loop().run_until_complete(network_handler.check_game_update())
     asyncio.get_event_loop().run_until_complete(LeaderBoardHandler().update(API_KEY))           # updating the leaderboard asynchronously
 
-def submit_result(game_env):
+def submit_result():
+    game_env = GameEnvironment()
     if game_env.dynamic.game_score > 0:
         network_handler = NetworkHandler(API_KEY)
         asyncio.get_event_loop().run_until_complete(network_handler.submit_result())
     asyncio.get_event_loop().run_until_complete(LeaderBoardHandler().update(API_KEY))           # updating the leaderboard asynchronously
 
-def create_vegetation(game_env, vegetations):
+def create_vegetation(vegetations):
+    game_env = GameEnvironment()
     vegetations.empty()
     for i in range(math.ceil(game_env.static.screen_width / game_env.vegetation_size[0])):                          # drawing the 1st vegetations required to fill the 1st sceen (max is the screen width)
         vegetation = Vegetation(x_pos= i * game_env.vegetation_size[0] + game_env.vegetation_size[0]/2)   # creating a new vegetation
         vegetations.add(vegetation)                                                                                 # just adding sprite to vegetations group, to updating on screen for now
                                                                                 
-def notify_user_of_update(game_env):
+def notify_user_of_update():
+    game_env = GameEnvironment()
     if game_env.dynamic.update_url:
         try:
             webbrowser.open(game_env.dynamic.update_url)
         except:
             pass
 
-def request_android_permissions(self):
+def request_android_permissions():
     request_permissions([
         Permission.WRITE_EXTERNAL_STORAGE
         ])
@@ -171,7 +174,7 @@ def play():
     scoretext_sprite = ScoreText()                                                                          # creating scoreboard sprite
     game_env.dynamic.noammo_sprite = Text("NO AMMO !", 24)                                                # creating noammo-sprite 
 
-    create_vegetation(game_env, vegetations)
+    create_vegetation(vegetations)
     menu_screens = {Screen.REPLAY_MENU, Screen.GAME_MENU, Screen.EXIT_MENU}
     last_active_sprite = (game_env.dynamic.active_screen, active_sprite)
 
@@ -195,7 +198,7 @@ def play():
         [game_env.dynamic.all_sprites.add(sprite) for sprite in (jet, scoretext_sprite)]                # adding the jet and scoreboard to all_sprites
         game_env.reset()                                                                                # reseting game data
         pygame.time.set_timer(ADD_MISSILE, int(1000/game_env.static.missile_per_sec))                   # resetting missile creation event timer
-        create_vegetation(game_env, vegetations)                                                        # creating vegetation
+        create_vegetation(vegetations)                                                        # creating vegetation
         [backgrounds.add(sprite) for sprite in vegetations.sprites()]                                   # adding vegetation to background
         game_env.dynamic.active_screen = Screen.GAME_SCREEN                                             # setting gamescreen as the active sprite
         game_started = True                                                                             # game has started
@@ -390,7 +393,7 @@ def play():
                 game_env.dynamic.collision_sound.play()
                 [game_env.dynamic.all_sprites.add(sprite) for sprite in (active_sprite, hint_sprite)]   # adding the gameover and the hint sprite
                 game_env.dynamic.all_sprites.remove(game_env.dynamic.noammo_sprite)
-                submit_result(game_env)
+                submit_result()
 
             # bullet hit
             collision = pygame.sprite.groupcollide(missiles, game_env.dynamic.bullets, True, True)      # checking for collision between bullets and missiles, killing each one of them on collision
@@ -445,7 +448,7 @@ def play():
 
     pygame.mixer.music.stop()                                                                       # stopping game music
     pygame.mixer.quit()                                                                             # stopping game sound mixer
-    notify_user_of_update(game_env)
+    notify_user_of_update()
 
 
 if __name__ == '__main__':

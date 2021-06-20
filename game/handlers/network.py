@@ -36,7 +36,7 @@ class NetworkHandler(Handlers):
                         self.log('New game version {} detected'.format(json_response['version']))
         except:
             self.log('Failed to check for game update')
-        await self.submit_result(game_env, only_sync=True)
+        await self.submit_result(only_sync=True)
 
     async def get_leaders(self):
         leaders = {}

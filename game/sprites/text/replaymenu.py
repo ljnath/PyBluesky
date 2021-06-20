@@ -10,7 +10,7 @@ class ReplayMenuText(Text):
     def __init__(self): 
         Text.__init__(self, size=38)                                                                  # initilizing parent class with default text color as red
         game_env = GameEnvironment()
-        self.__gameover = Text(game_env, "GAME OVER", 60)
+        self.__gameover = Text("GAME OVER", 60)
 
         self.__replaytext_surf = self.font.render("Replay ", 1, self.color)                                     # creating surface with the Replay text
 

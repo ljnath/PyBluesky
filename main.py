@@ -191,7 +191,7 @@ def play():
         nonlocal gameover, jet, star_shown, screen_color, game_started
         screen_color = game_env.static.background_default                                               # restoring  screen color
         [sprite.kill() for sprite in title_sprites]                                                     # kill all the title_sprites sprite sprite
-        jet = Jet(game_env)                                                                             # re-creating the jet
+        jet = Jet()                                                                             # re-creating the jet
         missiles.empty()                                                                                # empting the missle group                    
         game_env.dynamic.all_sprites = pygame.sprite.Group()                                            # re-creating group of sprites 
         [game_env.dynamic.all_sprites.remove(sprite) for sprite in (active_sprite, hint_sprite)]        # removing active sprite and hint sprite
@@ -352,7 +352,7 @@ def play():
 
                 last_sprite = vegetations.sprites()[-1]                                             # storing the last available vegetation for computation
                 if last_sprite.rect.x + last_sprite.rect.width/2 - game_env.static.screen_width < 0: # checking if the last vegetation has appeared in the screen, if yes a new vegetation will be created and appended
-                    vegetation = Vegetation(game_env, x_pos=last_sprite.rect.x + last_sprite.rect.width+last_sprite.rect.width/2)   # position of the new sprite is after the last sprite
+                    vegetation = Vegetation(x_pos=last_sprite.rect.x + last_sprite.rect.width+last_sprite.rect.width/2)   # position of the new sprite is after the last sprite
                     vegetations.add(vegetation)                                                     # adding sprite to groups for update and display
                     backgrounds.add(vegetation)
 

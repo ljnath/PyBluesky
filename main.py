@@ -102,7 +102,7 @@ def request_android_permissions():
     
     if not check_permission('android.permission.WRITE_EXTERNAL_STORAGE'):
         common_handlers = Handlers()
-        common_handlers.log.error('Required permission WRITE_EXTERNAL_STORAGE is missing. Exiting application')
+        common_handlers.log('Required permission WRITE_EXTERNAL_STORAGE is missing. Exiting application')
         sys.exit(1)
     
     

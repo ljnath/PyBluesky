@@ -1,5 +1,6 @@
 import random
 
+from game.environment import GameEnvironment
 from pygame import image, sprite
 
 
@@ -7,12 +8,12 @@ from pygame import image, sprite
 class Star(sprite.Sprite):
     """ Powerup sprite class for creating and updating the star in the game screen
     """
-    def __init__(self, game_env):
+    def __init__(self):
         super(Star, self).__init__()
-        self.__game_env = game_env
+        self.__game_env = GameEnvironment()
         self.surf = image.load(self.__game_env.static.powerup_image).convert()   
         self.surf.set_colorkey((255, 255, 255), self.__game_env.RLEACCEL)
-        self.rect = self.surf.get_rect(center=self.__game_env.get_random_point_on_top())               # powerup stars are created on top of screen 
+        self.rect = self.surf.get_rect(center=self.__game_env.get_random_point_on_top())        # powerup stars are created on top of screen 
         self.__current_alpha = 255
         self.__transperant = False
         flash_rate = 6                                                                          # setting the blink rate of the star

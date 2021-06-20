@@ -1,14 +1,15 @@
 import math
 
+from game.environment import GameEnvironment
 from pygame import image, sprite
 
 
 class Bullet(sprite.Sprite):
     """ Bullet sprite for create and moving bullet
     """
-    def __init__(self, game_env, x_pos, y_pos):                                     # bullet constructur takes the position where it should be created
+    def __init__(self, x_pos, y_pos):                                     # bullet constructur takes the position where it should be created
         super(Bullet, self).__init__()
-        self.__game_env = game_env
+        self.__game_env = GameEnvironment()
         self.__x = x_pos
         self.__y = y_pos
         self.__speed = 8

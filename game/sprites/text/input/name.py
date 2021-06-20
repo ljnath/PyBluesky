@@ -1,17 +1,17 @@
 import re
 
-from pygame.surface import Surface
-
+from game.environment import GameEnvironment
 from game.sprites.text import Text
+from pygame.surface import Surface
 
 
 class NameInputText(Text):
     """ NameInputText class extended from Text class.
         Class is responsible for creating the sprite for taking player name as input
     """
-    def __init__(self, game_env): 
-        Text.__init__(self, game_env, size=32)                                          # initilizing parent class with default text color as red
-        self.__game_env = game_env
+    def __init__(self): 
+        Text.__init__(self, size=32)                                                    # initilizing parent class with default text color as red
+        self.__game_env = GameEnvironment()
         self.__header = Text(self.__game_env, "=== ENTER YOUR NAME ===", 36)
         self.__footer = Text(self.__game_env, "===============================", 36)
         self.__player_name = ''                                                         # default player name

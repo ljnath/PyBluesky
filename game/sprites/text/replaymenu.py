@@ -1,15 +1,15 @@
-from pygame.surface import Surface
-
+from game.environment import GameEnvironment
 from game.sprites.text import Text
+from pygame.surface import Surface
 
 
 class ReplayMenuText(Text):
     """ ReplayText class extended from Text class.
         It creates the game replay menu sprite
     """
-    def __init__(self, game_env): 
-        Text.__init__(self, game_env, size=38)                                                                  # initilizing parent class with default text color as red
-        self.__game_env = game_env
+    def __init__(self): 
+        Text.__init__(self, size=38)                                                                  # initilizing parent class with default text color as red
+        self.__game_env = GameEnvironment()
         self.__gameover = Text(self.__game_env, "GAME OVER", 60)
 
         self.__replaytext_surf = self.font.render("Replay ", 1, self.color)                                     # creating surface with the Replay text

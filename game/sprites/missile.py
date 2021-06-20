@@ -1,5 +1,6 @@
 import random
 
+from game.environment import GameEnvironment
 from pygame import image, sprite
 
 
@@ -7,11 +8,11 @@ from pygame import image, sprite
 class Missile(sprite.Sprite):
     """ Missile sprite class for creating and updating the missile in the game screen
     """
-    def __init__(self, game_env):
+    def __init__(self):
         super(Missile, self).__init__()                                                                                 # initilizing parent class pygame.sprite.Sprite
-        self.__game_env = game_env
-        self.surf = image.load(game_env.static.missile_activated_image).convert()                                # loading missile image from file
-        self.surf.set_colorkey((255, 255, 255), game_env.RLEACCEL)                                                      # setting the white color as the transperant area; RLEACCEL is used for better performance on non accelerated displays
+        self.__game_env = GameEnvironment()
+        self.surf = image.load(self.__game_env.static.missile_activated_image).convert()                                # loading missile image from file
+        self.surf.set_colorkey((255, 255, 255), self.__game_env.RLEACCEL)                                               # setting the white color as the transperant area; RLEACCEL is used for better performance on non accelerated displays
         pos_x = random.randint(self.__game_env.static.screen_width + 10, self.__game_env.static.screen_width + 60)      # generating random x position
         pos_y = random.randint(0, self.__game_env.static.screen_height - self.__game_env.vegetation_size[1] / 2)        # generating random y position
         self.rect = self.surf.get_rect(center=(pos_x, pos_y))                                                           # create rectange from the missile screen

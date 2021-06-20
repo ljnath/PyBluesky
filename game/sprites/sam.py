@@ -1,14 +1,15 @@
 import math
 
+from game.environment import GameEnvironment
 from pygame import image, sprite, transform
 
 
 class Sam(sprite.Sprite):
     """ SurfaceToAirMissile (SAM) sprite for create and moving bullet
     """
-    def __init__(self, game_env, source, target, flip):
+    def __init__(self, source, target, flip):
         super(Sam, self).__init__()
-        self.__game_env = game_env
+        self.__game_env = GameEnvironment()
         self.__angle = math.atan2(target[1] - source[1], target[0] - source[0])     # sam angle of fire in radian
         self.__speed = 5 + (1 if self.__game_env.dynamic.game_level%2 == 0 else 0)  # default sam speed is 5 and increased each level
 

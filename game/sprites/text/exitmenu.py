@@ -1,16 +1,16 @@
-from pygame.surface import Surface
-
+from game.environment import GameEnvironment
 from game.sprites.text import Text
+from pygame.surface import Surface
 
 
 class ExitMenuText(Text):
     """ ExitText class extended from Text class.
         It creates the game exit menu with confirmation sprite
     """
-    def __init__(self, game_env): 
-        Text.__init__(self, game_env, size=38)
-        self.__game_env = game_env
-        self.__title = Text(self.__game_env, "Do you want to quit?", 48)
+    def __init__(self): 
+        Text.__init__(self, size=38)
+        self.__game_env = GameEnvironment()
+        self.__title = Text("Do you want to quit?", 48)
 
         self.__y_selected_surf = self.font.render("Yes", 1, self.__game_env.static.text_selection_color)        # creating surface with Yes text when highlighted
         self.__n_surf = self.font.render("/No",1, self.color)                                                   # creating surface with No text

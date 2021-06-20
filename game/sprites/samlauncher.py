@@ -1,17 +1,17 @@
 import math
 import random
 
-from pygame import image, sprite, transform
-
+from game.environment import GameEnvironment
 from game.sprites.sam import Sam
+from pygame import image, sprite, transform
 
 
 class SamLauncher(sprite.Sprite):
     """ SamLauncher sprite class for creating and updating the vegetation in the game screen
     """
-    def __init__(self, game_env):
+    def __init__(self):
         super(SamLauncher, self).__init__()
-        self.__game_env= game_env
+        self.__game_env= GameEnvironment()
         self.surf = image.load(self.__game_env.static.sam_launcher).convert()
         self.surf.set_colorkey((255,255,255), self.__game_env.RLEACCEL) 
         self.__speed = random.randint(8,12)                                 # speed of the sam launcher
@@ -41,7 +41,7 @@ class SamLauncher(sprite.Sprite):
             self.kill()
 
     def fire(self, target):
-        sam = Sam(self.__game_env, (self.rect.x, self.rect.y), target, self.__flip)
+        sam = Sam((self.rect.x, self.rect.y), target, self.__flip)
         self.__game_env.dynamic.sam_missiles.add(sam)
         self.__game_env.dynamic.all_sprites.add(sam)
         self.__game_env.dynamic.samfire_sound.play()

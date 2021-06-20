@@ -76,7 +76,7 @@ def submit_result(game_env):
 def create_vegetation(game_env, vegetations):
     vegetations.empty()
     for i in range(math.ceil(game_env.static.screen_width / game_env.vegetation_size[0])):                          # drawing the 1st vegetations required to fill the 1st sceen (max is the screen width)
-        vegetation = Vegetation(game_env, x_pos= i * game_env.vegetation_size[0] + game_env.vegetation_size[0]/2)   # creating a new vegetation
+        vegetation = Vegetation(x_pos= i * game_env.vegetation_size[0] + game_env.vegetation_size[0]/2)   # creating a new vegetation
         vegetations.add(vegetation)                                                                                 # just adding sprite to vegetations group, to updating on screen for now
                                                                                 
 def notify_user_of_update(game_env):
@@ -156,20 +156,20 @@ def play():
 
     general_hint_text = "Move your phone for changing selection and tap on screen to confirm the selection"
     
-    title_banner_sprite = Text(game_env, "{} {}".format(game_env.static.name, game_env.static.version), 100, pos_x=game_env.static.screen_width/2 , pos_y=100)                  # creating title_banner_sprite text sprite with game name
-    title_author_sprite = Text(game_env, "By Lakhya Jyoti Nath (www.ljnath.com)", 26, pos_x=game_env.static.screen_width/2 , pos_y= game_env.static.screen_height-20)  # creating game author
+    title_banner_sprite = Text("{} {}".format(game_env.static.name, game_env.static.version), 100, pos_x=game_env.static.screen_width/2 , pos_y=100)                  # creating title_banner_sprite text sprite with game name
+    title_author_sprite = Text("By Lakhya Jyoti Nath (www.ljnath.com)", 26, pos_x=game_env.static.screen_width/2 , pos_y= game_env.static.screen_height-20)  # creating game author
 
     if game_env.dynamic.player_name:
-        hint_sprite = Text(game_env, general_hint_text, 36, pos_x=game_env.static.screen_width/2 , pos_y= 145)  # creating game help
-        active_sprite = GameMenuText(game_env)
+        hint_sprite = Text(general_hint_text, 36, pos_x=game_env.static.screen_width/2 , pos_y= 145)  # creating game help
+        active_sprite = GameMenuText()
 
     game_env.dynamic.all_sprites.add(hint_sprite)
     [title_sprites.add(sprite) for sprite in (active_sprite, title_banner_sprite, title_author_sprite)]             # adding all the necessary sprites to title_sprites
     [game_env.dynamic.all_sprites.add(sprite) for sprite in title_sprites]                                          # adding all title_sprites sprite to all_sprites
         
-    jet = Jet(game_env)                                                                                             # creating jet sprite
-    scoretext_sprite = ScoreText(game_env)                                                                          # creating scoreboard sprite
-    game_env.dynamic.noammo_sprite = Text(game_env, "NO AMMO !", 24)                                                # creating noammo-sprite 
+    jet = Jet()                                                                                             # creating jet sprite
+    scoretext_sprite = ScoreText()                                                                          # creating scoreboard sprite
+    game_env.dynamic.noammo_sprite = Text("NO AMMO !", 24)                                                # creating noammo-sprite 
 
     create_vegetation(game_env, vegetations)
     menu_screens = {Screen.REPLAY_MENU, Screen.GAME_MENU, Screen.EXIT_MENU}
@@ -278,11 +278,11 @@ def play():
             # add missile and sam-launcher
             elif game_started and not gameover:
                 if event.type == ADD_MISSILE:                                                                       # is event to add missile is triggered; missles are not added during gameover
-                    new_missile = Missile(game_env)                                                                 # create a new missile
+                    new_missile = Missile()                                                                 # create a new missile
                     missiles.add(new_missile)                                                                       # adding the missile to missle group
                     game_env.dynamic.all_sprites.add(new_missile)                                                   # adding the missile to all_sprites group as well
                 if event.type == ADD_SAM_LAUNCHER and not samlaunchers.sprites() and game_env.dynamic.game_level > 5:
-                    samlauncher = SamLauncher(game_env)
+                    samlauncher = SamLauncher()
                     samlaunchers.add(samlauncher)
                     game_env.dynamic.all_sprites.add(samlauncher)
                         
@@ -353,13 +353,13 @@ def play():
                     vegetations.add(vegetation)                                                     # adding sprite to groups for update and display
                     backgrounds.add(vegetation)
 
-                new_cloud = Cloud(game_env)                                                         # is event to add cloud is triggered
+                new_cloud = Cloud()                                                         # is event to add cloud is triggered
                 clouds.add(new_cloud)                                                               # create a new cloud
                 backgrounds.add(new_cloud)                                                          # adding the cloud to all_sprites group
                 if not gameover and game_started:
                     game_env.dynamic.game_playtime += 1                                             # increasing playtime by 1s as this event is triggered every second; just reusing existing event instead of recreating a new event
                     if not star_shown and random.randint(0,30) % 3 == 0:                            # probabity of getting a star is 30%
-                        star = Star(game_env)
+                        star = Star()
                         stars.add(star)
                         game_env.dynamic.all_sprites.add(star)
                         star_shown = True
@@ -383,7 +383,7 @@ def play():
             if pygame.sprite.spritecollideany(jet, missiles) or pygame.sprite.spritecollideany(jet, game_env.dynamic.sam_missiles):    # Check if any missiles have collided with the player; if so
                 vibrator.vibrate(1)                                                                     # vibrating device for 1s on game-over
                 gameover = True                                                                         # setting gameover to true to prevent new missiles from spawning
-                active_sprite = ReplayMenuText(game_env)
+                active_sprite = ReplayMenuText()
                 game_env.dynamic.active_screen = Screen.REPLAY_MENU
                 jet.kill()                                                                              # killing the jet
                 [sam_missile.kill() for sam_missile in game_env.dynamic.sam_missiles]                   # killing the SAM missile

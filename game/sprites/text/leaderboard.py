@@ -1,19 +1,19 @@
 import time
 
-from pygame.surface import Surface
-
+from game.environment import GameEnvironment
 from game.handlers.leaderboard import LeaderBoardHandler
 from game.sprites.text import Text
+from pygame.surface import Surface
 
 
 class LeaderBoardText(Text):
     """ LeaderBoardText class extended from Text class.
         It creates the the leaderboard table sprite
     """
-    def __init__(self, game_env): 
-        Text.__init__(self, game_env, size=20)
-        self.__game_env = game_env
-        name_length = self.__game_env.static.name_length * 2
+    def __init__(self): 
+        Text.__init__(self, size=20)
+        game_env = GameEnvironment()
+        name_length = game_env.static.name_length * 2
         leaders = LeaderBoardHandler().load()
         seperator = self.font.render('===================================================================================================', 1, self.color)
         header = self.font.render('=== HALL OF FAME ===', 1, self.color)
@@ -31,10 +31,10 @@ class LeaderBoardText(Text):
             pass
         all_surfaces.append(seperator)
 
-        self.surf = Surface((all_surfaces[2].get_width(), all_surfaces[0].get_height() * (len(all_surfaces) + 1)), self.__game_env.SRCALPHA)
+        self.surf = Surface((all_surfaces[2].get_width(), all_surfaces[0].get_height() * (len(all_surfaces) + 1)), game_env.SRCALPHA)
 
         self.surf.blit(header, (self.surf.get_width()/2 - header.get_width()/2, 0))
         for index, temp_surf in enumerate(all_surfaces):
             self.surf.blit(temp_surf, (0, header.get_height() + index * temp_surf.get_height()))
 
-        self.rect = self.surf.get_rect(center=(self.__game_env.static.screen_width/2, self.__game_env.static.screen_height/2))
+        self.rect = self.surf.get_rect(center=(game_env.static.screen_width/2, game_env.static.screen_height/2))

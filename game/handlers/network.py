@@ -17,7 +17,7 @@ class NetworkHandler(Handlers):
         Handlers().__init__()
         self.__api_key = api_key
         self.__api_endpoint = 'https://app.ljnath.com/pybluesky/'
-        self.__serialize_handler = SerializeHandler(self.__game_env.static.offline_score_file)
+        self.__serialize_handler = SerializeHandler(self.game_env.static.offline_score_file)
 
     async def check_game_update(self, game_env):
         try:

@@ -86,7 +86,19 @@ def notify_user_of_update(game_env):
         except:
             pass
 
+def request_android_permissions(self):
+    request_permissions([
+        Permission.WRITE_EXTERNAL_STORAGE
+        ])
+        
+    print(f"{check_permission('android.permission.VIBRATE')}")
+    print(f"{check_permission('android.permission.INTERNET')}")
+    print(f"{check_permission('android.permission.WRITE_EXTERNAL_STORAGE')}")
+    
+    
 def play():
+    request_android_permissions()
+    
     pygame.mixer.init()                                                 # initializing same audio mixer with default settings
     pygame.init()                                                       # initializing pygame
     game_env = GameEnvironment()                                        # initializing game environment
@@ -439,12 +451,6 @@ def play():
 if __name__ == '__main__':
     # hide loading screen as the game has been loaded
     loadingscreen.hide_loading_screen()
-    
-    print(f"{check_permission('android.permission.VIBRATE')}")
-    print(f"{check_permission('android.permission.INTERNET')}")
-    print(f"{check_permission('android.permission.MANAGE_USERS')}")
-    print(f"{check_permission('android.permission.READ_PRIVILEGED_PHONE_STATE')}")
-      
     
     # start the game
     play()

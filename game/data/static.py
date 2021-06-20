@@ -37,15 +37,15 @@ class StaticData():
     
     @property
     def game_log_file(self):
-        return f'{self.primary_external_storage_path}/logs/game.log'
+        return f'{primary_external_storage_path()}/logs/game.log'
     
     @property
     def leaders_file(self):
-        return f'{self.primary_external_storage_path}/data/leaders.dat'
+        return f'{primary_external_storage_path()}/data/leaders.dat'
     
     @property
     def offline_score_file(self):
-        return f'{self.primary_external_storage_path}/data/offline.dat'
+        return f'{primary_external_storage_path()}/data/offline.dat'
     
     @property
     def screen_width(self):

@@ -8,6 +8,7 @@ from time import time
 
 import aiohttp
 
+from game.environment import GameEnvironment
 from game.handlers import Handlers
 from game.handlers.serialize import SerializeHandler
 
@@ -15,12 +16,14 @@ from game.handlers.serialize import SerializeHandler
 class NetworkHandler(Handlers):
     def __init__(self, api_key):
         Handlers().__init__()
+        game_env = GameEnvironment()
         self.__api_key = api_key
         self.__api_endpoint = 'https://app.ljnath.com/pybluesky/'
-        self.__serialize_handler = SerializeHandler(self.game_env.static.offline_score_file)
+        self.__serialize_handler = SerializeHandler(game_env.static.offline_score_file)
 
-    async def check_game_update(self, game_env):
+    async def check_game_update(self):
         try:
+            game_env = GameEnvironment()
             get_parameters = {'action': 'getUpdate', 'apiKey': self.__api_key}
             async with aiohttp.ClientSession() as session:
                 async with session.get(self.__api_endpoint, params=get_parameters, ssl=False, timeout=aiohttp.ClientTimeout(total=10)) as response:
@@ -49,8 +52,9 @@ class NetworkHandler(Handlers):
         finally:
             return leaders
         
-    async def submit_result(self, game_env, only_sync = False):
+    async def submit_result(self, only_sync = False):
         payloads = []
+        game_env = GameEnvironment()
         deserialized_object = self.__serialize_handler.deserialize()
         if deserialized_object:
             payloads = list(deserialized_object)

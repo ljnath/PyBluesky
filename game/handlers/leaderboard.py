@@ -1,6 +1,7 @@
 import os
 import pickle
 
+from game.environment import GameEnvironment
 from game.handlers import Handlers
 from game.handlers.network import NetworkHandler
 from game.handlers.serialize import SerializeHandler
@@ -9,7 +10,8 @@ from game.handlers.serialize import SerializeHandler
 class LeaderBoardHandler(Handlers):
     def __init__(self):
         Handlers().__init__()
-        self.__serialize_handler = SerializeHandler(self.game_env.static.leaders_file)
+        self.__game_env = GameEnvironment()
+        self.__serialize_handler = SerializeHandler(self.__game_env.static.leaders_file)
 
     def load(self):
         leaders = []
@@ -18,7 +20,7 @@ class LeaderBoardHandler(Handlers):
             if deserialized_object:
                 leaders = dict(deserialized_object)
         except Exception:
-            self.log('Failed to read leaders from file {}'.format(self.game_env.static.leaders_file))
+            self.log('Failed to read leaders from file {}'.format(self.__game_env.static.leaders_file))
         finally:
             return leaders
 
@@ -29,7 +31,7 @@ class LeaderBoardHandler(Handlers):
             
             self.__serialize_handler.serialize(leaders)
         except Exception:
-            self.log('Failed to save leaders to file {}'.format(self.game_env.static.leaders_file))
+            self.log('Failed to save leaders to file {}'.format(self.__game_env.static.leaders_file))
     
     async def update(self, api_key):
         network_handler = NetworkHandler(api_key)

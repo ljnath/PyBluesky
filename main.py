@@ -62,15 +62,15 @@ from game.sprites.vegetation import Vegetation
 
 API_KEY = ''
 
-def check_update(game_env):
+def check_update():
     network_handler = NetworkHandler(API_KEY)
-    asyncio.get_event_loop().run_until_complete(network_handler.check_game_update(game_env))
+    asyncio.get_event_loop().run_until_complete(network_handler.check_game_update())
     asyncio.get_event_loop().run_until_complete(LeaderBoardHandler().update(API_KEY))           # updating the leaderboard asynchronously
 
 def submit_result(game_env):
     if game_env.dynamic.game_score > 0:
         network_handler = NetworkHandler(API_KEY)
-        asyncio.get_event_loop().run_until_complete(network_handler.submit_result(game_env))
+        asyncio.get_event_loop().run_until_complete(network_handler.submit_result())
     asyncio.get_event_loop().run_until_complete(LeaderBoardHandler().update(API_KEY))           # updating the leaderboard asynchronously
 
 def create_vegetation(game_env, vegetations):
@@ -115,7 +115,7 @@ def play():
     pygame.mouse.set_visible(False)                                                     # hiding the mouse pointer from the game screen
 
     gameclock = pygame.time.Clock()                                                     # setting up game clock to maintain constant fps
-    check_update(game_env)
+    check_update()
 
     ADD_MISSILE = pygame.USEREVENT + 1                                                  # creating custom event to automatically add missiles in the screen
     pygame.time.set_timer(ADD_MISSILE, int(1000/game_env.static.missile_per_sec))       # setting event to auto-trigger every 500ms; 2 missiles will be created every second
@@ -144,12 +144,11 @@ def play():
 
     general_hint_text = "Move your phone for changing selection and tap on screen to confirm the selection"
     
-    
     title_banner_sprite = Text(game_env, "{} {}".format(game_env.static.name, game_env.static.version), 100, pos_x=game_env.static.screen_width/2 , pos_y=100)                  # creating title_banner_sprite text sprite with game name
     title_author_sprite = Text(game_env, "By Lakhya Jyoti Nath (www.ljnath.com)", 26, pos_x=game_env.static.screen_width/2 , pos_y= game_env.static.screen_height-20)  # creating game author
 
     if game_env.dynamic.player_name:
-        hint_sprite = Text(game_env, general_hint_text, 24, pos_x=game_env.static.screen_width/2 , pos_y= 145)  # creating game help
+        hint_sprite = Text(game_env, general_hint_text, 36, pos_x=game_env.static.screen_width/2 , pos_y= 145)  # creating game help
         active_sprite = GameMenuText(game_env)
 
     game_env.dynamic.all_sprites.add(hint_sprite)

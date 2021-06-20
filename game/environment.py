@@ -1,20 +1,24 @@
-from game.data.static import StaticData
-from game.data.dynamic import DynamicData
-import random
 import os
-from pygame import image
- # importing here to avoid reimporting in all the sub modules
-from pygame.locals import (
-    SRCALPHA,
-    RLEACCEL,
-    FULLSCREEN,
-    QUIT,
-    FINGERUP,
-    FINGERDOWN,
-    FINGERMOTION
-)
+import random
 
-class GameEnvironment():
+from pygame import image
+from pygame.locals import (
+    FINGERDOWN, 
+    FINGERMOTION, 
+    FINGERUP, 
+    FULLSCREEN,
+    QUIT, 
+    RLEACCEL, 
+    SRCALPHA
+    )
+
+from game.common.singleton import Singleton
+from game.data.dynamic import DynamicData
+from game.data.static import StaticData
+
+ # importing here to avoid reimporting in all the sub modules
+
+class GameEnvironment(metaclass=Singleton):
     """ Game environment which holds the game contants, variables as well as pygame constants
     """
     def __init__(self):

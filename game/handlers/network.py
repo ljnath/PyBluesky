@@ -17,14 +17,13 @@ class NetworkHandler(Handlers):
         Handlers().__init__()
         self.__api_key = api_key
         self.__api_endpoint = 'https://app.ljnath.com/pybluesky/'
-        self.__sync_file = 'data/offline.dat'
-        self.__serialize_handler = SerializeHandler(self.__sync_file)
+        self.__serialize_handler = SerializeHandler(self.__game_env.static.offline_score_file)
 
     async def check_game_update(self, game_env):
         try:
             get_parameters = {'action': 'getUpdate', 'apiKey': self.__api_key}
             async with aiohttp.ClientSession() as session:
-                async with session.get(self.__api_endpoint, params=get_parameters, timeout=aiohttp.ClientTimeout(total=10)) as response:
+                async with session.get(self.__api_endpoint, params=get_parameters, ssl=False, timeout=aiohttp.ClientTimeout(total=10)) as response:
                     if response.status != 200:
                         raise Exception()
                     json_response = loads(await response.text())
@@ -41,7 +40,7 @@ class NetworkHandler(Handlers):
         try:
             get_parameters = {'action': 'getTopScores', 'apiKey': self.__api_key}
             async with aiohttp.ClientSession() as session:
-                async with session.get(self.__api_endpoint, params=get_parameters, timeout=aiohttp.ClientTimeout(total=15)) as response:
+                async with session.get(self.__api_endpoint, params=get_parameters, ssl=False, timeout=aiohttp.ClientTimeout(total=15)) as response:
                     if response.status != 200:
                         raise Exception()
                     leaders = loads(await response.text())
@@ -87,7 +86,7 @@ class NetworkHandler(Handlers):
         result = True
         try:
             payload['apiKey'] = self.__api_key
-            async with session.put(self.__api_endpoint, json=payload, timeout=aiohttp.ClientTimeout(total=30)) as response:
+            async with session.put(self.__api_endpoint, json=payload, ssl=False, timeout=aiohttp.ClientTimeout(total=30)) as response:
                 if response.status != 201:
                     result = False
         except:

@@ -1,5 +1,5 @@
 from pygame import display
-from android.storage import app_storage_path
+from android.storage import app_storage_path, primary_external_storage_path
 
 class StaticData():
     """ Class which holds all the static game values
@@ -34,6 +34,18 @@ class StaticData():
     @property
     def icon_asset_directory(self):
         return f'{self.android_app_directory}/assets/icon'
+    
+    @property
+    def game_log_file(self):
+        return f'{self.primary_external_storage_path}/logs/game.log'
+    
+    @property
+    def leaders_file(self):
+        return f'{self.primary_external_storage_path}/data/leaders.dat'
+    
+    @property
+    def offline_score_file(self):
+        return f'{self.primary_external_storage_path}/data/offline.dat'
     
     @property
     def screen_width(self):

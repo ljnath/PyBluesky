@@ -31,6 +31,7 @@ Website: https://www.ljnath.com
 
 import asyncio
 import math
+import sys
 import random
 import webbrowser
 
@@ -43,6 +44,7 @@ from pygame._sdl2 import touch
 
 from game.data.enums import Screen, StartChoice
 from game.environment import GameEnvironment
+from game.handlers import Handlers
 from game.handlers.leaderboard import LeaderBoardHandler
 from game.handlers.network import NetworkHandler
 from game.sprites.cloud import Cloud
@@ -97,6 +99,11 @@ def request_android_permissions():
     print(f"{check_permission('android.permission.VIBRATE')}")
     print(f"{check_permission('android.permission.INTERNET')}")
     print(f"{check_permission('android.permission.WRITE_EXTERNAL_STORAGE')}")
+    
+    if not check_permission('android.permission.WRITE_EXTERNAL_STORAGE'):
+        common_handlers = Handlers()
+        common_handlers.log.error('Required permission WRITE_EXTERNAL_STORAGE is missing. Exiting application')
+        sys.exit(1)
     
     
 def play():

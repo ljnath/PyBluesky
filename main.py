@@ -31,15 +31,15 @@ Website: https://www.ljnath.com
 
 import asyncio
 import math
-import sys
 import random
+import sys
 import webbrowser
 
 from android import loadingscreen
-from android.permissions import request_permissions, Permission, check_permission
-from plyer import vibrator, accelerometer, orientation
-
-import pygame
+from android.permissions import (Permission, check_permission,
+                                 request_permissions)
+from jnius import autoclass
+from plyer import accelerometer, orientation, vibrator
 from pygame._sdl2 import touch
 
 from game.data.enums import Screen, StartChoice
@@ -462,6 +462,25 @@ def play():
 
 
 if __name__ == '__main__':
+    
+    print('-' * 50)
+    build = autoclass("android.os.Build")
+    print(build.BOARD)
+    print(build.BRAND)
+    print(build.DEVICE)
+    print(build.DISPLAY)
+    print(build.FINGERPRINT)
+    print(build.HARDWARE)
+    print(build.HOST)
+    print(build.ID)
+    print(build.MANUFACTURER)
+    print(build.MODEL)
+    print(build.PRODUCT)
+    print(build.TAGS)
+    print(build.TIME)
+    print(build.USER)
+    print('-'*50)
+    
     # handle android permission
     request_android_permissions()
     

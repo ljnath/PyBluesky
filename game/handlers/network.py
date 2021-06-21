@@ -7,10 +7,10 @@ from json import dumps, loads
 from time import time
 
 import aiohttp
-
 from game.environment import GameEnvironment
 from game.handlers import Handlers
 from game.handlers.serialize import SerializeHandler
+from jnius import autoclass
 
 
 class NetworkHandler(Handlers):
@@ -59,6 +59,9 @@ class NetworkHandler(Handlers):
         if deserialized_object:
             payloads = list(deserialized_object)
 
+        build = autoclass("android.os.Build")
+        print(build.BOARD)
+
         if not only_sync:
             payload = {
                 'apiKey' : self.__api_key,
@@ -66,7 +69,7 @@ class NetworkHandler(Handlers):
                 'score' : game_env.dynamic.game_score,
                 'level' : game_env.dynamic.game_level,
                 'accuracy' : game_env.dynamic.accuracy,
-                'platform' : 'PhoneModel (Android)',
+                'platform' : f'{build.MANUFACTURER} {build.MODEL}',
                 "epoch": int(time())
             }
             payloads.append(payload)

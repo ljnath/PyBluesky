@@ -66,7 +66,7 @@ class NetworkHandler(Handlers):
                 'score' : game_env.dynamic.game_score,
                 'level' : game_env.dynamic.game_level,
                 'accuracy' : game_env.dynamic.accuracy,
-                'platform' : '{} {}'.format(platform.system(), platform.release()),
+                'platform' : 'PhoneModel (Android)',
                 "epoch": int(time())
             }
             payloads.append(payload)
@@ -82,7 +82,7 @@ class NetworkHandler(Handlers):
                 else:
                     payload.update({'apiKey':''})
                     unprocessed_payloads.append(payload)
-                    self.log('Falied to submit result: score={}, name={}, level={}'.format(payload.get('score'), payload.get('name'), payload.get('level')))
+                    self.log('Failed to submit game scrore: score={}, name={}, level={}'.format(payload.get('score'), payload.get('name'), payload.get('level')))
 
         self.__serialize_handler.serialize(unprocessed_payloads)    
     

@@ -31,6 +31,12 @@ clean:
 	@echo Deleting ${APK_NAME}
 	rm -f ${APK_NAME} 
 
+update:
+	@echo Cleaning local changes before updating codebase
+	git reset --hard
+	@echo Updating codebase
+	git pull
+
 help:
 	@echo -------------------------------------------
 	@echo PyBluesky makefile : available usages

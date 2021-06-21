@@ -44,7 +44,6 @@ from pygame._sdl2 import touch
 
 from game.data.enums import Screen, StartChoice
 from game.environment import GameEnvironment
-from game.handlers import Handlers
 from game.handlers.leaderboard import LeaderBoardHandler
 from game.handlers.network import NetworkHandler
 from game.sprites.cloud import Cloud
@@ -92,7 +91,10 @@ def notify_user_of_update():
             pass
 
 def request_android_permissions():
-    request_permissions([
+    max_retry = 3
+    while max_retry > 0 or not check_permission('android.permission.WRITE_EXTERNAL_STORAGE'):
+        max_retry -= 1
+        request_permissions([
         Permission.WRITE_EXTERNAL_STORAGE
         ])
         
@@ -100,15 +102,8 @@ def request_android_permissions():
     print(f"{check_permission('android.permission.INTERNET')}")
     print(f"{check_permission('android.permission.WRITE_EXTERNAL_STORAGE')}")
     
-    if not check_permission('android.permission.WRITE_EXTERNAL_STORAGE'):
-        common_handlers = Handlers()
-        common_handlers.log('Required permission WRITE_EXTERNAL_STORAGE is missing. Exiting application')
-        sys.exit(1)
-    
     
 def play():
-    request_android_permissions()
-    
     pygame.mixer.init()                                                 # initializing same audio mixer with default settings
     pygame.init()                                                       # initializing pygame
     game_env = GameEnvironment()                                        # initializing game environment
@@ -250,7 +245,15 @@ def play():
             # checking for VIDEORESIZE event, this event is used to prevent auto-rotate in android device
             # if any change in the screensize is detected, then the orienatation is forcefully re-applied
             if event.type == pygame.VIDEORESIZE:
-                orientation.set_landscape(reverse=False)            
+                orientation.set_landscape(reverse=False)
+                
+            elif event.type == pygame.FINGERMOTION:
+                print(f'event = {event}')
+                if event.dx < 0:
+                    print('left swipe')
+                elif event.dy < 0:
+                    print('right swipe')
+                    
              
              
             # # stopping game when ESC key is pressed or when the game window is closed
@@ -269,7 +272,7 @@ def play():
             
             
             # all finger based interaction
-            if event.type == game_env.FINGERDOWN:                                                                   
+            elif event.type == game_env.FINGERDOWN:                                                                   
                 # handling all 1 finger-down events
                 if active_touch == 1:
                     
@@ -459,6 +462,9 @@ def play():
 
 
 if __name__ == '__main__':
+    # handle android permission
+    request_android_permissions()
+    
     # hide loading screen as the game has been loaded
     loadingscreen.hide_loading_screen()
     

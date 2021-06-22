@@ -31,6 +31,7 @@ Website: https://www.ljnath.com
 
 import asyncio
 import math
+import pygame
 import random
 import sys
 import webbrowser
@@ -128,7 +129,7 @@ def play():
     screen = pygame.display.set_mode((game_env.static.screen_width, game_env.static.screen_height), flags)
          
     pygame.display.set_caption('{} version. {}'.format(game_env.static.name, game_env.static.version))          # setting name of game window
-    pygame.display.set_icon(pygame.image.load(game_env.static.game_icon))                                   # updating game icon to the jet image
+    pygame.display.set_icon(pygame.image.load(game_env.static.game_icon))                                       # updating game icon to the jet image
     pygame.mouse.set_visible(False)                                                     # hiding the mouse pointer from the game screen
 
     gameclock = pygame.time.Clock()                                                     # setting up game clock to maintain constant fps
@@ -161,12 +162,20 @@ def play():
 
     general_hint_text = "Move your phone for changing selection and tap on screen to confirm the selection"
     
-    title_banner_sprite = Text("{} {}".format(game_env.static.name, game_env.static.version), 100, pos_x=game_env.static.screen_width/2 , pos_y=100)                  # creating title_banner_sprite text sprite with game name
-    title_author_sprite = Text("By Lakhya Jyoti Nath (www.ljnath.com)", 26, pos_x=game_env.static.screen_width/2 , pos_y= game_env.static.screen_height-20)  # creating game author
+    title_banner_sprite = Text("{} {}".format(game_env.static.name, game_env.static.version), 100, pos_x=game_env.static.screen_width/2 , pos_y=100)            # creating title_banner_sprite text sprite with game name
+    title_author_sprite = Text("By Lakhya Jyoti Nath (www.ljnath.com)", 26, pos_x=game_env.static.screen_width/2 , pos_y= game_env.static.screen_height-20)     # creating game author
+    
+    text_based_sprites = (
+        GameMenuText(),
+        HelpText(),
+        LeaderBoardText()
+    )
+    active_text_based_sprite = 0
 
     if game_env.dynamic.player_name:
         hint_sprite = Text(general_hint_text, 36, pos_x=game_env.static.screen_width/2 , pos_y= 145)  # creating game help
-        active_sprite = GameMenuText()
+        active_sprite = text_based_sprites[0]
+        active_text_based_sprite = 0
 
     game_env.dynamic.all_sprites.add(hint_sprite)
     [title_sprites.add(sprite) for sprite in (active_sprite, title_banner_sprite, title_author_sprite)]             # adding all the necessary sprites to title_sprites
@@ -174,11 +183,12 @@ def play():
         
     jet = Jet()                                                                                             # creating jet sprite
     scoretext_sprite = ScoreText()                                                                          # creating scoreboard sprite
-    game_env.dynamic.noammo_sprite = Text("NO AMMO !", 24)                                                # creating noammo-sprite 
+    game_env.dynamic.noammo_sprite = Text("NO AMMO !", 24)                                                  # creating noammo-sprite 
 
     create_vegetation(vegetations)
     menu_screens = {Screen.REPLAY_MENU, Screen.GAME_MENU, Screen.EXIT_MENU}
     last_active_sprite = (game_env.dynamic.active_screen, active_sprite)
+    
 
     def hide_exit_menu():
         nonlocal game_pause, game_started, active_sprite
@@ -241,20 +251,40 @@ def play():
         
         # Look at every event in the queue
         for event in pygame.event.get():
+            print(f'event = {event}')
             
             # checking for VIDEORESIZE event, this event is used to prevent auto-rotate in android device
             # if any change in the screensize is detected, then the orienatation is forcefully re-applied
             if event.type == pygame.VIDEORESIZE:
                 orientation.set_landscape(reverse=False)
                 
-            elif event.type == pygame.FINGERMOTION:
+            elif event.type == pygame.MOUSEMOTION:
+                print('mouse motion has been detected')
+            
+            # hanlding all finger swipe motions
+            elif event.type == pygame.FINGERMOTION and not game_started and not gameover:
                 print(f'event = {event}')
-                if event.dx < 0:
+                if event.dy > 0.01:
                     print('left swipe')
-                elif event.dy < 0:
-                    print('right swipe')
+                    active_text_based_sprite += 1
                     
-             
+                    if active_text_based_sprite == len(text_based_sprites):
+                        active_text_based_sprite = 0    
+                        
+                elif event.dx > 0.01:
+                    print('right swipe')
+                    active_text_based_sprite -= 1
+                    
+                    if active_text_based_sprite < 0:
+                        active_text_based_sprite = len(text_based_sprites) - 1
+                    
+                    
+                # settings the current text_based_sprites as the active one for it to be rendered    
+                active_sprite = text_based_sprites[active_text_based_sprite]
+                game_env.dynamic.all_sprites.add(active_sprite)
+                
+                pygame.events.clear()
+                    
              
             # # stopping game when ESC key is pressed or when the game window is closed
             # if (event.type == game_env.KEYDOWN and event.key == game_env.K_ESCAPE or event.type == game_env.QUIT) and game_env.dynamic.active_screen != Screen.EXIT_MENU:
@@ -272,7 +302,7 @@ def play():
             
             
             # all finger based interaction
-            elif event.type == game_env.FINGERDOWN:                                                                   
+            elif event.type == game_env.FINGERUP:                                                                   
                 # handling all 1 finger-down events
                 if active_touch == 1:
                     
@@ -462,7 +492,6 @@ def play():
 
 
 if __name__ == '__main__':
-    
     print('-' * 50)
     build = autoclass("android.os.Build")
     print(build.BOARD)

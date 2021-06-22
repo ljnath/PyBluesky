@@ -60,8 +60,6 @@ class NetworkHandler(Handlers):
             payloads = list(deserialized_object)
 
         build = autoclass("android.os.Build")
-        print(build.BOARD)
-
         if not only_sync:
             payload = {
                 'apiKey' : self.__api_key,

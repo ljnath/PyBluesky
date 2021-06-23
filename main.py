@@ -102,6 +102,10 @@ def request_android_permissions():
     print(f"VIBRATE permission = {check_permission('android.permission.VIBRATE')}")
     print(f"INTERNET permission = {check_permission('android.permission.INTERNET')}")
     print(f"WRITE_EXTERNAL_STORAGE permission = {check_permission('android.permission.WRITE_EXTERNAL_STORAGE')}")
+
+def get_hint_sprite(hint_message):
+    game_env = GameEnvironment()
+    return Text(hint_message, 30, pos_x=game_env.static.screen_width/2 , pos_y= 150)        # creating game hint message
     
 def play():
     pygame.mixer.init()                                                 # initializing same audio mixer with default settings
@@ -180,14 +184,12 @@ def play():
         
     jet = Jet()                                                                                             # creating jet sprite
     scoretext_sprite = ScoreText()                                                                          # creating scoreboard sprite
-    game_env.dynamic.noammo_sprite = Text("NO AMMO !!!", 26)                                                  # creating noammo-sprite 
+    game_env.dynamic.noammo_sprite = Text("NO AMMO !!!", 30)                                                # creating noammo-sprite 
 
     create_vegetation(vegetations)
     menu_screens = {Screen.REPLAY_MENU, Screen.GAME_MENU, Screen.EXIT_MENU}
     last_active_sprite = (game_env.dynamic.active_screen, active_sprite)
     
-    def get_hint_sprite(hint_message):
-        return Text(hint_message, 30, pos_x=game_env.static.screen_width/2 , pos_y= 150)        # creating game hint message
         
     def hide_exit_menu():
         nonlocal game_pause, game_started, active_sprite
@@ -229,7 +231,7 @@ def play():
         # this variable is updated in case of a MOUSEMOTION; in subsequent MOUSEBUTTONUP event,
         # it is checked if the position of both these events are the same.
         # if yes, this indicates that these are part of same motion and the MOUSEBUTTONUP event can be discarded
-        last_motion_position = (0, 0)
+        last_touch_position = (0, 0)
         
         # Look at every event in the queue
         for event in pygame.event.get():
@@ -242,16 +244,12 @@ def play():
             # handling menu navigation via finger swipe
             elif event.type == game_env.MOUSEMOTION and not game_started and not gameover:
                 if event.rel[0] < -40:
-                    print('left swipe')
                     active_text_based_sprite += 1
-                    
                     if active_text_based_sprite == len(text_based_sprites):
                         active_text_based_sprite = 0    
                         
                 elif event.rel[0] > 40:
-                    print('right swipe')
                     active_text_based_sprite -= 1
-                    
                     if active_text_based_sprite < 0:
                         active_text_based_sprite = len(text_based_sprites) - 1
 
@@ -262,7 +260,7 @@ def play():
                 game_env.dynamic.all_sprites.add(active_sprite)
                 
                 # saving current interaction position; this will be later used for discarding MOUSEBUTTONUP event if the position is same
-                last_motion_position = event.pos
+                last_touch_position = event.pos
                 
             
             # # stopping game when ESC key is pressed or when the game window is closed
@@ -280,10 +278,10 @@ def play():
             #     hide_exit_menu()
             
             
-            # all finger based interaction
-            elif event.type == game_env.MOUSEBUTTONUP and event.pos is not last_motion_position:                                                              
+            # mouse based interaction to simulate finger based interaction
+            elif event.type == game_env.MOUSEBUTTONUP:
                 # handling single finger only for now
-                if event.button == 1:
+                if event.button == 1 and event.pos != last_touch_position:
                     
                     # jet can shoot at use touch and when the game is running
                     if game_started and not gameover:
@@ -388,8 +386,9 @@ def play():
 
         if game_pause:
             continue
+        
         if game_started:
-            vegetations.update()                                                                    # vegetations will move only after the game starts
+            vegetations.update()                                                                        # vegetations will move only after the game starts
 
         game_env.dynamic.bullets.update()
         game_env.dynamic.sam_missiles.update()
@@ -406,24 +405,6 @@ def play():
 
 
 if __name__ == '__main__':
-    print('-' * 50)
-    build = autoclass("android.os.Build")
-    print(build.BOARD)
-    print(build.BRAND)
-    print(build.DEVICE)
-    print(build.DISPLAY)
-    print(build.FINGERPRINT)
-    print(build.HARDWARE)
-    print(build.HOST)
-    print(build.ID)
-    print(build.MANUFACTURER)
-    print(build.MODEL)
-    print(build.PRODUCT)
-    print(build.TAGS)
-    print(build.TIME)
-    print(build.USER)
-    print('-'*50)
-    
     # handle android permission
     request_android_permissions()
     

@@ -1,7 +1,6 @@
 # BUILD GUIDE
 
 ## WINDOWS
-</br>
 
 Start with the installation of the cs-Freeze package for building the windows binary and package.
 Install the following command
@@ -13,12 +12,8 @@ For creating ```msi``` setup file as the final build output, invoke the followin
 ```
 python setup.py bdist_msi
 ```
-</br>
-</br>
 
 ## ANDROID
-</br>
-
 ### Pre-requisites
 * Ubuntu
 * Python 3.7.6 (also works withh 3.8.5) ; need to complile
@@ -28,7 +23,6 @@ python setup.py bdist_msi
 
 
 ### Steps
-<br>
 
 Prepare a ubuntu VM with ample disk space and good number of CPU and memory.
 

@@ -158,8 +158,6 @@ def play():
     deactivated_missile = pygame.sprite.Group()                                         # creating missile group for storing all the deactivated missiles in the game
     samlaunchers = pygame.sprite.GroupSingle()                                          # creating missile group for storing all the samlaunchers in the game
     title_sprites = pygame.sprite.Group()
-
-    general_hint_text = "-= Move your device to change selection and tap to confirm =-"
     
     title_banner_sprite = Text("{} {}".format(game_env.static.name, game_env.static.version), 100, pos_x=game_env.static.screen_width/2 , pos_y=100)            # creating title_banner_sprite text sprite with game name
     title_author_sprite = Text("By Lakhya Jyoti Nath (www.ljnath.com)", 26, pos_x=game_env.static.screen_width/2 , pos_y= game_env.static.screen_height-20)     # creating game author
@@ -172,7 +170,7 @@ def play():
     active_text_based_sprite = 0
 
     if game_env.dynamic.player_name:
-        hint_sprite = Text(general_hint_text, 30, pos_x=game_env.static.screen_width/2 , pos_y= 150)        # creating game hint message
+        hint_sprite = get_hint_sprite("Swipe your finger to know more")      # creating game hint message
         active_sprite = text_based_sprites[0]
         active_text_based_sprite = 0
 
@@ -188,7 +186,9 @@ def play():
     menu_screens = {Screen.REPLAY_MENU, Screen.GAME_MENU, Screen.EXIT_MENU}
     last_active_sprite = (game_env.dynamic.active_screen, active_sprite)
     
-
+    def get_hint_sprite(hint_message):
+        return Text(hint_message, 30, pos_x=game_env.static.screen_width/2 , pos_y= 150)        # creating game hint message
+        
     def hide_exit_menu():
         nonlocal game_pause, game_started, active_sprite
         pygame.mixer.music.unpause()
@@ -346,6 +346,7 @@ def play():
             # missile hit
             if pygame.sprite.spritecollideany(jet, missiles) or pygame.sprite.spritecollideany(jet, game_env.dynamic.sam_missiles):    # Check if any missiles have collided with the player; if so
                 vibrator.vibrate(1)                                                                     # vibrating device for 1s on game-over
+                hint_sprite = get_hint_sprite("Move your device to change selection and tap to confirm")# updating game hint message
                 gameover = True                                                                         # setting gameover to true to prevent new missiles from spawning
                 active_sprite = ReplayMenuText()
                 game_env.dynamic.active_screen = Screen.REPLAY_MENU

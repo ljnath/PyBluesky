@@ -246,10 +246,6 @@ def play():
             if event.type == game_env.VIDEORESIZE:
                 orientation.set_landscape(reverse=False)
                 
-            # resetting user_has_swipped flag, allowing user to swipe again
-            elif event.type == RESET_SWIPE:
-                user_has_swipped = False
-                
             # handling menu navigation via finger swipe
             elif event.type == game_env.MOUSEMOTION and not game_started and not gameover:
                 # saving current interaction position; this will be later used for discarding MOUSEBUTTONUP event if the position is same
@@ -258,16 +254,13 @@ def play():
                 if user_has_swipped:
                     continue
                 
-                print(f'mouse motion event = {event}')
                 if event.rel[0] < -40:
-                    print("left")
                     user_has_swipped = True
                     selected_menu_index += 1
                     if selected_menu_index == len(swipe_navigated_menus):
                         selected_menu_index = 0    
                         
                 elif event.rel[0] > 40:
-                    print("right")
                     user_has_swipped = True
                     selected_menu_index -= 1
                     if selected_menu_index < 0:
@@ -281,21 +274,16 @@ def play():
                 active_sprite = swipe_navigated_menus[game_env.dynamic.active_screen]
                 
                 game_env.dynamic.all_sprites.add(active_sprite)
-                
-            # # stopping game when ESC key is pressed or when the game window is closed
-            # if (event.type == game_env.KEYDOWN and event.key == game_env.K_ESCAPE or event.type == game_env.QUIT) and game_env.dynamic.active_screen != Screen.EXIT_MENU:
-            #     pygame.mixer.music.pause()
-            #     last_active_sprite = (game_env.dynamic.active_screen, active_sprite)
-            #     game_started, game_pause = game_pause, game_started
-            #     [game_env.dynamic.all_sprites.remove(sprite) for sprite in (active_sprite, hint_sprite)]
-            #     active_sprite = ExitMenuText(game_env)
-            #     game_env.dynamic.all_sprites.add(active_sprite)
-            #     game_env.dynamic.active_screen = Screen.EXIT_MENU
             
-            # # showing the exit menu when [ESC] key is pressed
-            # elif game_env.dynamic.active_screen == Screen.EXIT_MENU and (event.type == game_env.KEYDOWN and event.key == game_env.K_ESCAPE):
-            #     hide_exit_menu()
-            
+            # showing PAUSE message when back button is pressed on android device
+            elif event.type == game_env.KEYDOWN and event.key == 1073742094 and game_env.dynamic.active_screen != Screen.EXIT_MENU:
+                pygame.mixer.music.pause()
+                last_active_sprite = (game_env.dynamic.active_screen, active_sprite)
+                game_started, game_pause = game_pause, game_started
+                [game_env.dynamic.all_sprites.remove(sprite) for sprite in (active_sprite, hint_sprite)]
+                active_sprite = ExitMenuText()
+                game_env.dynamic.all_sprites.add(active_sprite)
+                game_env.dynamic.active_screen = Screen.EXIT_MENU
             
             # mouse based interaction to simulate finger based interaction
             elif event.type == game_env.MOUSEBUTTONUP:
@@ -325,6 +313,10 @@ def play():
                     samlaunchers.add(samlauncher)
                     game_env.dynamic.all_sprites.add(samlauncher)
  
+            # resetting user_has_swipped flag, allowing user to swipe again
+            if event.type == RESET_SWIPE:
+                user_has_swipped = False
+                
             # adding of clouds, backgroud, vegetation and power-up star is handled inside this
             if event.type == ADD_CLOUD:
                 if game_pause:

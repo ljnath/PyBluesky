@@ -10,7 +10,8 @@ from pygame.locals import (
     QUIT, 
     RLEACCEL, 
     SRCALPHA,
-    VIDEORESIZE
+    VIDEORESIZE,
+    KEYDOWN
     )
 
 from game.common.singleton import Singleton
@@ -88,3 +89,7 @@ class GameEnvironment(metaclass=Singleton):
     @property
     def VIDEORESIZE(self):
         return VIDEORESIZE
+
+    @property
+    def KEYDOWN(self):
+        return KEYDOWN

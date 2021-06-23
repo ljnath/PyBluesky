@@ -8,7 +8,7 @@ class HelpText(Text):
         It creates the game help sprite
     """
     def __init__(self):
-        Text.__init__(self, size=20)
+        Text.__init__(self, size=22)
         game_env = GameEnvironment()
         seperator = self.font.render(' ', 1, self.color)
         header = self.font.render('=== HELP ===', 1, self.color)

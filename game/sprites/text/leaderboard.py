@@ -11,7 +11,7 @@ class LeaderBoardText(Text):
         It creates the the leaderboard table sprite
     """
     def __init__(self):
-        Text.__init__(self, size=20)
+        Text.__init__(self, size=22)
         game_env = GameEnvironment()
         name_length = game_env.static.name_length * 2
         leaders = LeaderBoardHandler().load()

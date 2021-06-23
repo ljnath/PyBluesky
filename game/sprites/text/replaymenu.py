@@ -8,7 +8,7 @@ class ReplayMenuText(Text):
         It creates the game replay menu sprite
     """
     def __init__(self):
-        Text.__init__(self, size=34)                                                                  # initilizing parent class with default text color as red
+        Text.__init__(self, size=30)                                                                  # initilizing parent class with default text color as red
         game_env = GameEnvironment()
         self.__gameover = Text("GAME OVER", 60)
 

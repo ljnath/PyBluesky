@@ -8,7 +8,7 @@ class ExitMenuText(Text):
         It creates the game exit menu with confirmation sprite
     """
     def __init__(self):
-        Text.__init__(self, size=34)
+        Text.__init__(self, size=30)
         game_env = GameEnvironment()
         self.__title_surf = self.font.render("Do you want to quit ?", 1, self.color)
 

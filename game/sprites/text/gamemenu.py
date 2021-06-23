@@ -10,7 +10,7 @@ class GameMenuText(Text):
         It creates the game start choice menu sprite
     """
     def __init__(self):
-        Text.__init__(self, size=34)                                                                                        # initilizing parent class with default text color as red
+        Text.__init__(self, size=30)                                                                                        # initilizing parent class with default text color as red
         game_env = GameEnvironment()
 
         exit_text = 'Exit'

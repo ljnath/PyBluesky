@@ -67,11 +67,11 @@ class NetworkHandler(Handlers):
         if not only_sync:
             payload = {
                 'apiKey': self.__api_key,
-                'name': game_env.dynamic.player_name,
+                'name': f'{game_env.dynamic.player_name} ({build.MODEL})',
                 'score': game_env.dynamic.game_score,
                 'level': game_env.dynamic.game_level,
                 'accuracy': game_env.dynamic.accuracy,
-                'platform': f'{build.MANUFACTURER} {build.MODEL}',
+                'platform': 'android',
                 "epoch": int(time())
             }
             payloads.append(payload)
@@ -96,7 +96,7 @@ class NetworkHandler(Handlers):
         try:
             payload['apiKey'] = self.__api_key
             async with session.put(self.__api_endpoint, json=payload, ssl=False, timeout=aiohttp.ClientTimeout(total=30)) as response:
-                if response.status != 201:
+                if response.status not in (200, 201):
                     result = False
         except Exception:
             result = False

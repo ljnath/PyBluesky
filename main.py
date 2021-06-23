@@ -166,17 +166,17 @@ def play():
     title_banner_sprite = Text("{} {}".format(game_env.static.name, game_env.static.version), 100, pos_x=game_env.static.screen_width/2 , pos_y=100)            # creating title_banner_sprite text sprite with game name
     title_author_sprite = Text("By Lakhya Jyoti Nath (www.ljnath.com)", 26, pos_x=game_env.static.screen_width/2 , pos_y= game_env.static.screen_height-20)     # creating game author
     
-    text_based_sprites = (
-        GameMenuText(),
-        HelpText(),
-        LeaderBoardText()
-    )
-    active_text_based_sprite = 0
+    swipe_navigated_menus = {
+        Screen.GAME_MENU: GameMenuText(),
+        Screen.HELP: HelpText(),
+        Screen.LEADERBOARD : LeaderBoardText()
+    }
+    selected_menu_index = 0
 
     if game_env.dynamic.player_name:
         hint_sprite = get_hint_sprite("Swipe your finger to know more")      # creating game hint message
-        active_sprite = text_based_sprites[0]
-        active_text_based_sprite = 0
+        active_sprite = swipe_navigated_menus[Screen.GAME_MENU]
+        selected_menu_index = 0
 
     game_env.dynamic.all_sprites.add(hint_sprite)
     [title_sprites.add(sprite) for sprite in (active_sprite, title_banner_sprite, title_author_sprite)]     # adding all the necessary sprites to title_sprites
@@ -243,20 +243,24 @@ def play():
                 
             # handling menu navigation via finger swipe
             elif event.type == game_env.MOUSEMOTION and not game_started and not gameover:
+                print(f'mouse motion event = {event}')
                 if event.rel[0] < -40:
-                    active_text_based_sprite += 1
-                    if active_text_based_sprite == len(text_based_sprites):
-                        active_text_based_sprite = 0    
+                    selected_menu_index += 1
+                    if selected_menu_index == len(swipe_navigated_menus):
+                        selected_menu_index = 0    
                         
                 elif event.rel[0] > 40:
-                    active_text_based_sprite -= 1
-                    if active_text_based_sprite < 0:
-                        active_text_based_sprite = len(text_based_sprites) - 1
+                    selected_menu_index -= 1
+                    if selected_menu_index < 0:
+                        selected_menu_index = len(swipe_navigated_menus) - 1
 
-                # settings the current text_based_sprites as the active one for it to be rendered
+                # settings the current swipe_navigated_menus as the active one for it to be rendered
                 # and refreshing the active_sprite in game_env.dynamic.all_sprites for re-rendering
                 game_env.dynamic.all_sprites.remove(active_sprite)
-                active_sprite = text_based_sprites[active_text_based_sprite]
+                
+                game_env.dynamic.active_screen = list(swipe_navigated_menus.keys())[selected_menu_index]
+                active_sprite = swipe_navigated_menus[game_env.dynamic.active_screen]
+                
                 game_env.dynamic.all_sprites.add(active_sprite)
                 
                 # saving current interaction position; this will be later used for discarding MOUSEBUTTONUP event if the position is same

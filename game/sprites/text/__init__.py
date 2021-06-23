@@ -17,19 +17,19 @@ class Text(Sprite):
         self.rect = self.surf.get_rect(center=(pos_x, pos_y))                                   # creating rectangle from the surface
         self.__move_forward = True
         self.__move_up = True
-    
+
     def render(self, text):
         self.surf = self.font.render(text, 2, self.color)                                   # dynamically updating the surface with updated text
 
     def moveOnXaxis(self, speed):
         """ Method to move the text across the X axis
         """
-        if not self.__move_forward and self.rect.x <= 0:                                    # detecting if the sprite should move forward or backward 
+        if not self.__move_forward and self.rect.x <= 0:                                    # detecting if the sprite should move forward or backward
             self.__move_forward = True
         elif self.__move_forward and self.rect.x + self.rect.width >= self.__game_env.static.screen_width:
             self.__move_forward = False
-        self.rect.x += speed if self.__move_forward else (speed*-1)
-    
+        self.rect.x += speed if self.__move_forward else (speed * -1)
+
     def moveOnYaxis(self, speed):
         """ Method to move the text across the Y axis
         """
@@ -37,4 +37,4 @@ class Text(Sprite):
             self.__move_up = True
         elif self.__move_up and self.rect.y + self.rect.height >= self.__game_env.static.screen_height:
             self.__move_up = False
-        self.rect.y += speed if self.__move_up else (speed*-1)
+        self.rect.y += speed if self.__move_up else (speed * -1)

@@ -1,5 +1,3 @@
-import random
-
 from game.environment import GameEnvironment
 from pygame import image, sprite
 
@@ -11,13 +9,13 @@ class Star(sprite.Sprite):
     def __init__(self):
         super(Star, self).__init__()
         game_env = GameEnvironment()
-        self.surf = image.load(game_env.static.powerup_image).convert()   
+        self.surf = image.load(game_env.static.powerup_image).convert()
         self.surf.set_colorkey((255, 255, 255), game_env.RLEACCEL)
-        self.rect = self.surf.get_rect(center=game_env.get_random_point_on_top())        # powerup stars are created on top of screen 
+        self.rect = self.surf.get_rect(center=game_env.get_random_point_on_top())               # powerup stars are created on top of screen
         self.__current_alpha = 255
         self.__transperant = False
         flash_rate = 6                                                                          # setting the blink rate of the star
-        self.__alpha_delta = int(255/flash_rate)                                                # calculating the alpha delta based on the blink rate
+        self.__alpha_delta = int(255 / flash_rate)                                              # calculating the alpha delta based on the blink rate
 
     def update(self):
         game_env = GameEnvironment()
@@ -26,5 +24,5 @@ class Star(sprite.Sprite):
             self.__transperant = ~self.__transperant                                            # flicking effect on the star
         self.__current_alpha += self.__alpha_delta if self.__transperant else -self.__alpha_delta
         self.surf.set_alpha(self.__current_alpha)
-        if self.rect.bottom > game_env.static.screen_height:                          # star is killed if it crosses the screens
+        if self.rect.bottom > game_env.static.screen_height:                                    # star is killed if it crosses the screens
             self.kill()

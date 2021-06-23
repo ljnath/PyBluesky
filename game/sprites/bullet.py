@@ -13,9 +13,9 @@ class Bullet(sprite.Sprite):
         self.__x = x_pos
         self.__y = y_pos
         self.__speed = 8
-        self.surf = image.load(game_env.static.bullet_image).convert()       # loading bullet image from file
-        self.surf.set_colorkey((255,255,255), game_env.RLEACCEL)             # setting the white color as the transperant area; RLEACCEL is used for better performance on non accelerated displays
-        self.rect = self.surf.get_rect(center=(self.__x, self.__y))                 # setting the position of the bullet as the input (souce_x, y_pos)
+        self.surf = image.load(game_env.static.bullet_image).convert()          # loading bullet image from file
+        self.surf.set_colorkey((255, 255, 255), game_env.RLEACCEL)              # setting the white color as the transperant area; RLEACCEL is used for better performance on non accelerated displays
+        self.rect = self.surf.get_rect(center=(self.__x, self.__y))             # setting the position of the bullet as the input (souce_x, y_pos)
 
     def update(self):
         game_env = GameEnvironment()

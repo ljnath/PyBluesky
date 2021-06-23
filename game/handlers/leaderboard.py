@@ -1,6 +1,3 @@
-import os
-import pickle
-
 from game.environment import GameEnvironment
 from game.handlers import Handlers
 from game.handlers.network import NetworkHandler
@@ -28,11 +25,11 @@ class LeaderBoardHandler(Handlers):
         try:
             if leaders is None:
                 return
-            
+
             self.__serialize_handler.serialize(leaders)
         except Exception:
             self.log('Failed to save leaders to file {}'.format(self.__game_env.static.leaders_file))
-    
+
     async def update(self, api_key):
         network_handler = NetworkHandler(api_key)
         self.save(await network_handler.get_leaders())

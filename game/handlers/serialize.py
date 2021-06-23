@@ -17,7 +17,6 @@ class SerializeHandler(Handlers):
                 pickle.dump(object, file_writter)
         except Exception:
             self.log('Failed to serialize object to file {}'.format(self.__file))
-    
 
     def deserialize(self):
         serialized_object = None

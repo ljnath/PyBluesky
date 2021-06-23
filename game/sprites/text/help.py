@@ -7,7 +7,7 @@ class HelpText(Text):
     """ HelpText class extended from Text class.
         It creates the game help sprite
     """
-    def __init__(self): 
+    def __init__(self):
         Text.__init__(self, size=20)
         game_env = GameEnvironment()
         seperator = self.font.render(' ', 1, self.color)
@@ -30,9 +30,9 @@ class HelpText(Text):
 
         self.surf = Surface((all_surfaces[1].get_width(), all_surfaces[0].get_height() * (len(all_surfaces) + 2)), game_env.SRCALPHA)
 
-        self.surf.blit(header, (self.surf.get_width()/2 - header.get_width()/2, 0))
+        self.surf.blit(header, (self.surf.get_width() / 2 - header.get_width() / 2, 0))
         for index, temp_surf in enumerate(all_surfaces):
             self.surf.blit(temp_surf, (0, header.get_height() + index * temp_surf.get_height()))
-        self.surf.blit(footer, (self.surf.get_width()/2 - footer.get_width()/2, self.surf.get_height() - footer.get_height()))
+        self.surf.blit(footer, (self.surf.get_width() / 2 - footer.get_width() / 2, self.surf.get_height() - footer.get_height()))
 
-        self.rect = self.surf.get_rect(center=(game_env.static.screen_width/2, game_env.static.screen_height/2))
+        self.rect = self.surf.get_rect(center=(game_env.static.screen_width / 2, game_env.static.screen_height / 2))

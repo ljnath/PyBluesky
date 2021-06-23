@@ -2,6 +2,7 @@
 Class responsible for acting as metaclass for generation of singleton classes
 """
 
+
 class Singleton(type):
     """
     Class responsible for acting as metaclass for generation of singleton classes

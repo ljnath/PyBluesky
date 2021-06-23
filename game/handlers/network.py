@@ -1,9 +1,5 @@
 import asyncio
-import os
-import pickle
-import platform
-from datetime import datetime
-from json import dumps, loads
+from json import loads
 from time import time
 
 import aiohttp
@@ -34,7 +30,7 @@ class NetworkHandler(Handlers):
                         game_env.dynamic.update_available = True
                         game_env.dynamic.update_url = json_response['url']
                         self.log('New game version {} detected'.format(json_response['version']))
-        except:
+        except Exception:
             self.log('Failed to check for game update')
         await self.submit_result(only_sync=True)
 
@@ -47,12 +43,12 @@ class NetworkHandler(Handlers):
                     if response.status != 200:
                         raise Exception()
                     leaders = loads(await response.text())
-        except:
+        except Exception:
             self.log('Failed to get game leaders from remote server')
         finally:
             return leaders
-        
-    async def submit_result(self, only_sync = False):
+
+    async def submit_result(self, only_sync=False):
         payloads = []
         game_env = GameEnvironment()
         deserialized_object = self.__serialize_handler.deserialize()
@@ -62,17 +58,17 @@ class NetworkHandler(Handlers):
         build = autoclass("android.os.Build")
         if not only_sync:
             payload = {
-                'apiKey' : self.__api_key,
-                'name' : game_env.dynamic.player_name,
-                'score' : game_env.dynamic.game_score,
-                'level' : game_env.dynamic.game_level,
-                'accuracy' : game_env.dynamic.accuracy,
-                'platform' : f'{build.MANUFACTURER} {build.MODEL}',
+                'apiKey': self.__api_key,
+                'name': game_env.dynamic.player_name,
+                'score': game_env.dynamic.game_score,
+                'level': game_env.dynamic.game_level,
+                'accuracy': game_env.dynamic.accuracy,
+                'platform': f'{build.MANUFACTURER} {build.MODEL}',
                 "epoch": int(time())
             }
             payloads.append(payload)
 
-        unprocessed_payloads = []       
+        unprocessed_payloads = []
         async with aiohttp.ClientSession() as session:
             put_tasks = [asyncio.ensure_future(self.__post_results(session, payload)) for payload in payloads]
             await asyncio.gather(*put_tasks, return_exceptions=False)
@@ -81,12 +77,12 @@ class NetworkHandler(Handlers):
                 if task._result:
                     self.log('Successfully submitted result: score={}, name={}, level={}'.format(payload.get('score'), payload.get('name'), payload.get('level')))
                 else:
-                    payload.update({'apiKey':''})
+                    payload.update({'apiKey': ''})
                     unprocessed_payloads.append(payload)
                     self.log('Failed to submit game scrore: score={}, name={}, level={}'.format(payload.get('score'), payload.get('name'), payload.get('level')))
 
-        self.__serialize_handler.serialize(unprocessed_payloads)    
-    
+        self.__serialize_handler.serialize(unprocessed_payloads)
+
     async def __post_results(self, session, payload):
         result = True
         try:
@@ -94,7 +90,7 @@ class NetworkHandler(Handlers):
             async with session.put(self.__api_endpoint, json=payload, ssl=False, timeout=aiohttp.ClientTimeout(total=30)) as response:
                 if response.status != 201:
                     result = False
-        except:
+        except Exception:
             result = False
         finally:
             return result

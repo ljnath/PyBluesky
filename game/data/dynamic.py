@@ -13,7 +13,7 @@ class DynamicData():
     """ Class which holds all the game variables
     """
     def __init__(self):
-        self.__static= StaticData()
+        self.__static = StaticData()
         self.__collision_sound = Sound(self.__static.game_sound.get('collision'))
         self.__levelup_sound = Sound(self.__static.game_sound.get('levelup'))
         self.__shoot_sound = Sound(self.__static.game_sound.get('shoot'))
@@ -30,13 +30,13 @@ class DynamicData():
         self.__exit = False
         self.__update_url = None
         self.__player_name = 'player1'
-    
+
         # loading the player name from file, name can be max 20 character long
         if os.path.exists(self.__static.player_file):
             with open(self.__static.player_file) as file_reader:
-                name = file_reader.read().strip()[:self.__static.name_length]
-                self.__player_name = name if name and re.match(r'[a-zA-Z0-9@. ]',name) else ''
-        
+                name = file_reader.read().strip()[: self.__static.name_length]
+                self.__player_name = name if name and re.match(r'[a-zA-Z0-9@. ]', name) else ''
+
         self.__active_screen = Screen.NAME_INPUT if not self.__player_name else Screen.GAME_MENU
         self.load_defaults()
 
@@ -72,7 +72,7 @@ class DynamicData():
     @property
     def samfire_sound(self):
         return self.__samfire_sound
-        
+
     @property
     def game_start_choice(self):
         return self.__game_start_choice
@@ -107,16 +107,16 @@ class DynamicData():
 
     @property
     def ammo(self):
-       return self.__ammo
-    
+        return self.__ammo
+
     @ammo.setter
     def ammo(self, value):
         self.__ammo = value if value <= self.__static.max_ammo else self.__static.max_ammo
 
     @property
     def noammo_sprite(self):
-       return self.__noammo_sprite
-    
+        return self.__noammo_sprite
+
     @noammo_sprite.setter
     def noammo_sprite(self, value):
         self.__noammo_sprite = value
@@ -187,7 +187,7 @@ class DynamicData():
         # saving the player name to file for future reference
         with open(self.__static.player_file, 'w') as file_writter:
             file_writter.write(self.__player_name)
-            
+
     @property
     def bullets_fired(self):
         return self.__bullet_fired
@@ -206,7 +206,7 @@ class DynamicData():
 
     @property
     def accuracy(self):
-        return 0 if self.bullets_fired == 0 else round(self.missiles_destroyed / self.bullets_fired *100, 3)
+        return 0 if self.bullets_fired == 0 else round(self.missiles_destroyed / self.bullets_fired * 100, 3)
 
     @property
     def update_url(self):

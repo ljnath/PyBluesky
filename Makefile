@@ -15,6 +15,8 @@ compile:
 	@echo Compiling project
 	${PYTHON} setup.py apk
 
+reinstall: uninstall install
+
 uninstall:
 	@echo Un-installing app with package name ${PACKAGE_NAME} from target device
 	${ADB} uninstall ${PACKAGE_NAME}
@@ -26,6 +28,8 @@ install:
 start:
 	@echo Starting ${APK_NAME} in target device
 	${ADB} shell am start -n ${PACKAGE_NAME}/${ACTIVITY_NAME}
+
+reset: clean update
 
 clean:
 	@echo Deleting ${APK_NAME}

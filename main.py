@@ -301,6 +301,19 @@ def play():
                     # exit the game when user has selected 'Exit' in GAME_MENU or 'No' in REPLAY_MENT
                     elif game_env.dynamic.active_screen == Screen.GAME_MENU and game_env.dynamic.game_start_choice == StartChoice.EXIT or (game_env.dynamic.active_screen == Screen.REPLAY_MENU and not game_env.dynamic.replay):
                         running = False
+                    
+                    # resume or exit game based on user interaction with the EXIT-MENU        
+                    elif game_env.dyanmic.active_screen == Screen.EXIT_MENU:
+                        if game_env.dynamic.exit:
+                            running = False
+                        elif not game_env.dynamic.exit:
+                            pygame.mixer.music.unpause()
+                            game_started, game_pause = game_pause, game_started
+                            game_env.dynamic.all_sprites.remove(active_sprite)
+                            game_env.dynamic.active_screen, active_sprite = last_active_sprite
+                            if game_env.dynamic.active_screen != Screen.GAME_SCREEN:
+                                [game_env.dynamic.all_sprites.add(sprite) for sprite in (active_sprite, hint_sprite)]
+                                
                 
             # add missile and sam-launcher
             elif game_started and not gameover:

@@ -8,7 +8,7 @@ class ReplayMenuText(Text):
         It creates the game replay menu sprite
     """
     def __init__(self): 
-        Text.__init__(self, size=38)                                                                  # initilizing parent class with default text color as red
+        Text.__init__(self, size=34)                                                                  # initilizing parent class with default text color as red
         game_env = GameEnvironment()
         self.__gameover = Text("GAME OVER", 60)
 
@@ -41,7 +41,7 @@ class ReplayMenuText(Text):
             self.__highlight_no()                                                                               # calling method to highlight Nos
         elif y_axis < -3:                                                                                       # checking if android device is tiled RIGHT
             game_env.dynamic.replay = True                                                                      # setting game replay choice as True
-            self.__highlight_yes()                                                                              # calling method to highlight Ye
+            self.__highlight_yes()                                                                              # calling method to highlight Yes
             
         self.rect = self.surf.get_rect(center=(game_env.static.screen_width/2, game_env.static.screen_height/2 + 10))   # creating default rect and setting its position center below the GAME OVER text
 

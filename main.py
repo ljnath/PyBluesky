@@ -281,7 +281,7 @@ def play():
             
             
             # all finger based interaction
-            elif event.type == game_env.MOUSEBUTTONUP and event.pos is not last_active_sprite:                                                              
+            elif event.type == game_env.MOUSEBUTTONUP and event.pos is not last_motion_position:                                                              
                 # handling single finger only for now
                 if event.button == 1:
                     

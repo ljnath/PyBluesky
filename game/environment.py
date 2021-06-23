@@ -3,13 +3,14 @@ import random
 
 from pygame import image
 from pygame.locals import (
-    FINGERDOWN, 
-    FINGERMOTION, 
-    FINGERUP, 
+    MOUSEMOTION,
+    MOUSEBUTTONDOWN,
+    MOUSEBUTTONUP, 
     FULLSCREEN,
     QUIT, 
     RLEACCEL, 
-    SRCALPHA
+    SRCALPHA,
+    VIDEORESIZE
     )
 
 from game.common.singleton import Singleton
@@ -73,13 +74,17 @@ class GameEnvironment(metaclass=Singleton):
         return QUIT
 
     @property
-    def FINGERUP(self):
-        return FINGERUP
+    def MOUSEBUTTONUP(self):
+        return MOUSEBUTTONUP
     
     @property
-    def FINGERDOWN(self):
-        return FINGERDOWN
+    def MOUSEBUTTONDOWN(self):
+        return MOUSEBUTTONDOWN
     
     @property
-    def FINGERMOTION(self):
-        return FINGERMOTION
+    def MOUSEMOTION(self):
+        return MOUSEMOTION
+    
+    @property
+    def VIDEORESIZE(self):
+        return VIDEORESIZE

@@ -217,37 +217,20 @@ def play():
         gameover = False                                                                                # game is not over yet
         star_shown = False                                                                              # no star is displayed
         
-    def get_touch_id():
-        """ Get touch ID of valid touch input
-        """
-        touch_device_count = touch.get_num_devices()
-        # check for touch-id for all touch devices, looping from high to low; becuase the higher one usually works
-        for i in range(touch_device_count - 1, -1, -1):
-            touch_id = touch.get_device(i)
-            if touch_id > 0:
-                return touch_id
-    
-    touch_id = get_touch_id()
-    if not touch_id:
-        print('Cannot initilize game as no valid touch input is detected')
-    
     # enabling acclerometer sensor to get accleration sensor data
     accelerometer.enable()
         
     # Main game loop
     while running:
-        active_touch = 0
-        
-        try:
-            # TODO: take care of 'pygame.error: Surface doesn't have a colorkey' without this try-except
-            # getting the number of active touched by fingers on the touch device
-            active_touch = touch.get_num_fingers(touch_id)
-        except:
-            pass
         
         # getting the accleration sensor data from accelerometer
         # acceleration_sensor_values is a tuple of (x, y, z) sensor data
         acceleration_sensor_values = accelerometer.acceleration
+        
+        # this variable is updated in case of a MOUSEMOTION; in subsequent MOUSEBUTTONUP event,
+        # it is checked if the position of both these events are the same.
+        # if yes, this indicates that these are part of same motion and the MOUSEBUTTONUP event can be discarded
+        last_motion_position = (0, 0)
         
         # Look at every event in the queue
         for event in pygame.event.get():
@@ -255,37 +238,36 @@ def play():
             
             # checking for VIDEORESIZE event, this event is used to prevent auto-rotate in android device
             # if any change in the screensize is detected, then the orienatation is forcefully re-applied
-            if event.type == pygame.VIDEORESIZE:
+            if event.type == game_env.VIDEORESIZE:
                 orientation.set_landscape(reverse=False)
                 
-            elif event.type == pygame.MOUSEMOTION:
-                print('mouse motion has been detected')
-            
-            # hanlding all finger swipe motions
-            elif event.type == pygame.FINGERMOTION and not game_started and not gameover:
+            # handling menu navigation via finger swipe
+            elif event.type == game_env.MOUSEMOTION and not game_started and not gameover:
                 print(f'event = {event}')
-                if event.dy > 0.01:
+                if event.rel[0] < -40:
                     print('left swipe')
                     active_text_based_sprite += 1
                     
                     if active_text_based_sprite == len(text_based_sprites):
                         active_text_based_sprite = 0    
                         
-                elif event.dx > 0.01:
+                elif event.rel[0] > 40:
                     print('right swipe')
                     active_text_based_sprite -= 1
                     
                     if active_text_based_sprite < 0:
                         active_text_based_sprite = len(text_based_sprites) - 1
-                    
-                    
-                # settings the current text_based_sprites as the active one for it to be rendered    
+
+                # settings the current text_based_sprites as the active one for it to be rendered
+                # and refreshing the active_sprite in game_env.dynamic.all_sprites for re-rendering
+                game_env.dynamic.all_sprites.remove(active_sprite)
                 active_sprite = text_based_sprites[active_text_based_sprite]
                 game_env.dynamic.all_sprites.add(active_sprite)
                 
-                pygame.events.clear()
-                    
-             
+                # saving current interaction position; this will be later used for discarding MOUSEBUTTONUP event if the position is same
+                last_motion_position = event.pos
+                
+            
             # # stopping game when ESC key is pressed or when the game window is closed
             # if (event.type == game_env.KEYDOWN and event.key == game_env.K_ESCAPE or event.type == game_env.QUIT) and game_env.dynamic.active_screen != Screen.EXIT_MENU:
             #     pygame.mixer.music.pause()
@@ -302,9 +284,9 @@ def play():
             
             
             # all finger based interaction
-            elif event.type == game_env.FINGERUP:                                                                   
-                # handling all 1 finger-down events
-                if active_touch == 1:
+            elif event.type == game_env.MOUSEBUTTONUP and event.pos is not last_active_sprite:                                                              
+                # handling single finger only for now
+                if event.button == 1:
                     
                     # jet can shoot at use touch and when the game is running
                     if game_started and not gameover:
@@ -321,27 +303,14 @@ def play():
             # add missile and sam-launcher
             elif game_started and not gameover:
                 if event.type == ADD_MISSILE:                                                                       # is event to add missile is triggered; missles are not added during gameover
-                    new_missile = Missile()                                                                 # create a new missile
+                    new_missile = Missile()                                                                         # create a new missile
                     missiles.add(new_missile)                                                                       # adding the missile to missle group
                     game_env.dynamic.all_sprites.add(new_missile)                                                   # adding the missile to all_sprites group as well
                 if event.type == ADD_SAM_LAUNCHER and not samlaunchers.sprites() and game_env.dynamic.game_level > 5:
                     samlauncher = SamLauncher()
                     samlaunchers.add(samlauncher)
                     game_env.dynamic.all_sprites.add(samlauncher)
-                        
-                        
-                    # elif game_env.dynamic.active_screen == Screen.REPLAY_MENU:                                      # selecting reply option in replaymenu screen
-                    #     if game_env.dynamic.replay:
-                    #         start_gameplay()                                                                        # starting game on replay
-                    #     else:
-                    #         running = False                                                                         # stopping game as user as opted not to replay
-                    # elif game_env.dynamic.active_screen == Screen.EXIT_MENU:
-                    #     if not game_env.dynamic.exit:
-                    #         hide_exit_menu()                                                                        # hide exitmenu if user opts to no exit the game
-                    #     else:
-                    #         running = False
-                
-            
+                    
             # # all keyboard key interaction
             # elif event.type == game_env.KEYDOWN:                                                                    # handling all the VALID key press, action varies based on current active screen
             #     if not game_started and game_env.dynamic.active_screen == Screen.NAME_INPUT:
@@ -415,11 +384,9 @@ def play():
                         game_env.dynamic.game_score += 10                                           # increasing game score by 10 after each level
                         game_env.dynamic.all_sprites.remove(game_env.dynamic.noammo_sprite)         # removing no ammo sprite when ammo is refilled
                         
-
         screen.fill(screen_color)                                                                   # Filling screen with sky blue color
         [screen.blit(sprite.surf, sprite.rect) for sprite in backgrounds]                           # drawing all backgrounds sprites
         [screen.blit(sprite.surf, sprite.rect) for sprite in game_env.dynamic.all_sprites]          # drawing all sprites in the screen
-        
 
         if not gameover:
             # missile hit
@@ -452,15 +419,7 @@ def play():
                     missile.deactivate()                                                                # making missile as deactivated
                     deactivated_missile.add(missile)                                                    # adding missile to deactivated_missile group
                     missiles.remove(missile)                                                            # remove missiles from missles group to avoid collision with jet 
-            
-        
 
-        # pressed_keys = pygame.key.get_pressed()                                                         # getting all the pressed keys
-        # if not game_pause and game_started and not gameover and game_env.dynamic.game_input == InputMode.KEYBOARD:
-        #     jet.update(pressed_keys)
-        # elif not game_pause and game_started and not gameover and game_env.dynamic.game_input == InputMode.MOUSE:          # performing the jet movement here for smooth movement till mouse cursor
-        #     jet.auto_move(mouse_pos)
-        
         if not game_pause and game_started and not gameover:
             jet.update(acceleration_sensor_values)
         elif game_env.dynamic.active_screen in menu_screens:

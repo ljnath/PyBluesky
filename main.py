@@ -93,7 +93,7 @@ def notify_user_of_update():
 
 def request_android_permissions():
     max_retry = 3
-    while max_retry > 0 or not check_permission('android.permission.WRITE_EXTERNAL_STORAGE'):
+    while not check_permission('android.permission.WRITE_EXTERNAL_STORAGE') or max_retry > 0:
         max_retry -= 1
         request_permissions([
         Permission.WRITE_EXTERNAL_STORAGE
@@ -247,25 +247,32 @@ def play():
                 orientation.set_landscape(reverse=False)
                 
             # handling menu navigation via finger swipe
-            elif event.type == game_env.MOUSEMOTION and not game_started and not gameover:
+            elif event.type == game_env.MOUSEMOTION and not game_pause and not game_started and not gameover:
                 # saving current interaction position; this will be later used for discarding MOUSEBUTTONUP event if the position is same
                 last_touch_position = event.pos
                 
                 if user_has_swipped:
                     continue
                 
+                is_valid_swipe = False
+                
                 if event.rel[0] < -40:
                     user_has_swipped = True
+                    is_valid_swipe = True
                     selected_menu_index += 1
                     if selected_menu_index == len(swipe_navigated_menus):
                         selected_menu_index = 0    
                         
                 elif event.rel[0] > 40:
                     user_has_swipped = True
+                    is_valid_swipe = True
                     selected_menu_index -= 1
                     if selected_menu_index < 0:
                         selected_menu_index = len(swipe_navigated_menus) - 1
 
+                if not is_valid_swipe:
+                    continue
+                
                 # settings the current swipe_navigated_menus as the active one for it to be rendered
                 # and refreshing the active_sprite in game_env.dynamic.all_sprites for re-rendering
                 game_env.dynamic.all_sprites.remove(active_sprite)
@@ -278,7 +285,8 @@ def play():
             # showing PAUSE message when back button is pressed on android device
             elif event.type == game_env.KEYDOWN and event.key == 1073742094 and game_env.dynamic.active_screen != Screen.EXIT_MENU:
                 pygame.mixer.music.pause()
-                last_active_sprite = (game_env.dynamic.active_screen, active_sprite)
+                last_active_screen = game_env.dynamic.active_screen
+                last_active_sprite = active_sprite
                 game_started, game_pause = game_pause, game_started
                 [game_env.dynamic.all_sprites.remove(sprite) for sprite in (active_sprite, hint_sprite)]
                 active_sprite = ExitMenuText()
@@ -290,6 +298,20 @@ def play():
                 # handling single finger only for now
                 if event.button == 1 and event.pos != last_touch_position:
                     
+                    # resume or exit game based on user interaction with the EXIT-MENU        
+                    if game_env.dynamic.active_screen == Screen.EXIT_MENU:
+                        if game_env.dynamic.exit:
+                            running = False
+                        elif not game_env.dynamic.exit:
+                            pygame.mixer.music.unpause()
+                            game_started, game_pause = game_pause, game_started
+                            game_env.dynamic.all_sprites.remove(active_sprite)
+                            game_env.dynamic.active_screen = last_active_screen
+                            active_sprite = last_active_sprite
+                            
+                            if game_env.dynamic.active_screen != Screen.GAME_SCREEN:
+                                [game_env.dynamic.all_sprites.add(sprite) for sprite in (active_sprite, hint_sprite)]
+                                
                     # jet can shoot at use touch and when the game is running
                     if game_started and not gameover:
                         jet.shoot()
@@ -300,20 +322,7 @@ def play():
                         
                     # exit the game when user has selected 'Exit' in GAME_MENU or 'No' in REPLAY_MENT
                     elif game_env.dynamic.active_screen == Screen.GAME_MENU and game_env.dynamic.game_start_choice == StartChoice.EXIT or (game_env.dynamic.active_screen == Screen.REPLAY_MENU and not game_env.dynamic.replay):
-                        running = False
-                    
-                    # resume or exit game based on user interaction with the EXIT-MENU        
-                    elif game_env.dyanmic.active_screen == Screen.EXIT_MENU:
-                        if game_env.dynamic.exit:
-                            running = False
-                        elif not game_env.dynamic.exit:
-                            pygame.mixer.music.unpause()
-                            game_started, game_pause = game_pause, game_started
-                            game_env.dynamic.all_sprites.remove(active_sprite)
-                            game_env.dynamic.active_screen, active_sprite = last_active_sprite
-                            if game_env.dynamic.active_screen != Screen.GAME_SCREEN:
-                                [game_env.dynamic.all_sprites.add(sprite) for sprite in (active_sprite, hint_sprite)]
-                                
+                        running = False           
                 
             # add missile and sam-launcher
             elif game_started and not gameover:

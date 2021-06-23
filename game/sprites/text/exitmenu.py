@@ -10,7 +10,7 @@ class ExitMenuText(Text):
     def __init__(self): 
         Text.__init__(self, size=34)
         game_env = GameEnvironment()
-        self.__title_surf = self.font.render("What do want to quit ?", 1, self.color)
+        self.__title_surf = self.font.render("Do you want to quit ?", 1, self.color)
 
         self.__y_selected_surf = self.font.render("Yes", 1, game_env.static.text_selection_color)               # creating surface with Yes text when highlighted
         self.__n_surf = self.font.render("/No",1, self.color)                                                   # creating surface with No text

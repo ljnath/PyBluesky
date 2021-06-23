@@ -27,7 +27,7 @@ class DynamicData():
         self.__noammo_sprite = None
         self.__update_available = False
         self.__replay = True
-        self.__exit = True
+        self.__exit = False
         self.__update_url = None
         self.__player_name = 'player1'
     

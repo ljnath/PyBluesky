@@ -146,12 +146,17 @@ def play():
 
     ADD_SAM_LAUNCHER = pygame.USEREVENT + 3
     pygame.time.set_timer(ADD_SAM_LAUNCHER, 5000)                                       # setting event to auto-trigger every 5s; 1 level can have 4 sam launcher
+    
+    RESET_SWIPE = pygame.USEREVENT + 4
+    pygame.time.set_timer(RESET_SWIPE, 1000)                                            # setting event to auto-trigger sec; user can swipe once per second
+    
 
     running = True                                                                      # game running variable
     gameover = False                                                                    # no gameover by default
     game_started = False                                                                # game is not started by default
     game_pause = False
     star_shown = False
+    user_has_swipped = False
     screen_color = game_env.static.background_default if game_started else game_env.static.background_special
 
     backgrounds = pygame.sprite.Group()                                                 # creating seperate group for background sprites
@@ -241,15 +246,29 @@ def play():
             if event.type == game_env.VIDEORESIZE:
                 orientation.set_landscape(reverse=False)
                 
+            # resetting user_has_swipped flag, allowing user to swipe again
+            elif event.type == RESET_SWIPE:
+                user_has_swipped = False
+                
             # handling menu navigation via finger swipe
             elif event.type == game_env.MOUSEMOTION and not game_started and not gameover:
+                # saving current interaction position; this will be later used for discarding MOUSEBUTTONUP event if the position is same
+                last_touch_position = event.pos
+                
+                if user_has_swipped:
+                    continue
+                
                 print(f'mouse motion event = {event}')
                 if event.rel[0] < -40:
+                    print("left")
+                    user_has_swipped = True
                     selected_menu_index += 1
                     if selected_menu_index == len(swipe_navigated_menus):
                         selected_menu_index = 0    
                         
                 elif event.rel[0] > 40:
+                    print("right")
+                    user_has_swipped = True
                     selected_menu_index -= 1
                     if selected_menu_index < 0:
                         selected_menu_index = len(swipe_navigated_menus) - 1
@@ -263,10 +282,6 @@ def play():
                 
                 game_env.dynamic.all_sprites.add(active_sprite)
                 
-                # saving current interaction position; this will be later used for discarding MOUSEBUTTONUP event if the position is same
-                last_touch_position = event.pos
-                
-            
             # # stopping game when ESC key is pressed or when the game window is closed
             # if (event.type == game_env.KEYDOWN and event.key == game_env.K_ESCAPE or event.type == game_env.QUIT) and game_env.dynamic.active_screen != Screen.EXIT_MENU:
             #     pygame.mixer.music.pause()

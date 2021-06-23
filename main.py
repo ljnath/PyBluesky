@@ -99,10 +99,9 @@ def request_android_permissions():
         Permission.WRITE_EXTERNAL_STORAGE
         ])
         
-    print(f"{check_permission('android.permission.VIBRATE')}")
-    print(f"{check_permission('android.permission.INTERNET')}")
-    print(f"{check_permission('android.permission.WRITE_EXTERNAL_STORAGE')}")
-    
+    print(f"VIBRATE permission = {check_permission('android.permission.VIBRATE')}")
+    print(f"INTERNET permission = {check_permission('android.permission.INTERNET')}")
+    print(f"WRITE_EXTERNAL_STORAGE permission = {check_permission('android.permission.WRITE_EXTERNAL_STORAGE')}")
     
 def play():
     pygame.mixer.init()                                                 # initializing same audio mixer with default settings
@@ -160,7 +159,7 @@ def play():
     samlaunchers = pygame.sprite.GroupSingle()                                          # creating missile group for storing all the samlaunchers in the game
     title_sprites = pygame.sprite.Group()
 
-    general_hint_text = "Move your phone for changing selection and tap on screen to confirm the selection"
+    general_hint_text = "Swipe left or right to know more !"
     
     title_banner_sprite = Text("{} {}".format(game_env.static.name, game_env.static.version), 100, pos_x=game_env.static.screen_width/2 , pos_y=100)            # creating title_banner_sprite text sprite with game name
     title_author_sprite = Text("By Lakhya Jyoti Nath (www.ljnath.com)", 26, pos_x=game_env.static.screen_width/2 , pos_y= game_env.static.screen_height-20)     # creating game author
@@ -173,7 +172,7 @@ def play():
     active_text_based_sprite = 0
 
     if game_env.dynamic.player_name:
-        hint_sprite = Text(general_hint_text, 36, pos_x=game_env.static.screen_width/2 , pos_y= 145)  # creating game help
+        hint_sprite = Text(general_hint_text, 30, pos_x=game_env.static.screen_width/2 , pos_y= 145)  # creating game help
         active_sprite = text_based_sprites[0]
         active_text_based_sprite = 0
 
@@ -183,7 +182,7 @@ def play():
         
     jet = Jet()                                                                                             # creating jet sprite
     scoretext_sprite = ScoreText()                                                                          # creating scoreboard sprite
-    game_env.dynamic.noammo_sprite = Text("NO AMMO !", 24)                                                  # creating noammo-sprite 
+    game_env.dynamic.noammo_sprite = Text("NO AMMO !", 26)                                                  # creating noammo-sprite 
 
     create_vegetation(vegetations)
     menu_screens = {Screen.REPLAY_MENU, Screen.GAME_MENU, Screen.EXIT_MENU}

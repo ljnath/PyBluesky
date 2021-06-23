@@ -53,11 +53,13 @@ class StaticData():
     
     @property
     def screen_width(self):
-        return self.__display_info.current_w                        # game resolution is same as monitor resolution
+        # setting fixed screen width for scaling
+        return 1280
 
     @property
     def screen_height(self):
-        return self.__display_info.current_h                        # game resolution is same as monitor resolution
+        # setting fixed screen height for scaling
+        return 720
         
     @property
     def text_default_color(self):

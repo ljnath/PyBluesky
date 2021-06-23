@@ -17,7 +17,7 @@ class GameMenuText(Text):
         start_game_text = 'Start Game'
         
         self.__jet = Jet()                                                                                      # creating a of jet 
-        self.__prefix_surf = self.font.render("What do you want to do ?", 1, self.color)                                # creating surface with the prefix text
+        self.__prefix_surf = self.font.render("What do you plan ?", 1, self.color)                                # creating surface with the prefix text
         self.__exit = self.font.render(f' {exit_text}',1, self.color)                                                   # creating surface with Exit text
         self.__play = self.font.render(f' {start_game_text}', 1, self.color)                                            # creating surface with Play Game text
 

@@ -159,7 +159,7 @@ def play():
     samlaunchers = pygame.sprite.GroupSingle()                                          # creating missile group for storing all the samlaunchers in the game
     title_sprites = pygame.sprite.Group()
 
-    general_hint_text = "Swipe left or right to know more !"
+    general_hint_text = "-= Move your device to change selection and tap to confirm =-"
     
     title_banner_sprite = Text("{} {}".format(game_env.static.name, game_env.static.version), 100, pos_x=game_env.static.screen_width/2 , pos_y=100)            # creating title_banner_sprite text sprite with game name
     title_author_sprite = Text("By Lakhya Jyoti Nath (www.ljnath.com)", 26, pos_x=game_env.static.screen_width/2 , pos_y= game_env.static.screen_height-20)     # creating game author

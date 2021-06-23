@@ -20,7 +20,11 @@ class NetworkHandler(Handlers):
     async def check_game_update(self):
         try:
             game_env = GameEnvironment()
-            get_parameters = {'action': 'getUpdate', 'apiKey': self.__api_key}
+            get_parameters = {
+                'action': 'getUpdate',
+                'apiKey': self.__api_key,
+                'platform': 'android'
+                }
             async with aiohttp.ClientSession() as session:
                 async with session.get(self.__api_endpoint, params=get_parameters, ssl=False, timeout=aiohttp.ClientTimeout(total=10)) as response:
                     if response.status != 200:
@@ -37,7 +41,11 @@ class NetworkHandler(Handlers):
     async def get_leaders(self):
         leaders = {}
         try:
-            get_parameters = {'action': 'getTopScores', 'apiKey': self.__api_key}
+            get_parameters = {
+                'action': 'getTopScores',
+                'apiKey': self.__api_key,
+                'platform': 'android'
+                }
             async with aiohttp.ClientSession() as session:
                 async with session.get(self.__api_endpoint, params=get_parameters, ssl=False, timeout=aiohttp.ClientTimeout(total=15)) as response:
                     if response.status != 200:

@@ -34,7 +34,7 @@ class Jet(sprite.Sprite):
         self.auto_move((projected_x, projected_y))
 
     def auto_move(self, position):
-        speed = 9
+        speed = 7
         dx = position[0] - self.rect.x                                                                              # calculating x-coordinate difference of mouse and current jet position
         dy = position[1] - self.rect.y                                                                              # caluclating y-coordinate difference of mouse and current jet position
         if (dx >= -speed and dx <= speed) and (dy >= -speed and dy <= speed):                                       # jet will not move if the delta is less then its speed

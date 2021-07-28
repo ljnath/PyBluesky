@@ -38,7 +38,7 @@ setup(
     author_email='ljnath@ljnath.com',
     description='A simple python game to navigate your jet and fight \
         though a massive missiles attack based on pygame framework',
-    url='https://github.com/ljnath/PyBluesky-android',
+    url='https://github.com/ljnath/PyBluesky',
     packages=find_packages(),
     package_data={
         '.': ['main.py'],

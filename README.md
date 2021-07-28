@@ -1,5 +1,5 @@
 
-# PyBluesky-android
+# PyBluesky
 ### Version : 1.1.0
 
 

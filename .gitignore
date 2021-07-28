@@ -126,3 +126,7 @@ dmypy.json
 .pyre/
 *.dat
 api.key
+**/.vscode/*
+**/release/*
+**/#raw_assets/*
+Makefile-dev

@@ -1,4 +1,8 @@
+from typing import Tuple
+
+from game.environment import GameEnvironment
 from game.sprites.text import Text
+from pygame import Surface
 
 
 # Define a ScoreText class object by Text class
@@ -6,11 +10,63 @@ class ScoreText(Text):
     """ ScoreText class extended from Text class.
         It creates the game score sprite
     """
-    def __init__(self, game_env):
-        Text.__init__(self, game_env, text="LEVEL 00 TIME 0 AMMO 0 SCORE 0", size=28, color=(103,103,103))                             # initializing parent class with defautl text and color
-        self.__game_env = game_env
-        self.rect = self.surf.get_rect(topright=(self.__game_env.static.screen_width-self.surf.get_width()/2 + 30, 2))       # creating rectangle from text surface
-    
-    def update(self):
+    def __init__(self):
+        game_env = GameEnvironment()
+        Text.__init__(self, text="LEVEL: 00 TIME: 0 AMMO: 0 SCORE: 0 HEALTH: 0", size=game_env.static.score_sprite_size, color=(255, 255, 255))     # initializing parent class with defautl text and color
+        self.rect = self.surf.get_rect(topright=(game_env.static.screen_width - self.surf.get_width() / 2, 2))                                      # creating rectangle from text surface
+
+        self.surf = Surface((200, game_env.static.score_sprite_size), game_env.SRCALPHA, 32)
+        self.rect = self.surf.get_rect(topright=(600, 5))
+
+    def update(self) -> None:
+        """
+        Method for updating the score sprite. The score, gamelevel, time, remaining ammo and score are updated.
+        Also a health bar for the jet health is created and updated
+        """
+        self.dirty = 1
+        game_env = GameEnvironment()
+        self.surf = Surface((game_env.static.screen_width, game_env.static.score_sprite_size), game_env.SRCALPHA, 32)
+
         # updating scoreboard score and time
-        self.surf = self.font.render("LEVEL {} TIME {} AMMO {} SCORE {}".format(str(self.__game_env.dynamic.game_level).zfill(2), str(self.__game_env.dynamic.game_playtime).zfill(5), str(self.__game_env.dynamic.ammo).zfill(3),str(self.__game_env.dynamic.game_score).zfill(8)), 1, self.color)
+        score_text = self.font.render(
+            f"LEVEL: {str(game_env.dynamic.game_level).zfill(2)} "
+            f"TIME: {str(game_env.dynamic.game_playtime).zfill(5)} "
+            f"AMMO: {str(game_env.dynamic.ammo).zfill(3)} "
+            f"SCORE: {str(game_env.dynamic.game_score).zfill(8)} "
+            f"HEALTH:",
+            1, self.color)
+
+        # # creating and filling color in health bar
+        # health_bar = Surface((game_env.dynamic.jet_health * 2, game_env.static.score_sprite_size - 30), game_env.SRCALPHA, 32)
+        # health_bar.fill(self.__get_color(game_env.dynamic.jet_health))
+        
+        self.surf.blit(score_text, (0, 0))
+        self.surf.blit(game_env.game_assets.get_health(game_env.dynamic.jet_health), (score_text.get_width() + 5, -4))
+
+        self.rect = self.surf.get_rect(bottomleft=(10, game_env.static.scoretext_horizontal_position))
+
+    def __get_color(self, health: int) -> Tuple[int, int, int]:
+        """
+        Method to evaluate the color of the health bar depending on the health value
+        :param health : health of the jet
+        """
+        fill_color = (0, 0, 0)
+
+        health100 = (0, 100, 0)
+        health80 = (79, 121, 66)
+        health60 = (238, 118, 0)
+        health40 = (255, 159, 0)
+        health20 = (255, 0, 0)
+
+        if 80 < health <= 100:
+            fill_color = health100
+        elif 60 < health <= 80:
+            fill_color = health80
+        elif 40 < health <= 60:
+            fill_color = health60
+        elif 20 < health <= 40:
+            fill_color = health40
+        elif 0 < health <= 20:
+            fill_color = health20
+
+        return fill_color

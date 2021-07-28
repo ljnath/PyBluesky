@@ -21,83 +21,54 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 
-cx freeze setup file for building the game
-
-Version: 1.0.5
+Version: 1.1.0
 Author: Lakhya Jyoti Nath (ljnath)
 Email:  ljnath@ljnath.com
-Website: https://www.ljnath.com
+Website: https://ljnath.com
 """
 
-import sys
-
-from cx_Freeze import Executable, setup
-
-shortcut_metadata = [
-    ("DesktopShortcut",                 # Shortcut
-     "DesktopFolder",                   # Directory_
-     "Play PyBluesky",                  # Name
-     "TARGETDIR",                       # Component_
-     "[TARGETDIR]pybluesky.exe",        # Target
-     None,                              # Arguments
-     None,                              # Description
-     None,                              # Hotkey
-     "",                                # Icon
-     None,                              # IconIndex
-     False,                             # ShowCmd
-     'TARGETDIR'                        # WkDir
-    )]
-
-
-bdist_msi_options= {}
-executables =None
-if sys.platform == "win32":
-    executables = [Executable(
-        script="pybluesky.py",
-        initScript = None,
-        base = "Win32GUI",
-        targetName = "pybluesky.exe",
-        icon = 'icon/pybluesky.ico'
-    )]
-
-    bdist_msi_options = {
-        'data': {
-            "Shortcut": shortcut_metadata
-        },
-        'install_icon':'icon/pybluesky.ico'
-    }
-else:
-    executables = [Executable(
-        script="pybluesky.py"
-    )]
+from distutils.core import setup
+from setuptools import find_packages
 
 
 setup(
-    name = "PyBluesky",
-    version = '1.0.5',
-    author = "Lakhya's Innovation Inc.",
-    description = 'A simple python game to navigate your jet and fight though a massive missiles attack based on pygame framework',
-    executables = executables,
+    name="PyBluesky",
+    version='1.1.0',
+    author="Lakhya Jyoti Nath (ljnath)",
+    author_email='ljnath@ljnath.com',
+    description='A simple python game to navigate your jet and fight \
+        though a massive missiles attack based on pygame framework',
+    url='https://github.com/ljnath/PyBluesky-android',
+    packages=find_packages(),
+    package_data={
+        '.': ['main.py'],
+        './*': ['*.py'],
+        '*/*': ['*.py', '*.ogg', '*.ttf', '*.png', '*.ico', '*.jpg'],
+        '*/*/*': ['*.py', '*.png', '*.jpg'],
+        '*/*/*/*': ['*.py']
+    },
     options={
-        "bdist_msi": bdist_msi_options,
-        "build_exe": {
-            "optimize" : 2,
-            "packages":[
-                "pygame",
-                "asyncio",
-                "aiohttp"
-            ],
-            "includes":[
-                'math',
-                'random'
-            ],
-            "include_files": [
-                'audio/',
-                'font/',
-                'image/',
-                'icon/',
-                'LICENSE'
-            ]
+            'apk': {
+                'ignore-setup-py': None,
+                # 'release': None,
+                'arch': 'armeabi-v7a',
+                'package': 'com.ljnath.pybluesky',
+                'requirements': 'pygame==2.0.1,pygame-menu==4.1.3,urllib3==1.24.3,Plyer==2.0.0,typing-extensions==3.10.0.0',
+                'sdk-dir': '../android-sdk',
+                'ndk-dir': '../android-ndk-r19c',
+                'presplash': 'assets/images/presplash.png',
+                'presplash-color': '#C4E2FF',
+                'icon': 'assets/icon/pybluesky.png',
+                'dist-name': 'PyBluesky',
+                'android-api': 29,
+                'bootstrap': 'sdl2',
+                'orientation': 'landscape',
+                'wakelock': None,
+                'permissions':
+                    [
+                        'VIBRATE',
+                        'INTERNET'
+                    ]
+            }
         }
-    }
 )
